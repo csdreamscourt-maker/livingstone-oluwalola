@@ -14,3 +14,4 @@ export { Pagination } from './Pagination';
 export { Tabs } from './Tabs';
 export { Rating } from './Rating';
 export { Progress } from './Progress';
+export { Skeleton } from './Skeleton';

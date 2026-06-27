@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Container, Section, Card } from '@/components/ui';
+import { Container, Section, Card, Input, Textarea, Select, Button, Alert } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { CheckCircle, AlertCircle, Mail, MapPin, Clock } from 'lucide-react';
+import { Mail, MapPin, Clock } from 'lucide-react';
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -107,98 +107,71 @@ export default function ContactPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-midnight-950 mb-3">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your name"
-                  className="w-full px-6 py-4 bg-white border border-gray-300 rounded-lg text-midnight-950 placeholder-gray-400 transition-all duration-300 focus:outline-none focus:border-gold-600 focus:ring-2 focus:ring-gold-500/20"
-                />
-              </div>
+              <Input
+                label="Full Name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Your full name"
+              />
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-midnight-950 mb-3">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="your@email.com"
-                  className="w-full px-6 py-4 bg-white border border-gray-300 rounded-lg text-midnight-950 placeholder-gray-400 transition-all duration-300 focus:outline-none focus:border-gold-600 focus:ring-2 focus:ring-gold-500/20"
-                />
-              </div>
+              <Input
+                label="Email Address"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="your@email.com"
+              />
 
-              <div>
-                <label htmlFor="subject" className="block text-sm font-semibold text-midnight-950 mb-3">
-                  Subject
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-6 py-4 bg-white border border-gray-300 rounded-lg text-midnight-950 transition-all duration-300 focus:outline-none focus:border-gold-600 focus:ring-2 focus:ring-gold-500/20"
-                >
-                  <option value="">Select a subject</option>
-                  <option value="partnership">Partnership Inquiry</option>
-                  <option value="speaking">Speaking Engagement</option>
-                  <option value="consulting">Advisory/Consulting</option>
-                  <option value="general">General Inquiry</option>
-                </select>
-              </div>
+              <Select
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                placeholder="Select a subject"
+                options={[
+                  { value: 'partnership', label: 'Partnership Inquiry' },
+                  { value: 'speaking', label: 'Speaking Engagement' },
+                  { value: 'consulting', label: 'Advisory/Consulting' },
+                  { value: 'general', label: 'General Inquiry' },
+                ]}
+              />
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-semibold text-midnight-950 mb-3">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  placeholder="Tell us more about your inquiry..."
-                  className="w-full px-6 py-4 bg-white border border-gray-300 rounded-lg text-midnight-950 placeholder-gray-400 transition-all duration-300 focus:outline-none focus:border-gold-600 focus:ring-2 focus:ring-gold-500/20 resize-none"
-                />
-              </div>
+              <Textarea
+                label="Message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                placeholder="Tell us more about your inquiry..."
+                maxLength={1000}
+              />
 
-              <button
+              <Button
                 type="submit"
+                variant="gold"
+                size="lg"
                 disabled={status === 'loading'}
-                className="w-full px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full"
               >
                 {status === 'loading' ? 'Sending...' : 'Send Message'}
-              </button>
+              </Button>
 
               {status === 'success' && (
-                <div className="flex items-center gap-3 p-4 bg-emerald-600 bg-opacity-20 border border-emerald-500 border-opacity-30 rounded-lg animate-slideUp">
-                  <CheckCircle size={20} className="text-emerald-400 flex-shrink-0" />
-                  <p className="text-emerald-200">
-                    Message sent successfully. We'll get back to you soon.
-                  </p>
-                </div>
+                <Alert type="success" title="Success!">
+                  Message sent successfully. We'll get back to you soon.
+                </Alert>
               )}
 
               {status === 'error' && (
-                <div className="flex items-center gap-3 p-4 bg-red-600 bg-opacity-20 border border-red-500 border-opacity-30 rounded-lg animate-shake">
-                  <AlertCircle size={20} className="text-red-400 flex-shrink-0" />
-                  <p className="text-red-200">
-                    Something went wrong. Please try again.
-                  </p>
-                </div>
+                <Alert type="error" title="Error">
+                  Something went wrong. Please try again.
+                </Alert>
               )}
             </form>
           </div>

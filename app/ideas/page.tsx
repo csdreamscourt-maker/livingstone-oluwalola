@@ -1,36 +1,34 @@
-import { Container, Section, Button } from '@/components/ui';
-import { Hero } from '@/components/sections';
+'use client';
 
-export const metadata = {
-  title: 'Ideas | Livingstone',
-  description: 'Explore big ideas on leadership, strategy, innovation, and transformation.',
-};
+import { Container, Section, Card, Button } from '@/components/ui';
+import { Hero } from '@/components/sections';
+import { Lightbulb, ArrowRight } from 'lucide-react';
 
 export default function IdeasPage() {
   return (
     <>
       <Hero
-        subtitle="Thinking Forward"
-        title="Ideas & Perspectives"
-        description="Deep dives into the ideas that shape our work and the thinking that drives our approach to leadership and innovation."
+        subtitle="Intellectual Exploration"
+        title="Ideas & Concepts"
+        description="Explore thought-provoking ideas, conceptual frameworks, and emerging perspectives that shape our understanding of leadership and innovation."
       />
 
-      <Section padding="lg">
-        <Container size="md">
-          <div className="prose prose-lg max-w-none">
-            <p className="text-xl text-stone-600 leading-relaxed mb-12">
-              This section will showcase in-depth explorations of the key ideas, concepts, and frameworks that shape our approach to leadership, innovation, and organizational transformation.
+      <Section padding="2xl">
+        <Container>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-4">
+              Coming Soon
+            </h2>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              We're curating a collection of original ideas and conceptual explorations that push the boundaries of strategic thinking and innovation.
             </p>
-
-            <div className="bg-stone-100 rounded-lg p-8 text-center">
-              <h2 className="text-2xl font-serif font-bold text-midnight-950 mb-4">
-                Coming Soon
-              </h2>
-              <p className="text-lg text-stone-600 mb-6">
-                We're preparing a collection of comprehensive essays and idea explorations.
-              </p>
-              <Button href="/articles">Explore Articles in the Meantime</Button>
-            </div>
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              Back to Home
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </Container>
       </Section>

@@ -5,6 +5,7 @@ import { Container, Section, Card, Badge } from '@/components/ui';
 import { Hero } from '@/components/sections';
 import { SAMPLE_ARTICLES } from '@/lib/constants';
 import Link from 'next/link';
+import { ArrowRight, Calendar, Clock } from 'lucide-react';
 
 const CATEGORIES = Array.from(new Set(SAMPLE_ARTICLES.map((a) => a.category)));
 
@@ -23,19 +24,19 @@ export default function ArticlesPage() {
         description="Thoughtful perspectives on leadership, strategy, faith, innovation, and the frameworks that drive transformation."
       />
 
-      <Section padding="lg">
+      <Section padding="2xl">
         <Container>
-          <div className="mb-12">
-            <h2 className="text-2xl font-serif font-bold text-midnight-950 mb-6">
+          <div className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-8">
               Filter by Category
             </h2>
-            <div className="flex flex-wrap gap-3 mb-12">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                   selectedCategory === null
-                    ? 'bg-midnight-950 text-white'
-                    : 'bg-stone-200 text-midnight-950 hover:bg-stone-300'
+                    ? 'bg-gold-600 text-midnight-950 shadow-lg shadow-gold-600/30'
+                    : 'border border-gray-300 text-midnight-950 hover:border-gold-600 hover:text-gold-600'
                 }`}
               >
                 All Articles
@@ -44,10 +45,10 @@ export default function ArticlesPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                  className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                     selectedCategory === category
-                      ? 'bg-midnight-950 text-white'
-                      : 'bg-stone-200 text-midnight-950 hover:bg-stone-300'
+                      ? 'bg-gold-600 text-midnight-950 shadow-lg shadow-gold-600/30'
+                      : 'border border-gray-300 text-midnight-950 hover:border-gold-600 hover:text-gold-600'
                   }`}
                 >
                   {category}
@@ -56,41 +57,63 @@ export default function ArticlesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredArticles.map((article) => (
-              <Card key={article.id} variant="bordered" hover className="flex flex-col">
-                <div className="mb-4">
-                  <Badge variant="primary">{article.category}</Badge>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            {filteredArticles.map((article, index) => (
+              <Card
+                key={article.id}
+                variant="bordered"
+                className="group flex flex-col h-full hover:border-gold-600 hover:shadow-lg transition-all duration-300 animate-slideUp"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="mb-6">
+                  <Badge variant="outline" className="group-hover:bg-gold-600 group-hover:text-midnight-950 transition-all">
+                    {article.category}
+                  </Badge>
                 </div>
 
-                <h3 className="text-xl font-serif font-bold text-midnight-950 mb-3">
+                <h3 className="text-xl font-serif font-bold text-midnight-950 mb-4 group-hover:text-gold-600 transition-colors leading-snug">
                   {article.title}
                 </h3>
 
-                <p className="text-stone-600 mb-6 flex-1 leading-relaxed">
+                <p className="text-gray-600 mb-8 flex-1 leading-relaxed">
                   {article.excerpt}
                 </p>
 
-                <div className="border-t border-stone-200 pt-4 flex justify-between items-center text-sm text-stone-500">
-                  <span>{article.date}</span>
-                  <span>{article.readTime}</span>
+                <div className="border-t border-gray-200 pt-6 flex items-center justify-between text-sm text-gray-500 mb-6">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {article.date}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {article.readTime}
+                    </span>
+                  </div>
                 </div>
 
                 <Link
                   href={`/articles/${article.id}`}
-                  className="text-sm font-medium text-gold-600 hover:text-gold-700 transition-colors mt-4"
+                  className="flex items-center gap-2 text-gold-600 hover:text-gold-700 font-semibold group/link transition-all"
                 >
-                  Read Article →
+                  Read Article
+                  <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                 </Link>
               </Card>
             ))}
           </div>
 
           {filteredArticles.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-lg text-stone-600">
-                No articles found in this category. Try another selection.
+            <div className="text-center py-20">
+              <p className="text-lg text-gray-600 mb-4">
+                No articles found in this category.
               </p>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="text-gold-600 hover:text-gold-700 font-semibold transition-colors"
+              >
+                View all articles
+              </button>
             </div>
           )}
         </Container>

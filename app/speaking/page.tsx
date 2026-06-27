@@ -1,38 +1,34 @@
-import { Container, Section, Button } from '@/components/ui';
-import { Hero } from '@/components/sections';
+'use client';
 
-export const metadata = {
-  title: 'Speaking | Livingstone',
-  description: 'Speaking engagements, conferences, and presentations on leadership, innovation, and transformation.',
-};
+import { Container, Section } from '@/components/ui';
+import { Hero } from '@/components/sections';
+import { Mic, ArrowRight } from 'lucide-react';
 
 export default function SpeakingPage() {
   return (
     <>
       <Hero
-        subtitle="On the Platform"
-        title="Speaking & Engagements"
-        description="Bringing frameworks, insights, and vision to organizations, conferences, and communities around the world."
+        subtitle="Leadership Communications"
+        title="Speaking & Events"
+        description="Explore keynote presentations, seminars, and speaking engagements designed to inspire and transform organizational thinking."
       />
 
-      <Section padding="lg">
-        <Container size="md">
-          <div className="prose prose-lg max-w-none">
-            <p className="text-xl text-stone-600 leading-relaxed mb-12">
-              Speaking engagements range from keynote presentations to workshop facilitations, executive retreats, and institutional strategy sessions.
+      <Section padding="2xl">
+        <Container>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-4">
+              Coming Soon
+            </h2>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              Learn more about speaking engagements, keynote presentations, and leadership seminars.
             </p>
-
-            <div className="bg-stone-100 rounded-lg p-8">
-              <h2 className="text-2xl font-serif font-bold text-midnight-950 mb-4 text-center">
-                Interested in a Speaking Engagement?
-              </h2>
-              <p className="text-lg text-stone-600 mb-6 text-center">
-                Let's explore how we can bring strategic insights and transformational frameworks to your organization or event.
-              </p>
-              <div className="flex justify-center">
-                <Button href="/contact">Request an Engagement</Button>
-              </div>
-            </div>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              Inquire About Speaking
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </Container>
       </Section>

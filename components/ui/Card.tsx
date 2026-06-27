@@ -1,37 +1,52 @@
-import { ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { ReactNode, CSSProperties } from 'react';
 
 interface CardProps {
   children: ReactNode;
   className?: string;
-  variant?: 'default' | 'elevated' | 'bordered';
-  padding?: 'sm' | 'md' | 'lg';
+  style?: CSSProperties;
+  variant?: 'default' | 'elevated' | 'bordered' | 'gradient' | 'dark';
+  padding?: 'sm' | 'md' | 'lg' | 'xl';
   hover?: boolean;
 }
 
 export function Card({
   children,
   className = '',
-  variant = 'default',
+  style,
+  variant = 'bordered',
   padding = 'md',
-  hover = false,
+  hover = true,
 }: CardProps) {
   const variants = {
-    default: 'bg-white',
+    default: 'bg-white border border-gray-100 shadow-subtle',
     elevated: 'bg-white shadow-lg',
-    bordered: 'bg-white border border-stone-200',
+    bordered: 'bg-white border border-gray-200 hover:border-gold-600',
+    gradient: 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-gold-600',
+    dark: 'bg-midnight-950 border border-gray-700 text-white',
   };
 
   const paddings = {
     sm: 'p-4',
     md: 'p-6',
     lg: 'p-8',
+    xl: 'p-10',
   };
 
-  const hoverClass = hover ? 'transition-shadow duration-300 hover:shadow-xl' : '';
+  const hoverClass = hover
+    ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1'
+    : '';
 
   return (
-    <div className={cn(variants[variant], paddings[padding], hoverClass, className)}>
+    <div
+      style={style}
+      className={`
+        rounded-xl
+        ${variants[variant]}
+        ${paddings[padding]}
+        ${hoverClass}
+        ${className}
+      `}
+    >
       {children}
     </div>
   );

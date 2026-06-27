@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useRef } from 'react';
 
 interface TooltipProps {
   children: ReactNode;
@@ -16,16 +16,18 @@ export function Tooltip({
   delay = 200,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
-  let timeout: NodeJS.Timeout;
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = () => {
-    timeout = setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
     }, delay);
   };
 
   const handleMouseLeave = () => {
-    clearTimeout(timeout);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setIsVisible(false);
   };
 

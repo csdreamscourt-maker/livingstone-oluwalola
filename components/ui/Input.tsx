@@ -17,7 +17,7 @@ export function Input({
   className = '',
   ...props
 }: InputProps) {
-  const baseStyles = 'w-full px-4 py-3 rounded-lg transition-all duration-300 font-sans text-base';
+  const baseStyles = 'w-full px-4 py-3 md:py-3 rounded-lg transition-all duration-300 font-sans text-base min-h-[44px] md:min-h-auto';
 
   const variants = {
     primary: `${baseStyles} border-2 border-gray-200 bg-white text-midnight-950 placeholder-gray-400

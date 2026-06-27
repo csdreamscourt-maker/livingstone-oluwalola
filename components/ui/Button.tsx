@@ -33,10 +33,10 @@ export function Button({
   };
 
   const sizes = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
-    xl: 'px-10 py-5 text-xl',
+    sm: 'px-3 py-2 text-sm min-h-[40px] md:min-h-auto',
+    md: 'px-6 py-3 text-base min-h-[44px] md:min-h-auto',
+    lg: 'px-8 py-4 text-lg min-h-[48px] md:min-h-auto',
+    xl: 'px-10 py-5 text-xl min-h-[48px] md:min-h-auto',
   };
 
   const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;

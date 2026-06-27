@@ -23,7 +23,7 @@ export function Select({
   className = '',
   ...props
 }: SelectProps) {
-  const baseStyles = `w-full px-4 py-3 rounded-lg transition-all duration-300 font-sans text-base appearance-none bg-white text-midnight-950
+  const baseStyles = `w-full px-4 py-3 rounded-lg transition-all duration-300 font-sans text-base appearance-none bg-white text-midnight-950 min-h-[44px] md:min-h-auto
     focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent
     border-2 border-gray-200 hover:border-gray-300
     disabled:bg-gray-50 disabled:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed

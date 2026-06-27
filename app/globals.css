@@ -1,0 +1,124 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-midnight-950: #0a0a14;
+  --color-midnight-900: #0f1219;
+  --color-midnight-800: #151b2a;
+  --color-midnight-700: #1a2333;
+  --color-charcoal-600: #2d2d2d;
+  --color-charcoal-500: #404040;
+  --color-stone-400: #9ca3af;
+  --color-stone-300: #d1d5db;
+  --color-stone-200: #e5e7eb;
+  --color-stone-100: #f3f4f6;
+  --color-white: #ffffff;
+  --color-gold-600: #d4af37;
+  --color-gold-500: #e6c75d;
+  --color-gold-400: #f0d86a;
+  --color-bronze-600: #8b7355;
+  --color-bronze-500: #a0826d;
+  --color-earth-700: #6b5b47;
+  --color-earth-600: #8b7355;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  --spacing-3xl: 6rem;
+  --spacing-4xl: 8rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --font-serif: 'Lora', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+:root {
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #0f1219;
+  font-family: 'Inter', sans-serif;
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  color: #0a0a14;
+}
+
+h1 {
+  font-size: var(--text-5xl);
+}
+
+h2 {
+  font-size: var(--text-4xl);
+}
+
+h3 {
+  font-size: var(--text-3xl);
+}
+
+h4 {
+  font-size: var(--text-2xl);
+}
+
+h5 {
+  font-size: var(--text-xl);
+}
+
+h6 {
+  font-size: var(--text-lg);
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+a {
+  color: #0a0a14;
+  text-decoration: none;
+  transition: color 150ms ease-out;
+}
+
+a:hover {
+  color: #d4af37;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}

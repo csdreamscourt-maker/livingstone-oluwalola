@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Container } from '@/components/ui';
-import { ArrowRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface HeroProps {
   title: string;
@@ -20,120 +20,156 @@ interface HeroProps {
 }
 
 export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-white via-white to-gray-50 overflow-hidden">
-      {/* Premium background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Top right gradient blob */}
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-gold opacity-10 rounded-full blur-3xl" />
-        
-        {/* Bottom left gradient blob */}
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-t from-midnight-900 to-midnight-800 opacity-5 rounded-full blur-3xl" />
-        
-        {/* Center glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-500 opacity-5 rounded-full blur-3xl" />
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-cosmic noise-overlay">
+      {/* Animated gradient blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full"
+          style={{ background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)', filter: 'blur(60px)' }}
+          animate={{ x: [0, 60, -20, 0], y: [0, -40, 30, 0], scale: [1, 1.1, 0.95, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/3 -right-40 w-[520px] h-[520px] rounded-full"
+          style={{ background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)', filter: 'blur(70px)' }}
+          animate={{ x: [0, -40, 30, 0], y: [0, 50, -30, 0], scale: [1, 0.9, 1.15, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute -bottom-40 left-1/4 w-[460px] h-[460px] rounded-full"
+          style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)', filter: 'blur(60px)' }}
+          animate={{ x: [0, 40, -30, 0], y: [0, -30, 40, 0], scale: [1, 1.05, 0.92, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-[380px] h-[380px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.6) 0%, transparent 70%)', filter: 'blur(50px)' }}
+          animate={{ x: [-100, 50, -80, -100], y: [-100, 30, -50, -100], scale: [1, 1.1, 0.95, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        />
       </div>
 
-      {/* Animated grid background (subtle) */}
-      <div className="absolute inset-0 opacity-[0.03]">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#0a0a14" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.08] pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-      {/* Content */}
-      <Container className="relative z-10 w-full py-20 md:py-24">
+      <Container className="relative z-10 w-full py-24 md:py-28">
         <div className="max-w-5xl mx-auto text-center">
-          {/* Subtitle with animation */}
           {subtitle && (
-            <div
-              className={`mb-8 transition-all duration-700 ${
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
-              style={{ transitionDelay: '100ms' }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-8 flex justify-center"
             >
-              <span className="inline-block text-xs md:text-sm font-bold text-gold-600 uppercase tracking-widest bg-gold-100 px-4 py-2 rounded-full">
+              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-dark text-indigo-200 text-xs md:text-sm font-semibold uppercase tracking-[0.2em] border border-indigo-400/30">
+                <Sparkles size={14} className="text-amber-400" />
                 {subtitle}
               </span>
-            </div>
+            </motion.div>
           )}
 
-          {/* Main title with premium typography */}
-          <h1
-            className={`text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-midnight-950 mb-8 leading-[1.1] transition-all duration-700 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
-            style={{ transitionDelay: '200ms' }}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif font-bold mb-8 leading-[1.05] tracking-tight"
+            style={{ color: '#ffffff' }}
           >
-            {title}
-          </h1>
+            <span className="block">{title.split(' ').slice(0, Math.ceil(title.split(' ').length / 2)).join(' ')}</span>
+            <span className="block text-gradient-primary mt-2">
+              {title.split(' ').slice(Math.ceil(title.split(' ').length / 2)).join(' ')}
+            </span>
+          </motion.h1>
 
-          {/* Description with premium styling */}
           {description && (
-            <p
-              className={`text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed font-light transition-all duration-700 ${
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}
-              style={{ transitionDelay: '300ms' }}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="text-lg md:text-xl lg:text-2xl text-indigo-100/80 max-w-3xl mx-auto mb-12 leading-relaxed font-light"
             >
               {description}
-            </p>
+            </motion.p>
           )}
 
-          {/* CTA Buttons with premium styling */}
           {(cta || cta2) && (
-            <div
-              className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center transition-all duration-700 ${
-                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}
-              style={{ transitionDelay: '400ms' }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center"
             >
               {cta && (
                 <Link
                   href={cta.href}
-                  className="group flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
+                  className="group relative inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 font-semibold rounded-2xl text-white overflow-hidden shadow-glow-violet transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                  style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
                 >
-                  {cta.label}
-                  <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <span className="relative z-10">{cta.label}</span>
+                  <ArrowRight size={20} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <span
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%)' }}
+                  />
                 </Link>
               )}
               {cta2 && (
                 <Link
                   href={cta2.href}
-                  className="group flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 border-2 border-midnight-950 text-midnight-950 font-semibold rounded-lg hover:bg-midnight-950 hover:text-white hover:shadow-lg transition-all duration-300 active:scale-95"
+                  className="group inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 font-semibold rounded-2xl glass-dark text-white border border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-300 active:scale-95"
                 >
                   {cta2.label}
-                  <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
                 </Link>
               )}
-            </div>
+            </motion.div>
           )}
+
+          {/* Trust indicators */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.9 }}
+            className="mt-16 md:mt-20 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-indigo-200/60"
+          >
+            {['Faith', 'Leadership', 'Systems', 'Innovation'].map((pillar, i) => (
+              <motion.div
+                key={pillar}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1 + i * 0.1 }}
+                className="flex items-center gap-2 text-sm md:text-base font-medium"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-400 to-fuchsia-400" />
+                {pillar}
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </Container>
 
-      {/* Scroll indicator (subtle) */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse">
-        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
-      </div>
-
-      <style jsx>{`
-        .bg-gradient-gold {
-          background: linear-gradient(135deg, #d4af37 0%, #f0d86a 100%);
-        }
-      `}</style>
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: [0, 8, 0] }}
+        transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity, ease: 'easeInOut' } }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5">
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-1 h-2 rounded-full bg-white/70"
+          />
+        </div>
+      </motion.div>
     </section>
   );
 }

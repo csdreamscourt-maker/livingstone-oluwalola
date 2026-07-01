@@ -2,140 +2,145 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Container } from '@/components/ui';
 import { BRAND, NAVIGATION } from '@/lib/constants';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 0);
-    };
-
+    const handleScroll = () => setHasScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-50 bg-white transition-all duration-300 ${
+      <motion.header
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={`sticky top-0 z-50 transition-all duration-500 ${
           hasScrolled
-            ? 'border-b border-gray-200 shadow-md'
-            : 'border-b border-gray-100 shadow-sm'
+            ? 'glass shadow-card border-b border-white/40'
+            : 'bg-transparent border-b border-transparent'
         }`}
       >
         <Container>
-          <div className="flex items-center justify-between h-18 md:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex flex-col gap-0 flex-shrink-0 group">
-              <span className="text-2xl md:text-3xl font-serif font-bold text-midnight-950 group-hover:text-gold-600 transition-colors duration-300">
-                {BRAND.name}
-              </span>
-              <span className="text-xs md:text-sm text-gold-600 font-medium tracking-wider uppercase">
-                {BRAND.tagline}
-              </span>
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
+              <div className="relative w-11 h-11 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-glow-violet group-hover:scale-110 transition-transform duration-300">
+                <Sparkles size={20} className="text-white" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-aurora opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+              <div className="flex flex-col leading-none">
+                <span className="text-xl md:text-2xl font-serif font-extrabold text-midnight-950 tracking-tight">
+                  {BRAND.name}
+                </span>
+                <span className="text-[10px] md:text-xs font-semibold tracking-[0.2em] uppercase text-gradient-primary mt-0.5">
+                  {BRAND.tagline}
+                </span>
+              </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-1">
               {NAVIGATION.slice(0, 6).map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative text-sm font-medium text-midnight-950 group"
+                  className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
                 >
-                  <span className="transition-colors duration-300 group-hover:text-gold-600">
-                    {item.label}
-                  </span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-600 transition-all duration-300 group-hover:w-full" />
+                  {item.label}
+                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </Link>
               ))}
             </nav>
 
-            {/* Right Section */}
-            <div className="flex items-center gap-4 ml-auto">
-              {/* Desktop CTA */}
-              <button className="hidden lg:flex items-center gap-2 px-6 py-3 bg-gold-600 text-midnight-950 font-medium rounded-lg hover:bg-gold-500 hover:shadow-lg transition-all duration-300 hover:scale-102 active:scale-95">
+            <div className="flex items-center gap-3">
+              <Link
+                href="/contact"
+                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm shadow-glow-violet hover:scale-105 active:scale-95 transition-transform duration-300"
+                style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+              >
                 Get Started
                 <ArrowRight size={16} />
-              </button>
+              </Link>
 
-              {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2 text-midnight-950 hover:bg-gray-100 rounded-lg transition-colors duration-300"
+                className="lg:hidden p-2.5 rounded-xl text-midnight-950 hover:bg-indigo-50 transition-colors duration-300"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X size={24} strokeWidth={2} /> : <Menu size={24} strokeWidth={2} />}
+                {isOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
         </Container>
-      </header>
+      </motion.header>
 
-      {/* Mobile Menu Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden animate-fadeIn"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Mobile Menu */}
-      <div
-        className={`fixed right-0 top-0 h-full w-64 bg-white z-50 lg:hidden transition-all duration-300 ${
-          isOpen ? 'translate-x-0 shadow-lg' : 'translate-x-full'
-        }`}
-      >
-        <div className="pt-20 px-6 space-y-2">
-          {NAVIGATION.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block px-4 py-3 text-base font-medium text-midnight-950 hover:text-gold-600 hover:bg-gray-50 rounded-lg transition-all duration-300 group"
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-midnight-950/60 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setIsOpen(false)}
-              style={{
-                animation: isOpen ? `slideUp 300ms ease-out ${index * 50}ms both` : 'none',
-              }}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 260 }}
+              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-gradient-cosmic shadow-2xl"
             >
-              <div className="flex items-center justify-between">
-                <span>{item.label}</span>
-                <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="pt-24 px-6 space-y-1">
+                {NAVIGATION.map((item, index) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 + 0.1 }}
+                  >
+                    <Link
+                      href={item.href}
+                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span>{item.label}</span>
+                      <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="pt-6"
+                >
+                  <Link
+                    href="/contact"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-white shadow-glow-violet"
+                    style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+                  >
+                    Get Started
+                    <ArrowRight size={16} />
+                  </Link>
+                </motion.div>
               </div>
-            </Link>
-          ))}
-
-          {/* Mobile CTA */}
-          <button className="w-full mt-6 px-4 py-3 bg-gold-600 text-midnight-950 font-medium rounded-lg hover:bg-gold-500 transition-all duration-300 active:scale-95">
-            Get Started
-          </button>
-        </div>
-      </div>
-
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateX(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

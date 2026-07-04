@@ -30,15 +30,15 @@ export function Footer() {
 
   return (
     <footer className="relative overflow-hidden bg-indigo-600">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-indigo-600" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gold-600" />
 
       <Container className="relative">
         <div className="py-16 md:py-24">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-16">
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="inline-flex items-center gap-3 group mb-6">
-                <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Sparkles size={20} className="text-white" />
+                <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-gold-600">
+                  <Sparkles size={20} className="text-gold-400" />
                 </div>
               </Link>
               <p className="text-indigo-100/60 text-sm leading-relaxed max-w-xs">
@@ -83,7 +83,7 @@ export function Footer() {
                     key={label}
                     href={href}
                     aria-label={label}
-                    className="group inline-flex items-center justify-center w-10 h-10 rounded-xl glass-dark border border-white/10 text-indigo-100/70 hover:text-white hover:border-indigo-400/50 hover:scale-110 transition-all duration-300"
+                    className="group inline-flex items-center justify-center w-10 h-10 rounded-xl glass-dark border border-gold-600 text-gold-400 hover:text-gold-300 hover:border-gold-400 hover:scale-110 transition-all duration-300"
                   >
                     <Icon size={16} />
                   </a>

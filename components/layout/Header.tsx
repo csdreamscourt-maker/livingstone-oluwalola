@@ -36,8 +36,8 @@ export function Header() {
         <Container>
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <Sparkles size={20} className="text-white" />
+              <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-gold-600">
+                <Sparkles size={20} className="text-gold-400" />
               </div>
             </Link>
 
@@ -57,7 +57,7 @@ export function Header() {
             <div className="flex items-center gap-3">
               <Link
                 href="/contact"
-                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-indigo-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-midnight-900 text-sm bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Get Started
                 <ArrowRight size={16} />
@@ -119,7 +119,7 @@ export function Header() {
                   <Link
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-white bg-white text-indigo-600 shadow-lg"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-midnight-900 bg-gold-600 shadow-lg"
                   >
                     Get Started
                     <ArrowRight size={16} />

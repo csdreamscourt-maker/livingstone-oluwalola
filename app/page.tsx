@@ -43,7 +43,7 @@ export default function Home() {
             variants={fadeUp}
             className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/70 backdrop-blur-sm border border-indigo-200 text-indigo-600 text-xs font-bold uppercase tracking-[0.2em]">
+            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/70 backdrop-blur-sm border border-gold-300 text-gold-600 text-xs font-bold uppercase tracking-[0.2em]">
               <Sparkles size={14} />
               Our Philosophy
             </span>
@@ -230,7 +230,7 @@ export default function Home() {
             </p>
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-2 px-10 py-5 rounded-2xl font-semibold text-indigo-600 bg-white shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
+              className="group inline-flex items-center gap-2 px-10 py-5 rounded-2xl font-semibold text-midnight-900 bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
             >
               Get Started
               <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />

@@ -48,10 +48,10 @@ export function NewsletterCTA() {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-indigo-600" />
 
             <div className="relative text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 mb-6 shadow-lg">
-                <Mail size={28} className="text-white" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold-600 mb-6 shadow-lg">
+                <Mail size={28} className="text-midnight-900" />
               </div>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-[0.2em]">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-gold-100 text-gold-700 text-xs font-bold uppercase tracking-[0.2em]">
                 <Sparkles size={12} />
                 Newsletter
               </span>
@@ -80,7 +80,7 @@ export function NewsletterCTA() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-white bg-indigo-600 shadow-lg hover:scale-[1.03] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-midnight-900 bg-gold-600 shadow-lg hover:scale-[1.03] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden"
               >
                 {status === 'loading' ? (
                   <>

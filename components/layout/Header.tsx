@@ -10,6 +10,7 @@ import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setHasScrolled(window.scrollY > 10);
@@ -42,15 +43,42 @@ export function Header() {
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
-              {NAVIGATION.slice(0, 6).map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
-                >
-                  {item.label}
-                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </Link>
+              {NAVIGATION.slice(0, 5).map((item) => (
+                item.children ? (
+                  <div key={item.label} className="relative">
+                    <button
+                      onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                      className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
+                    >
+                      {item.label}
+                      <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                    </button>
+
+                    {openDropdown === item.label && (
+                      <div className="absolute left-0 top-full mt-2 w-48 rounded-2xl border border-indigo-100 bg-white/95 p-2 shadow-xl backdrop-blur">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setOpenDropdown(null)}
+                            className="block rounded-xl px-3 py-2 text-sm font-medium text-midnight-800 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-300"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
+                  >
+                    {item.label}
+                    <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  </Link>
+                )
               ))}
             </nav>
 
@@ -95,19 +123,44 @@ export function Header() {
               <div className="pt-24 px-6 space-y-1">
                 {NAVIGATION.map((item, index) => (
                   <motion.div
-                    key={item.href}
+                    key={item.href || item.label}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 + 0.1 }}
                   >
-                    <Link
-                      href={item.href}
-                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span>{item.label}</span>
-                      <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                    </Link>
+                    {item.children ? (
+                      <div className="space-y-1">
+                        <Link
+                          href={item.href}
+                          className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <span>{item.label}</span>
+                          <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                        </Link>
+                        <div className="pl-4 space-y-1">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              <span>{child.label}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <span>{item.label}</span>
+                        <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                      </Link>
+                    )}
                   </motion.div>
                 ))}
                 <motion.div

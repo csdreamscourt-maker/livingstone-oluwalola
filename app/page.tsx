@@ -1,99 +1,115 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Hero, FeaturedContent, NewsletterCTA } from '@/components/sections';
+import { Hero, FeaturedContent } from '@/components/sections';
 import { Container } from '@/components/ui';
 import { FRAMEWORKS, COMPANIES, SAMPLE_ARTICLES } from '@/lib/constants';
 import Link from 'next/link';
-import { ArrowRight, Layers, Building2, Users, Sparkles } from 'lucide-react';
+import { ArrowRight, Layers, Building2, Users, Sparkles, BrainCircuit, Compass } from 'lucide-react';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.7, ease: EASE },
+    transition: { delay: i * 0.08, duration: 0.7, ease: EASE },
   }),
 };
 
 const stats = [
-  { number: '7', label: 'Operating Companies', icon: Building2, color: 'indigo-600' },
-  { number: '100+', label: 'Frameworks & Models', icon: Layers, color: 'indigo-600' },
-  { number: '1000+', label: 'Leaders Impacted', icon: Users, color: 'indigo-600' },
+  { number: '7', label: 'Operating companies', icon: Building2 },
+  { number: '100+', label: 'Frameworks & models', icon: Layers },
+  { number: '1000+', label: 'Leaders impacted', icon: Users },
+];
+
+const pillars = [
+  {
+    title: 'Systems thinking',
+    description: 'Clarity, discipline and durable strategy for mission-driven organizations.',
+    icon: BrainCircuit,
+  },
+  {
+    title: 'Reflective product design',
+    description: 'Experiences shaped for calm, modern use and long-term trust.',
+    icon: Compass,
+  },
+  {
+    title: 'Human-centered leadership',
+    description: 'A platform built to support growth, wisdom and meaningful execution.',
+    icon: Sparkles,
+  },
 ];
 
 export default function Home() {
   return (
     <>
       <Hero
-        title="The Digital Headquarters of Leadership & Innovation"
-        description="Explore frameworks, ideas, and systems for building people, businesses, and institutions through faith-driven strategic thinking."
+        subtitle="Livingstone • Modern Systems for Human Growth"
+        title="The digital headquarters for bold thinking and calm execution"
+        description="Explore strategic frameworks, elegant digital experiences, and living institutions shaped for the future."
         cta={{ label: 'Explore Frameworks', href: '/frameworks' }}
         cta2={{ label: 'Read Latest Insights', href: '/articles' }}
       />
 
-      {/* Philosophy / Stats */}
-      <section className="relative py-24 md:py-32 bg-mesh overflow-hidden">
+      <section className="relative overflow-hidden bg-[#f8f8fc] py-24 md:py-32">
         <Container>
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={fadeUp}
-            className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/70 backdrop-blur-sm border border-gold-300 text-gold-600 text-xs font-bold uppercase tracking-[0.2em]">
-              <Sparkles size={14} />
-              Our Philosophy
+          <div className="mb-12 max-w-3xl">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-700">
+              <Sparkles size={13} />
+              A sharper operating layer
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-[1.1]">
-              Building Systems That{' '}
-              <span className="text-indigo-600">Transform</span>
+            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl lg:text-5xl">
+              Built for leaders who want both depth and elegance.
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-              At the intersection of faith, leadership, technology, and human development lies a
-              powerful opportunity. We believe lasting transformation happens when vision, systems,
-              and people align.
+            <p className="mt-4 text-lg leading-8 text-gray-600">
+              The Livingstone ecosystem blends strategic thinking, product craft, and spiritual reflection into a single modern experience.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  custom={index}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-50px' }}
-                  variants={fadeUp}
-                  whileHover={{ y: -8 }}
-                  className="group relative"
-                >
-                  <div className="absolute -inset-0.5 rounded-3xl bg-indigo-600 opacity-0 group-hover:opacity-10 blur-lg transition-opacity duration-500" />
-                  <div className="relative h-full p-8 md:p-10 rounded-3xl bg-white border border-gray-200/80 shadow-card group-hover:shadow-card-hover transition-all duration-500">
-                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 mb-6 shadow-lg`}>
-                      <Icon size={26} className="text-white" />
+          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+            <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={fadeUp} className="rounded-[2rem] border border-gray-200 bg-white p-8 shadow-[0_18px_60px_-30px_rgba(15,23,42,0.24)]">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500">What we stand for</p>
+              <div className="mt-6 space-y-4">
+                {pillars.map((pillar) => {
+                  const Icon = pillar.icon;
+                  return (
+                    <div key={pillar.title} className="flex gap-4 rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
+                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
+                        <Icon size={18} />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-midnight-950">{pillar.title}</p>
+                        <p className="mt-1 text-sm leading-7 text-gray-600">{pillar.description}</p>
+                      </div>
                     </div>
-                    <p className={`text-6xl md:text-7xl font-serif font-extrabold text-indigo-600 mb-3 tracking-tight`}>
-                      {stat.number}
-                    </p>
-                    <p className="text-base md:text-lg text-gray-600 font-medium">{stat.label}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div key={stat.label} custom={index} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} variants={fadeUp} className="rounded-[1.6rem] border border-gray-200 bg-white p-6 shadow-[0_10px_40px_-24px_rgba(15,23,42,0.18)]">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
+                      <Icon size={18} />
+                    </div>
+                    <p className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950">{stat.number}</p>
+                    <p className="mt-2 text-sm leading-7 text-gray-600">{stat.label}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Frameworks */}
       <FeaturedContent
-        subtitle="Signature Systems"
-        title="Frameworks for Transformation"
-        description="Industry-leading frameworks and strategic models designed for organizational excellence."
+        subtitle="Signature systems"
+        title="Frameworks for transformation"
+        description="Practical models, strategic lenses, and structures for growth at every level."
         items={FRAMEWORKS.map((fw) => ({
           id: fw.id,
           title: fw.title,
@@ -102,97 +118,47 @@ export default function Home() {
           href: `/frameworks/${fw.id}`,
         }))}
         viewAllHref="/frameworks"
-        viewAllLabel="Explore All Frameworks"
+        viewAllLabel="Explore all frameworks"
       />
 
-      {/* Companies */}
-      <section className="relative py-24 md:py-32 bg-white overflow-hidden">
-        <Container className="relative">
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={fadeUp}
-            className="mb-16 md:mb-20 max-w-2xl"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-fuchsia-50 border border-fuchsia-200 text-fuchsia-600 text-xs font-bold uppercase tracking-[0.2em]">
-              <Building2 size={14} />
-              Our Ecosystem
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-[1.1]">
-              Companies &{' '}
-              <span className="text-indigo-600">Initiatives</span>
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600">
-              A collection of mission-driven organizations operating at the frontlines of
-              leadership, technology, and social impact.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 mb-12">
-            {COMPANIES.slice(0, 6).map((company, index) => {
-               const colors = [
-                 'indigo-600',
-                 'indigo-600',
-                 'indigo-600',
-                 'indigo-600',
-                 'indigo-600',
-                 'indigo-600',
-               ];
-              return (
-                <motion.div
-                  key={company.id}
-                  custom={index}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: '-50px' }}
-                  variants={fadeUp}
-                  whileHover={{ y: -6 }}
-                >
-                  <Link href={company.href} className="group block h-full">
-                    <div className="relative h-full p-7 md:p-8 rounded-3xl bg-white border border-gray-200/80 shadow-card group-hover:shadow-card-hover transition-all duration-500 overflow-hidden">
-                      <div className={`absolute top-0 left-0 right-0 h-1 bg-indigo-600`} />
-
-                      <div className={`absolute inset-0 bg-indigo-600 opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
-
-                      <div className="relative">
-                        <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600 mb-5 shadow-md`}>
-                          <Building2 size={22} className="text-white" />
-                        </div>
-                        <h3 className="text-xl md:text-2xl font-serif font-bold text-midnight-950 mb-3 group-hover:text-indigo-600 transition-colors duration-300">
-                          {company.name}
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed mb-5 line-clamp-3">
-                          {company.description}
-                        </p>
-                        <div className={`inline-flex items-center gap-2 font-semibold text-sm text-indigo-600 pt-4 border-t border-gray-100 w-full`}>
-                          <span>Learn More</span>
-                          <ArrowRight size={16} className="text-indigo-600 transition-transform duration-300 group-hover:translate-x-1.5" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
+      <section className="relative overflow-hidden bg-white py-24 md:py-32">
+        <Container>
+          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-fuchsia-200 bg-fuchsia-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-fuchsia-700">
+                <Building2 size={13} />
+                Ecosystem
+              </span>
+              <h2 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl">
+                A portfolio of focused initiatives.
+              </h2>
+            </div>
+            <Link href="/companies" className="inline-flex items-center gap-2 text-base font-semibold text-midnight-950 transition-colors duration-300 hover:text-indigo-600">
+              View all companies
+              <ArrowRight size={18} />
+            </Link>
           </div>
 
-          <div className="text-center">
-            <Link
-              href="/companies"
-              className="inline-flex items-center gap-2 text-lg font-semibold text-midnight-950 hover:text-indigo-600 group transition-colors duration-300 link-underline"
-            >
-              View All Companies
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
-            </Link>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {COMPANIES.slice(0, 4).map((company, index) => (
+              <motion.div key={company.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.6, delay: index * 0.06 }}>
+                <Link href={company.href} className="group block h-full rounded-[1.6rem] border border-gray-200 bg-[#fcfcfd] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_16px_60px_-30px_rgba(79,70,229,0.35)]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
+                    <Building2 size={18} />
+                  </div>
+                  <h3 className="mt-6 text-xl font-semibold tracking-[-0.02em] text-midnight-950">{company.name}</h3>
+                  <p className="mt-3 text-sm leading-7 text-gray-600">{company.description}</p>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </Container>
       </section>
 
       <FeaturedContent
-        subtitle="Latest Insights"
-        title="Articles & Perspectives"
-        description="Discover in-depth articles, case studies, and leadership insights from our team."
+        subtitle="Latest insights"
+        title="Articles & perspectives"
+        description="Thoughtful writing for leaders navigating complexity with clarity."
         items={SAMPLE_ARTICLES.map((article) => ({
           id: article.id,
           title: article.title,
@@ -201,39 +167,22 @@ export default function Home() {
           metadata: `${article.date} • ${article.readTime}`,
         }))}
         viewAllHref="/articles"
-        viewAllLabel="Read All Articles"
+        viewAllLabel="Read all articles"
       />
 
-      <NewsletterCTA />
-
-      {/* Final CTA */}
-      <section className="relative py-24 md:py-32 overflow-hidden bg-indigo-600">
-        <Container className="relative">
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={fadeUp}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full glass-dark text-indigo-200 text-xs font-bold uppercase tracking-[0.2em] border border-indigo-400/30">
-              <Sparkles size={14} className="text-amber-400" />
-              Take The Next Step
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-[1.1]">
-              Ready to Transform Your{' '}
-              <span className="text-white">Leadership?</span>
+      <section className="relative overflow-hidden bg-[linear-gradient(135deg,_#11162f_0%,_#181f3f_100%)] py-24 md:py-28">
+        <Container>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7 }} className="mx-auto max-w-3xl rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur-xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">Take the next step</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">
+              Ready to build something enduring?
             </h2>
-            <p className="text-lg md:text-xl text-indigo-100/80 mb-10 leading-relaxed">
-              Join thousands of leaders accessing tools, frameworks, and community through our
-              integrated platform.
+            <p className="mt-4 text-lg leading-8 text-white/70">
+              Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-2 px-10 py-5 rounded-2xl font-semibold text-midnight-900 bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
-            >
-              Get Started
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-gold-600 px-6 py-3.5 font-semibold text-midnight-950 transition-transform duration-300 hover:-translate-y-0.5">
+              Get started
+              <ArrowRight size={18} />
             </Link>
           </motion.div>
         </Container>

@@ -14,12 +14,22 @@ import {
   MoonStar,
   Sparkles,
   Sunrise,
-  Waves,
   LogOut,
+  LayoutDashboard,
+  PenTool,
+  Brain,
+  Settings,
 } from 'lucide-react';
 import type { User } from '@/types/database';
 import { addDreamEntry, getDreamEntries, getDreamStats } from '@/lib/dreams';
 import { getCurrentSession, signOutUser } from '@/lib/auth';
+
+const sidebarItems = [
+  { label: 'Overview', icon: LayoutDashboard, active: true },
+  { label: 'Journal', icon: PenTool },
+  { label: 'Dreams', icon: Brain },
+  { label: 'Settings', icon: Settings },
+];
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -82,10 +92,10 @@ export default function DashboardPage() {
     return (
       <Section padding="2xl">
         <Container>
-          <div className="text-center py-32">
+          <div className="py-32 text-center">
             <div className="inline-flex items-center gap-2">
-              <div className="w-2 h-2 bg-gold-600 rounded-full animate-pulse" />
-              <p className="text-lg text-gray-600">Preparing your Dreamscourt sanctuary...</p>
+              <div className="h-2 w-2 animate-pulse rounded-full bg-gold-600" />
+              <p className="text-lg text-gray-600">Preparing your Dreamscourt workspace...</p>
             </div>
           </div>
         </Container>
@@ -97,19 +107,12 @@ export default function DashboardPage() {
     return (
       <Section padding="2xl">
         <Container size="md">
-          <div className="text-center py-32">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-6">
-              Welcome to Dreamscourt
-            </h1>
-            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-              Sign in to access your private sanctuary for dream journaling, reflection, and spiritual growth.
-            </p>
-            <a
-              href="/auth/login"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              Sign In to Continue
-              <ArrowRight className="w-4 h-4" />
+          <div className="py-32 text-center">
+            <h1 className="mb-6 font-serif text-4xl font-bold text-midnight-950 md:text-5xl">Welcome to Dreamscourt</h1>
+            <p className="mb-10 text-lg leading-relaxed text-gray-600">Sign in to access your private sanctuary for dream journaling, reflection, and spiritual growth.</p>
+            <a href="/auth/login" className="inline-flex items-center gap-2 rounded-lg bg-gold-600 px-8 py-4 font-semibold text-midnight-950 transition-all duration-300 hover:scale-105 hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 active:scale-95">
+              Sign in to continue
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </Container>
@@ -118,144 +121,158 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
-      <Section padding="2xl" className="bg-[radial-gradient(circle_at_top,_rgba(245,214,117,0.18),_transparent_50%)]">
-        <Container>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between mb-10">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-gold-600/20 bg-gold-50 px-3 py-1 text-sm font-semibold text-gold-700 mb-4">
-                <MoonStar className="w-4 h-4" />
-                Dreamscourt • Private Reflection Space
-              </div>
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-3">
-                Welcome back, {user.full_name || 'Friend'}
-              </h1>
-              <p className="text-lg text-gray-600 max-w-2xl">
-                A calm place to remember what your dreams are trying to show you.
-              </p>
-            </div>
-            <Button onClick={handleLogout} variant="secondary" className="self-start">
-              <LogOut className="mr-2 h-4 w-4" />
-              Log Out
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6 mb-8">
-            <Card variant="dark" className="overflow-hidden border-gold-600/20">
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-                <div>
-                  <p className="text-sm uppercase tracking-[0.2em] text-gold-400 mb-2">Daily reflection</p>
-                  <h2 className="text-2xl font-serif font-semibold mb-3">What wants your attention today?</h2>
-                  <p className="text-gray-300 max-w-xl">
-                    Let your dreams become a gentle practice of attention, wisdom, and spiritual awareness.
-                  </p>
+    <Section padding="2xl" className="bg-[radial-gradient(circle_at_top_left,_rgba(245,214,117,0.2),_transparent_45%)]">
+      <Container>
+        <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-[0_20px_70px_-35px_rgba(15,23,42,0.24)]">
+          <div className="grid min-h-[760px] lg:grid-cols-[260px_1fr]">
+            <aside className="border-b border-gray-200 bg-[#0f1328] p-6 text-white lg:border-b-0 lg:border-r">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-300">
+                  <MoonStar className="h-5 w-5" />
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-white/10 p-4 text-gold-300">
-                  <div className="flex items-center gap-2 text-sm font-semibold">
-                    <Sunrise className="w-4 h-4" />
-                    Morning capture ready
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/50">Dreamscourt</p>
+                  <p className="text-sm font-semibold">Private workspace</p>
+                </div>
+              </div>
+
+              <nav className="mt-8 space-y-2">
+                {sidebarItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button key={item.label} className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-300 ${item.active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-8 rounded-[1.4rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm font-semibold">Today’s focus</p>
+                <p className="mt-2 text-sm leading-7 text-white/70">A calm space to interpret your dreams and track your recurring themes.</p>
+              </div>
+            </aside>
+
+            <main className="p-6 md:p-8 lg:p-10">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gold-200 bg-gold-50 px-3 py-1 text-sm font-semibold text-gold-700">
+                    <Sparkles className="h-4 w-4" />
+                    Dreamscourt • operational view
                   </div>
+                  <h1 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl">Welcome back, {user.full_name || 'Friend'}</h1>
+                  <p className="mt-3 max-w-2xl text-base leading-8 text-gray-600">A structured sanctuary for journaling, reflection and noticing what matters most.</p>
                 </div>
-              </div>
-            </Card>
-
-            <Card variant="bordered" className="bg-white/80 backdrop-blur">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="rounded-2xl bg-gold-100 p-3 text-gold-700">
-                  <Compass className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gold-700">Quick capture</p>
-                  <p className="text-sm text-gray-600">Capture a dream within seconds</p>
-                </div>
-              </div>
-              <textarea
-                value={draft}
-                onChange={(event) => setDraft(event.target.value)}
-                className="min-h-[120px] w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-midnight-950 outline-none focus:border-gold-600"
-                placeholder="I dreamt that..."
-              />
-              <div className="mt-4 flex items-center justify-between">
-                <p className="text-xs text-gray-500">Your words will be saved locally for now.</p>
-                <Button onClick={handleQuickCapture} variant="gold" size="sm">
-                  Save dream
+                <Button onClick={handleLogout} variant="secondary" className="self-start">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log out
                 </Button>
               </div>
-            </Card>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-            {[
-              { label: 'Dreams recorded', value: stats.dreamCount, icon: BookOpen },
-              { label: 'Avg clarity', value: `${stats.averageClarity}/5`, icon: Sparkles },
-              { label: 'Favorite dreams', value: stats.favoriteCount, icon: Heart },
-              { label: 'Recurring themes', value: stats.recurringThemes.length, icon: Lightbulb },
-            ].map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div key={item.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
-                  <Card variant="bordered" className="h-full">
-                    <div className="flex items-center gap-3">
-                      <div className="rounded-2xl bg-gold-50 p-3 text-gold-700">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-serif font-bold text-midnight-950">{item.value}</p>
-                        <p className="text-sm text-gray-600">{item.label}</p>
+              <div className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                <Card variant="dark" className="overflow-hidden border-gold-600/20">
+                  <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <p className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-gold-400">Daily reflection</p>
+                      <h2 className="text-2xl font-semibold text-white">What wants your attention today?</h2>
+                      <p className="mt-3 max-w-xl text-sm leading-7 text-gray-300">This is your calm command center for capturing dreams and returning to them with clarity.</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/10 p-4 text-gold-300">
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        <Sunrise className="h-4 w-4" />
+                        Morning capture ready
                       </div>
                     </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
-            <Card variant="bordered" className="h-full">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <p className="text-sm text-gold-700 font-semibold">Recent dreams</p>
-                  <h2 className="text-2xl font-serif font-bold text-midnight-950">Your dream timeline</h2>
-                </div>
-                <Link href="/dreams" className="text-sm font-semibold text-gold-700 hover:text-gold-800">
-                  Open library
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {dreams.slice(0, 4).map((dream) => (
-                  <div key={dream.id} className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <p className="font-semibold text-midnight-950">{dream.title}</p>
-                        <p className="text-sm text-gray-600">{new Date(dream.date).toLocaleDateString()}</p>
-                      </div>
-                      <div className="text-sm text-gold-700">{dream.mood}</div>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-2">{dream.description}</p>
                   </div>
-                ))}
-              </div>
-            </Card>
+                </Card>
 
-            <Card variant="bordered" className="h-full">
-              <p className="text-sm text-gold-700 font-semibold">Recommended reflection</p>
-              <h2 className="text-2xl font-serif font-bold text-midnight-950 mt-2 mb-4">A gentle prompt for tonight</h2>
-              <div className="rounded-2xl bg-midnight-950 p-6 text-white">
-                <p className="text-lg leading-relaxed">
-                  What emotion has been asking for your attention lately, and what might it be inviting you to understand?
-                </p>
+                <Card variant="bordered" className="bg-white/90 backdrop-blur">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="rounded-2xl bg-gold-100 p-3 text-gold-700">
+                      <Compass className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gold-700">Quick capture</p>
+                      <p className="text-sm text-gray-600">Save a dream in seconds</p>
+                    </div>
+                  </div>
+                  <textarea value={draft} onChange={(event) => setDraft(event.target.value)} className="min-h-[128px] w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-midnight-950 outline-none focus:border-gold-600" placeholder="I dreamt that..." />
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <p className="text-xs text-gray-500">Stored locally for now.</p>
+                    <Button onClick={handleQuickCapture} variant="gold" size="sm">Save dream</Button>
+                  </div>
+                </Card>
               </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {stats.recurringThemes.slice(0, 4).map((theme) => (
-                  <span key={theme} className="rounded-full bg-gold-50 px-3 py-1 text-sm text-gold-700">
-                    {theme}
-                  </span>
-                ))}
+
+              <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {[
+                  { label: 'Dreams recorded', value: stats.dreamCount, icon: BookOpen },
+                  { label: 'Avg clarity', value: `${stats.averageClarity}/5`, icon: Sparkles },
+                  { label: 'Favorite dreams', value: stats.favoriteCount, icon: Heart },
+                  { label: 'Recurring themes', value: stats.recurringThemes.length, icon: Lightbulb },
+                ].map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.div key={item.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
+                      <Card variant="bordered" className="h-full">
+                        <div className="flex items-center gap-3">
+                          <div className="rounded-2xl bg-gold-50 p-3 text-gold-700">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="text-2xl font-semibold tracking-[-0.02em] text-midnight-950">{item.value}</p>
+                            <p className="text-sm text-gray-600">{item.label}</p>
+                          </div>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  );
+                })}
               </div>
-            </Card>
+
+              <div className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                <Card variant="bordered" className="h-full">
+                  <div className="mb-6 flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gold-700">Recent dreams</p>
+                      <h2 className="text-2xl font-semibold tracking-[-0.02em] text-midnight-950">Your dream timeline</h2>
+                    </div>
+                    <Link href="/dreams" className="text-sm font-semibold text-gold-700 hover:text-gold-800">Open library</Link>
+                  </div>
+                  <div className="space-y-3">
+                    {dreams.slice(0, 4).map((dream) => (
+                      <div key={dream.id} className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <p className="font-semibold text-midnight-950">{dream.title}</p>
+                            <p className="text-sm text-gray-600">{new Date(dream.date).toLocaleDateString()}</p>
+                          </div>
+                          <div className="text-sm text-gold-700">{dream.mood}</div>
+                        </div>
+                        <p className="mt-2 text-sm leading-7 text-gray-600">{dream.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card variant="bordered" className="h-full">
+                  <p className="text-sm font-semibold text-gold-700">Reflection prompt</p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-[-0.02em] text-midnight-950">A gentle prompt for tonight</h2>
+                  <div className="mt-4 rounded-[1.4rem] bg-midnight-950 p-6 text-white">
+                    <p className="text-lg leading-8">What emotion has been asking for your attention lately, and what might it be inviting you to understand?</p>
+                  </div>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {stats.recurringThemes.slice(0, 4).map((theme) => (
+                      <span key={theme} className="rounded-full bg-gold-50 px-3 py-1 text-sm text-gold-700">{theme}</span>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </main>
           </div>
-        </Container>
-      </Section>
-    </>
+        </div>
+      </Container>
+    </Section>
   );
 }

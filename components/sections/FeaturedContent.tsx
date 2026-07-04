@@ -23,15 +23,6 @@ interface FeaturedContentProps {
   viewAllLabel?: string;
 }
 
-const COLORS = [
-  'indigo-600',
-  'indigo-600',
-  'indigo-600',
-  'indigo-600',
-  'indigo-600',
-  'indigo-600',
-];
-
 const PILL_TONES = [
   'bg-indigo-50 text-indigo-700 border-indigo-200',
   'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200',
@@ -49,83 +40,37 @@ export function FeaturedContent({
   viewAllHref,
   viewAllLabel = 'View All',
 }: FeaturedContentProps) {
-  const titleWords = title.split(' ');
-  const splitPoint = Math.ceil(titleWords.length / 2);
-
   return (
-    <section className="relative py-24 md:py-32 bg-white overflow-hidden">
+    <section className="relative overflow-hidden bg-white py-24 md:py-32">
       <Container className="relative">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16 md:mb-20 max-w-3xl"
-        >
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="mb-12 max-w-2xl">
           {subtitle && (
-            <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/70 backdrop-blur-sm border border-indigo-200 text-indigo-600 text-xs font-bold uppercase tracking-[0.2em]">
-              <Sparkles size={14} />
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-700">
+              <Sparkles size={13} />
               {subtitle}
             </span>
           )}
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-[1.1]">
-            {titleWords.slice(0, splitPoint).join(' ')}{' '}
-            <span className="text-indigo-600">
-              {titleWords.slice(splitPoint).join(' ')}
-            </span>
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl lg:text-5xl">
+            {title}
           </h2>
-          {description && (
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-              {description}
-            </p>
-          )}
+          {description && <p className="mt-4 text-lg leading-8 text-gray-600">{description}</p>}
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 mb-12">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {items.map((item, index) => {
-            const color = COLORS[index % COLORS.length];
             const pill = PILL_TONES[index % PILL_TONES.length];
             return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6 }}
-              >
-                <Link href={item.href || '#'} className="group block h-full">
-                  <div className="relative h-full p-7 md:p-8 rounded-3xl bg-white border border-gray-200/80 shadow-card group-hover:shadow-card-hover transition-all duration-500 flex flex-col overflow-hidden">
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-indigo-600`} />
-                    <div className={`absolute -right-20 -top-20 w-40 h-40 rounded-full bg-indigo-600 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500`} />
-
-                    <div className="relative flex-1">
-                      {item.category && (
-                        <span className={`inline-block px-3 py-1 mb-5 text-[11px] font-bold uppercase tracking-wider rounded-full border ${pill}`}>
-                          {item.category}
-                        </span>
-                      )}
-                      <h3 className="text-xl md:text-2xl font-serif font-bold text-midnight-950 mb-3 group-hover:text-indigo-600 transition-colors duration-300 leading-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600 text-base leading-relaxed mb-4">
-                        {item.description}
-                      </p>
+              <motion.div key={item.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.6, delay: index * 0.06 }}>
+                <Link href={item.href || '#'} className="group block h-full rounded-[1.6rem] border border-gray-200/80 bg-[#fcfcfd] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_16px_50px_-24px_rgba(79,70,229,0.35)]">
+                  <div className="flex items-start justify-between gap-4">
+                    {item.category && <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] ${pill}`}>{item.category}</span>}
+                    <div className="rounded-full border border-gray-200 bg-white p-2 text-gray-500 transition-colors duration-300 group-hover:text-indigo-600">
+                      <ArrowRight size={16} />
                     </div>
-
-                    {item.metadata && (
-                      <p className="relative text-xs font-medium text-gray-500 py-4 border-t border-gray-100 mb-4">
-                        {item.metadata}
-                      </p>
-                    )}
-
-                    {item.href && (
-                      <div className={`relative inline-flex items-center gap-2 font-semibold text-sm text-indigo-600`}>
-                        <span>Learn More</span>
-                        <ArrowRight size={16} className="text-indigo-600 transition-transform duration-300 group-hover:translate-x-1.5" />
-                      </div>
-                    )}
                   </div>
+                  <h3 className="mt-6 text-xl font-semibold tracking-[-0.02em] text-midnight-950">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-gray-600">{item.description}</p>
+                  {item.metadata && <p className="mt-6 border-t border-gray-100 pt-4 text-xs font-medium uppercase tracking-[0.2em] text-gray-500">{item.metadata}</p>}
                 </Link>
               </motion.div>
             );
@@ -133,19 +78,10 @@ export function FeaturedContent({
         </div>
 
         {viewAllHref && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-center"
-          >
-            <Link
-              href={viewAllHref}
-              className="inline-flex items-center gap-2 text-lg font-semibold text-midnight-950 hover:text-indigo-600 group transition-colors duration-300 link-underline"
-            >
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mt-10 text-center">
+            <Link href={viewAllHref} className="inline-flex items-center gap-2 text-base font-semibold text-midnight-950 transition-colors duration-300 hover:text-indigo-600">
               {viewAllLabel}
-              <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </motion.div>
         )}

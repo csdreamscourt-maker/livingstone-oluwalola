@@ -170,17 +170,17 @@ export default function Home() {
         viewAllLabel="Read all articles"
       />
 
-      <section className="relative overflow-hidden bg-[linear-gradient(135deg,_#11162f_0%,_#181f3f_100%)] py-24 md:py-28">
+      <section className="relative overflow-hidden bg-[#f8f8fc] py-24 md:py-28">
         <Container>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7 }} className="mx-auto max-w-3xl rounded-[2rem] border border-white/10 bg-white/10 p-8 text-center backdrop-blur-xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">Take the next step</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7 }} className="mx-auto max-w-3xl rounded-[2rem] border border-gray-200 bg-white p-8 text-center shadow-[0_20px_70px_-35px_rgba(15,23,42,0.28)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500">Take the next step</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl">
               Ready to build something enduring?
             </h2>
-            <p className="mt-4 text-lg leading-8 text-white/70">
+            <p className="mt-4 text-lg leading-8 text-gray-600">
               Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-gold-600 px-6 py-3.5 font-semibold text-midnight-950 transition-transform duration-300 hover:-translate-y-0.5">
+            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-midnight-950 px-6 py-3.5 font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
               Get started
               <ArrowRight size={18} />
             </Link>

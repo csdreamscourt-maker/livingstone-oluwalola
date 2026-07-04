@@ -40,14 +40,6 @@ export function Footer() {
                 <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <Sparkles size={20} className="text-white" />
                 </div>
-                <div className="flex flex-col leading-none">
-                  <div className="text-xl font-serif font-extrabold text-white tracking-tight">
-                    Livingstone
-                  </div>
-                  <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white mt-1">
-                    Faith · Leadership · Systems
-                  </div>
-                </div>
               </Link>
               <p className="text-indigo-100/60 text-sm leading-relaxed max-w-xs">
                 Building systems and frameworks for lasting impact across faith, leadership, technology, and human development.

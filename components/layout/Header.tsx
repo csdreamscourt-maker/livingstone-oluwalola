@@ -39,14 +39,6 @@ export function Header() {
               <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <Sparkles size={20} className="text-white" />
               </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-xl md:text-2xl font-serif font-extrabold text-midnight-950 tracking-tight">
-                  {BRAND.name}
-                </span>
-                <span className="text-[10px] md:text-xs font-semibold tracking-[0.2em] uppercase text-indigo-600 mt-0.5">
-                  {BRAND.tagline}
-                </span>
-              </div>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">

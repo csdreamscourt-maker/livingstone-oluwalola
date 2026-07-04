@@ -29,9 +29,9 @@ export default function AboutPage() {
             <div className="relative">
               <div className="absolute -top-20 -right-20 w-60 h-60 bg-gold-500 opacity-5 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-midnight-900 opacity-5 rounded-full blur-3xl" />
-              <div className="relative z-10 bg-midnight-900 rounded-2xl p-8 border border-gold-600 border-opacity-20">
+              <div className="relative z-10 bg-white rounded-2xl p-8 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
                 <div className="text-gold-600 text-5xl font-serif font-bold mb-4">✦</div>
-                <p className="text-white text-lg leading-relaxed">
+                <p className="text-midnight-950 text-lg leading-relaxed">
                   "Every framework here has been tested in the crucible of real-world application."
                 </p>
               </div>
@@ -118,9 +118,9 @@ export default function AboutPage() {
             <div className="order-2 lg:order-1 relative">
               <div className="absolute -top-20 -left-20 w-60 h-60 bg-gold-500 opacity-5 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-midnight-900 opacity-5 rounded-full blur-3xl" />
-              <div className="relative z-10 bg-midnight-900 rounded-2xl p-8 border border-gold-600 border-opacity-20">
+              <div className="relative z-10 bg-white rounded-2xl p-8 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
                 <div className="text-gold-600 text-5xl font-serif font-bold mb-4">✦</div>
-                <p className="text-white text-lg leading-relaxed">
+                <p className="text-midnight-950 text-lg leading-relaxed">
                   "We believe in the power of frameworks to create clarity from complexity."
                 </p>
               </div>
@@ -138,14 +138,14 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="bg-midnight-900 rounded-2xl p-12 md:p-16 border border-gold-600 border-opacity-20 mb-20">
-            <h3 className="text-3xl font-serif font-bold text-white mb-8">
+          <div className="bg-white rounded-2xl p-12 md:p-16 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)] mb-20">
+            <h3 className="text-3xl font-serif font-bold text-midnight-950 mb-8">
               The Ecosystem
             </h3>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-700 mb-8 leading-relaxed">
               Our work operates through multiple integrated channels. From one-on-one advisory to large institutional partnerships, from technology platforms to educational initiatives, we've created an ecosystem designed to meet leaders and organizations wherever they are.
             </p>
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-700 leading-relaxed">
               Whether through Dreamscourt's AI-powered personal development, House of Uphaz's institutional work, or our publishing efforts, every initiative is grounded in the same commitment: to help build a world where excellence, integrity, and transformative impact are the norm rather than the exception.
             </p>
           </div>

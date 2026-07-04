@@ -30,7 +30,7 @@ export default function SignupPage() {
   };
 
   return (
-    <Section padding="2xl" className="bg-[radial-gradient(circle_at_top,_rgba(245,214,117,0.18),_transparent_50%)]">
+    <Section padding="2xl" className="bg-[#f7f8fc]">
       <Container size="sm">
         <div className="py-16">
           <div className="text-center mb-10">

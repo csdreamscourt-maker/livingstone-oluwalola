@@ -22,7 +22,6 @@ interface HeroProps {
 export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-[#f7f7fb]">
-      <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#111827 1px, transparent 1px), linear-gradient(90deg, #111827 1px, transparent 1px)', backgroundSize: '52px 52px' }} />
       <Container className="relative z-10 py-20 md:py-28 lg:py-32">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
@@ -43,7 +42,7 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
             {(cta || cta2) && (
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 {cta && (
-                  <Link href={cta.href} className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-midnight-950 px-6 py-3.5 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-midnight-900">
+                  <Link href={cta.href} className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gold-600 px-6 py-3.5 font-semibold text-midnight-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold-500">
                     {cta.label}
                     <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
@@ -98,7 +97,7 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
                     <span className="font-semibold text-midnight-950">92%</span>
                   </div>
                   <div className="mt-3 h-2 rounded-full bg-gray-100">
-                    <div className="h-2 w-[92%] rounded-full bg-midnight-950" />
+                    <div className="h-2 w-[92%] rounded-full bg-gold-600" />
                   </div>
                 </div>
               </div>

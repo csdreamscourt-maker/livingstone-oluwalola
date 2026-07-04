@@ -61,18 +61,18 @@ export default function CompaniesPage() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-midnight-900 p-12 md:p-16 border border-gold-600 border-opacity-20">
+          <div className="relative overflow-hidden rounded-2xl bg-white p-12 md:p-16 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-8">
                 A Unified Vision
               </h2>
-              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
                 These organizations aren't separate ventures. They operate as an integrated ecosystem, each bringing specialized expertise while contributing to a singular mission: building people, businesses, and institutions that stand the test of time.
               </p>
-              <p className="text-lg text-gray-300 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Through technology, education, advisory, publishing, and direct engagement, we work to create a world where excellence, integrity, and transformative impact are the norm rather than the exception.
               </p>
             </div>

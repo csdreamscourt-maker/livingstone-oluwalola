@@ -143,9 +143,9 @@ export default async function CompanyDetailPage({ params }: CompanyPageProps) {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-midnight-900 p-8 text-white">
-                <h2 className="text-2xl font-serif font-bold mb-4">What this work looks like</h2>
-                <p className="text-gray-300 leading-relaxed">
+              <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
+                <h2 className="text-2xl font-serif font-bold mb-4 text-midnight-950">What this work looks like</h2>
+                <p className="text-gray-700 leading-relaxed">
                   This initiative is part of Livingstone’s broader ecosystem of mission-driven work, connecting faith, leadership, systems, and innovation in practical ways.
                 </p>
               </div>

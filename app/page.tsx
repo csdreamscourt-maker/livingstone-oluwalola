@@ -180,7 +180,7 @@ export default function Home() {
             <p className="mt-4 text-lg leading-8 text-gray-600">
               Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-midnight-950 px-6 py-3.5 font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
+            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-gold-600 px-6 py-3.5 font-semibold text-midnight-950 transition-transform duration-300 hover:-translate-y-0.5">
               Get started
               <ArrowRight size={18} />
             </Link>

@@ -29,8 +29,8 @@ export function Header() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`sticky top-0 z-50 transition-all duration-500 ${
           hasScrolled
-            ? 'bg-[#0f1328] shadow-card border-b border-gold-600/20'
-            : 'bg-[#0f1328] border-b border-transparent'
+            ? 'bg-white/95 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.24)] border-b border-gray-200'
+            : 'bg-white border-b border-transparent'
         }`}
       >
         <Container>
@@ -46,7 +46,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative px-4 py-2 text-sm font-semibold text-white/90 rounded-xl hover:text-gold-400 hover:bg-white/10 transition-all duration-300 group"
+                  className="relative px-4 py-2 text-sm font-semibold text-midnight-950 rounded-xl hover:text-gold-700 hover:bg-gold-50 transition-all duration-300 group"
                 >
                   {item.label}
                   <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
@@ -65,7 +65,7 @@ export function Header() {
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2.5 rounded-xl text-white hover:bg-white/10 transition-colors duration-300"
+                className="lg:hidden p-2.5 rounded-xl text-midnight-950 hover:bg-gold-50 transition-colors duration-300"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -102,7 +102,7 @@ export function Header() {
                   >
                     <Link
                       href={item.href}
-                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
+                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-midnight-950 hover:text-gold-700 hover:bg-gold-50 rounded-xl transition-all duration-300 group"
                       onClick={() => setIsOpen(false)}
                     >
                       <span>{item.label}</span>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/layout";
-import { Footer } from "@/components/layout";
+import { LayoutShell } from '@/components/layout/LayoutShell';
 
 export const metadata: Metadata = {
   title: "Livingstone | Faith, Leadership, Systems, Innovation",
@@ -29,9 +28,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="min-h-full flex flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

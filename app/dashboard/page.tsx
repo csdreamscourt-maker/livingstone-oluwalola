@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import type { User } from '@/types/database';
 import { addDreamEntry, getDreamEntries, getDreamStats } from '@/lib/dreams';
+import { getCurrentSession, signOutUser } from '@/lib/auth';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,46 +29,28 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem('auth_token');
+    const session = getCurrentSession();
+    if (!session) {
+      router.push('/auth/login');
+      setLoading(false);
+      return;
+    }
 
-        if (!token) {
-          router.push('/');
-          return;
-        }
-
-        const response = await fetch('/api/auth/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          localStorage.removeItem('auth_token');
-          router.push('/');
-          return;
-        }
-
-        const userData = await response.json();
-        setUser(userData);
-      } catch (err) {
-        console.error('Auth check failed:', err);
-        localStorage.removeItem('auth_token');
-        router.push('/');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
+    setUser({
+      id: session.userId,
+      email: session.email,
+      full_name: session.fullName,
+      created_at: session.createdAt,
+      updated_at: session.createdAt,
+    });
+    setLoading(false);
   }, [router]);
 
   const stats = useMemo(() => getDreamStats(dreams), [dreams]);
 
   const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    router.push('/');
+    signOutUser();
+    router.push('/auth/login');
   };
 
   const handleQuickCapture = () => {

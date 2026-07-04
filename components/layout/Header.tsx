@@ -10,7 +10,6 @@ import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setHasScrolled(window.scrollY > 10);
@@ -30,62 +29,35 @@ export function Header() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`sticky top-0 z-50 transition-all duration-500 ${
           hasScrolled
-            ? 'glass shadow-card border-b border-white/40'
-            : 'bg-transparent border-b border-transparent'
+            ? 'bg-[#0f1328] shadow-card border-b border-gold-600/20'
+            : 'bg-[#0f1328] border-b border-transparent'
         }`}
       >
         <Container>
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-gold-600">
-                <Sparkles size={20} className="text-gold-400" />
+              <div className="relative w-11 h-11 rounded-2xl bg-gold-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-white/10">
+                <Sparkles size={20} className="text-[#0f1328]" />
               </div>
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
               {NAVIGATION.slice(0, 5).map((item) => (
-                item.children ? (
-                  <div key={item.label} className="relative">
-                    <button
-                      onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-                      className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
-                    >
-                      {item.label}
-                      <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                    </button>
-
-                    {openDropdown === item.label && (
-                      <div className="absolute left-0 top-full mt-2 w-48 rounded-2xl border border-indigo-100 bg-white/95 p-2 shadow-xl backdrop-blur">
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={() => setOpenDropdown(null)}
-                            className="block rounded-xl px-3 py-2 text-sm font-medium text-midnight-800 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-300"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
-                  >
-                    {item.label}
-                    <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                  </Link>
-                )
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative px-4 py-2 text-sm font-semibold text-white/90 rounded-xl hover:text-gold-400 hover:bg-white/10 transition-all duration-300 group"
+                >
+                  {item.label}
+                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </Link>
               ))}
             </nav>
 
             <div className="flex items-center gap-3">
               <Link
                 href="/contact"
-                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-midnight-900 text-sm bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-[#0f1328] text-sm bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Get Started
                 <ArrowRight size={16} />
@@ -93,7 +65,7 @@ export function Header() {
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2.5 rounded-xl text-midnight-950 hover:bg-indigo-50 transition-colors duration-300"
+                className="lg:hidden p-2.5 rounded-xl text-white hover:bg-white/10 transition-colors duration-300"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -110,7 +82,7 @@ export function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-midnight-950/60 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-[#0f1328]/70 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -118,7 +90,7 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-indigo-600 shadow-2xl"
+              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-[#0f1328] shadow-2xl"
             >
               <div className="pt-24 px-6 space-y-1">
                 {NAVIGATION.map((item, index) => (
@@ -128,39 +100,14 @@ export function Header() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 + 0.1 }}
                   >
-                    {item.children ? (
-                      <div className="space-y-1">
-                        <Link
-                          href={item.href}
-                          className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          <span>{item.label}</span>
-                          <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                        </Link>
-                        <div className="pl-4 space-y-1">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className="flex items-center justify-between px-4 py-2 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300"
-                              onClick={() => setIsOpen(false)}
-                            >
-                              <span>{child.label}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <span>{item.label}</span>
-                        <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                      </Link>
-                    )}
+                    <Link
+                      href={item.href}
+                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 group"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span>{item.label}</span>
+                      <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                    </Link>
                   </motion.div>
                 ))}
                 <motion.div
@@ -172,7 +119,7 @@ export function Header() {
                   <Link
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-midnight-900 bg-gold-600 shadow-lg"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-[#0f1328] bg-gold-600 shadow-lg"
                   >
                     Get Started
                     <ArrowRight size={16} />

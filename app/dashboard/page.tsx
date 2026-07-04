@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Container, Section, Card, Button } from '@/components/ui';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -24,19 +24,13 @@ import type { User } from '@/types/database';
 import { addDreamEntry, getDreamEntries, getDreamStats } from '@/lib/dreams';
 import { getCurrentSession, signOutUser } from '@/lib/auth';
 
-const sidebarItems = [
-  { label: 'Overview', icon: LayoutDashboard, active: true },
-  { label: 'Journal', icon: PenTool },
-  { label: 'Dreams', icon: Brain },
-  { label: 'Settings', icon: Settings },
-];
-
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [dreams, setDreams] = useState(getDreamEntries());
   const [draft, setDraft] = useState('');
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const session = getCurrentSession();
@@ -57,6 +51,12 @@ export default function DashboardPage() {
   }, [router]);
 
   const stats = useMemo(() => getDreamStats(dreams), [dreams]);
+  const sidebarItems = [
+    { label: 'Overview', href: '/dashboard', icon: LayoutDashboard, active: pathname === '/dashboard' },
+    { label: 'Journal', href: '/journal', icon: PenTool, active: pathname === '/journal' },
+    { label: 'Dreams', href: '/dreams', icon: Brain, active: pathname === '/dreams' },
+    { label: 'Settings', href: '/settings', icon: Settings, active: pathname === '/settings' },
+  ];
 
   const handleLogout = () => {
     signOutUser();
@@ -121,11 +121,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <Section padding="2xl" className="bg-[radial-gradient(circle_at_top_left,_rgba(245,214,117,0.2),_transparent_45%)]">
+    <div className="min-h-screen bg-[#0f1328] px-4 py-4 md:px-6 lg:px-8 lg:py-6">
       <Container>
-        <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-[0_20px_70px_-35px_rgba(15,23,42,0.24)]">
-          <div className="grid min-h-[760px] lg:grid-cols-[260px_1fr]">
-            <aside className="border-b border-gray-200 bg-[#0f1328] p-6 text-white lg:border-b-0 lg:border-r">
+        <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#f7f7fb] shadow-[0_24px_90px_-36px_rgba(15,23,42,0.35)]">
+          <div className="grid min-h-[calc(100vh-3rem)] lg:grid-cols-[260px_1fr]">
+            <aside className="border-b border-white/10 bg-[#0f1328] p-6 text-white lg:border-b-0 lg:border-r">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-300">
                   <MoonStar className="h-5 w-5" />
@@ -140,10 +140,10 @@ export default function DashboardPage() {
                 {sidebarItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <button key={item.label} className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-300 ${item.active ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
+                    <Link key={item.label} href={item.href} className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-300 ${item.active ? 'bg-gold-500/15 text-gold-300' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}>
                       <Icon className="h-4 w-4" />
                       {item.label}
-                    </button>
+                    </Link>
                   );
                 })}
               </nav>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
               </div>
 
               <div className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-                <Card variant="dark" className="overflow-hidden border-gold-600/20">
+                <Card variant="dark" className="overflow-hidden border-gold-600/20 bg-[#0f1328]">
                   <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                     <div>
                       <p className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-gold-400">Daily reflection</p>
@@ -273,6 +273,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </Container>
-    </Section>
+    </div>
   );
 }

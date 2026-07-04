@@ -1,12 +1,16 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { Container, Section, Card, Button } from '@/components/ui';
 import { addDreamEntry, getDreamEntries } from '@/lib/dreams';
+import { getCurrentSession } from '@/lib/auth';
 import { BookOpen, Sparkles, PenSquare, MoonStar } from 'lucide-react';
 
 export default function JournalPage() {
+  const router = useRouter();
   const [dreams, setDreams] = useState(getDreamEntries());
+  const [ready, setReady] = useState(false);
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -16,12 +20,21 @@ export default function JournalPage() {
     notes: '',
   });
 
+  useEffect(() => {
+    const session = getCurrentSession();
+    if (!session) {
+      router.replace('/auth/login');
+      return;
+    }
+    setReady(true);
+  }, [router]);
+
   const stats = useMemo(() => ({
     total: dreams.length,
     favorite: dreams.filter((dream) => dream.favorite).length,
   }), [dreams]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!form.title.trim() || !form.description.trim()) return;
 
@@ -47,20 +60,22 @@ export default function JournalPage() {
     setForm({ title: '', description: '', mood: '', category: '', tags: '', notes: '' });
   };
 
+  if (!ready) return null;
+
   return (
-    <Section padding="2xl" className="bg-[radial-gradient(circle_at_top,_rgba(245,214,117,0.18),_transparent_50%)]">
+    <Section padding="2xl" className="bg-[#0f1328]">
       <Container>
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold-600/20 bg-gold-50 px-3 py-1 text-sm font-semibold text-gold-700 mb-4">
             <PenSquare className="w-4 h-4" />
             Dreamscourt journal
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950">Write the dream before it fades</h1>
-          <p className="mt-3 text-lg text-gray-600 max-w-2xl">Capture the image, the feeling, and the meaning in a space designed for calm, memory, and reflection.</p>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white">Write the dream before it fades</h1>
+          <p className="mt-3 text-lg text-white/75 max-w-2xl">Capture the image, the feeling, and the meaning in a space designed for calm, memory, and reflection.</p>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-6">
-          <Card variant="bordered" className="h-fit">
+          <Card variant="bordered" className="h-fit border-white/10 bg-[#f7f7fb]">
             <div className="flex items-center gap-3 mb-5">
               <div className="rounded-2xl bg-gold-50 p-3 text-gold-700"><BookOpen className="w-5 h-5" /></div>
               <div>
@@ -80,7 +95,7 @@ export default function JournalPage() {
             </div>
           </Card>
 
-          <Card variant="bordered">
+          <Card variant="bordered" className="border-white/10 bg-white">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

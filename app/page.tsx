@@ -27,7 +27,6 @@ export default function Home() {
   return (
     <>
       <Hero
-        subtitle="Welcome to Livingstone"
         title="The Digital Headquarters of Leadership & Innovation"
         description="Explore frameworks, ideas, and systems for building people, businesses, and institutions through faith-driven strategic thinking."
         cta={{ label: 'Explore Frameworks', href: '/frameworks' }}

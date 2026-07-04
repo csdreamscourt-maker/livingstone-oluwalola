@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Container } from '@/components/ui';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface HeroProps {
   title: string;
@@ -21,35 +21,7 @@ interface HeroProps {
 
 export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-cosmic noise-overlay">
-      {/* Animated gradient blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full"
-          style={{ background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)', filter: 'blur(60px)' }}
-          animate={{ x: [0, 60, -20, 0], y: [0, -40, 30, 0], scale: [1, 1.1, 0.95, 1] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-1/3 -right-40 w-[520px] h-[520px] rounded-full"
-          style={{ background: 'radial-gradient(circle, #d946ef 0%, transparent 70%)', filter: 'blur(70px)' }}
-          animate={{ x: [0, -40, 30, 0], y: [0, 50, -30, 0], scale: [1, 0.9, 1.15, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -bottom-40 left-1/4 w-[460px] h-[460px] rounded-full"
-          style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)', filter: 'blur(60px)' }}
-          animate={{ x: [0, 40, -30, 0], y: [0, -30, 40, 0], scale: [1, 1.05, 0.92, 1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-[380px] h-[380px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.6) 0%, transparent 70%)', filter: 'blur(50px)' }}
-          animate={{ x: [-100, 50, -80, -100], y: [-100, 30, -50, -100], scale: [1, 1.1, 0.95, 1] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-indigo-600">
       {/* Subtle grid overlay */}
       <div
         className="absolute inset-0 opacity-[0.08] pointer-events-none"
@@ -59,17 +31,16 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
         }}
       />
 
-      <Container className="relative z-10 w-full py-24 md:py-28">
-        <div className="max-w-5xl mx-auto text-center">
+      <Container className="relative z-10 w-full py-20 md:py-24">
+        <div className="max-w-4xl mx-auto text-center">
           {subtitle && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-8 flex justify-center"
+              className="mb-6 flex justify-center"
             >
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-dark text-indigo-200 text-xs md:text-sm font-semibold uppercase tracking-[0.2em] border border-indigo-400/30">
-                <Sparkles size={14} className="text-amber-400" />
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm text-white text-xs md:text-sm font-semibold uppercase tracking-[0.15em] border border-white/20">
                 {subtitle}
               </span>
             </motion.div>
@@ -79,13 +50,9 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif font-bold mb-8 leading-[1.05] tracking-tight"
-            style={{ color: '#ffffff' }}
+            className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-8 leading-[1.1] tracking-tight text-white"
           >
-            <span className="block">{title.split(' ').slice(0, Math.ceil(title.split(' ').length / 2)).join(' ')}</span>
-            <span className="block text-gradient-primary mt-2">
-              {title.split(' ').slice(Math.ceil(title.split(' ').length / 2)).join(' ')}
-            </span>
+            {title}
           </motion.h1>
 
           {description && (
@@ -93,7 +60,7 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="text-lg md:text-xl lg:text-2xl text-indigo-100/80 max-w-3xl mx-auto mb-12 leading-relaxed font-light"
+              className="text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto mb-10 leading-relaxed font-light"
             >
               {description}
             </motion.p>
@@ -109,49 +76,23 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
               {cta && (
                 <Link
                   href={cta.href}
-                  className="group relative inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 font-semibold rounded-2xl text-white overflow-hidden shadow-glow-violet transition-all duration-300 hover:scale-[1.03] active:scale-95"
-                  style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+                  className="group relative inline-flex items-center gap-2 px-8 py-3.5 md:px-10 md:py-4 font-semibold rounded-xl text-indigo-600 bg-white overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95"
                 >
                   <span className="relative z-10">{cta.label}</span>
-                  <ArrowRight size={20} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1.5" />
-                  <span
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%)' }}
-                  />
+                  <ArrowRight size={18} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               )}
               {cta2 && (
                 <Link
                   href={cta2.href}
-                  className="group inline-flex items-center gap-2 px-8 py-4 md:px-10 md:py-5 font-semibold rounded-2xl glass-dark text-white border border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-300 active:scale-95"
+                  className="group inline-flex items-center gap-2 px-8 py-3.5 md:px-10 md:py-4 font-semibold rounded-xl text-white border-2 border-white hover:bg-white/10 transition-all duration-300 active:scale-95"
                 >
                   {cta2.label}
-                  <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               )}
             </motion.div>
           )}
-
-          {/* Trust indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.9 }}
-            className="mt-16 md:mt-20 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-indigo-200/60"
-          >
-            {['Faith', 'Leadership', 'Systems', 'Innovation'].map((pillar, i) => (
-              <motion.div
-                key={pillar}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1 + i * 0.1 }}
-                className="flex items-center gap-2 text-sm md:text-base font-medium"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-400 to-fuchsia-400" />
-                {pillar}
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </Container>
 

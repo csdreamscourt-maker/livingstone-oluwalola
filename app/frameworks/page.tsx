@@ -35,7 +35,7 @@ export default function FrameworksPage() {
             {categories.map((category, categoryIndex) => (
               <div key={category} className="mb-20">
                 <div className="flex items-center gap-4 mb-10">
-                  <div className="w-1.5 h-10 bg-gradient-to-b from-gold-600 to-gold-500 rounded-full" />
+                  <div className="w-1.5 h-10 bg-gold-600 rounded-full" />
                   <h3 className="text-2xl md:text-3xl font-serif font-bold text-midnight-950">
                     {category}
                   </h3>
@@ -72,7 +72,7 @@ export default function FrameworksPage() {
             ))}
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-midnight-900 via-midnight-800 to-midnight-950 p-12 md:p-16 border border-gold-600 border-opacity-20">
+          <div className="relative overflow-hidden rounded-2xl bg-midnight-900 p-12 md:p-16 border border-gold-600 border-opacity-20">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             

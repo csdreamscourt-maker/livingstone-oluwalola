@@ -20,8 +20,8 @@ export function Card({
   const variants = {
     default: 'bg-white border border-gray-100 shadow-subtle',
     elevated: 'bg-white shadow-lg',
-    bordered: 'bg-white border border-gray-200 hover:border-gold-600',
-    gradient: 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-gold-600',
+    bordered: 'bg-white border border-gray-200 hover:border-indigo-600',
+    gradient: 'bg-white border border-gray-200 hover:border-indigo-600',
     dark: 'bg-midnight-950 border border-gray-700 text-white',
   };
 

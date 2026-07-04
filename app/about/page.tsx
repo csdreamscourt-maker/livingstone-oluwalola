@@ -29,7 +29,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="absolute -top-20 -right-20 w-60 h-60 bg-gold-500 opacity-5 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-midnight-900 opacity-5 rounded-full blur-3xl" />
-              <div className="relative z-10 bg-gradient-to-br from-midnight-900 to-midnight-950 rounded-2xl p-8 border border-gold-600 border-opacity-20">
+              <div className="relative z-10 bg-midnight-900 rounded-2xl p-8 border border-gold-600 border-opacity-20">
                 <div className="text-gold-600 text-5xl font-serif font-bold mb-4">✦</div>
                 <p className="text-white text-lg leading-relaxed">
                   "Every framework here has been tested in the crucible of real-world application."
@@ -118,7 +118,7 @@ export default function AboutPage() {
             <div className="order-2 lg:order-1 relative">
               <div className="absolute -top-20 -left-20 w-60 h-60 bg-gold-500 opacity-5 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-midnight-900 opacity-5 rounded-full blur-3xl" />
-              <div className="relative z-10 bg-gradient-to-br from-midnight-900 to-midnight-950 rounded-2xl p-8 border border-gold-600 border-opacity-20">
+              <div className="relative z-10 bg-midnight-900 rounded-2xl p-8 border border-gold-600 border-opacity-20">
                 <div className="text-gold-600 text-5xl font-serif font-bold mb-4">✦</div>
                 <p className="text-white text-lg leading-relaxed">
                   "We believe in the power of frameworks to create clarity from complexity."
@@ -138,7 +138,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-midnight-900 via-midnight-800 to-midnight-950 rounded-2xl p-12 md:p-16 border border-gold-600 border-opacity-20 mb-20">
+          <div className="bg-midnight-900 rounded-2xl p-12 md:p-16 border border-gold-600 border-opacity-20 mb-20">
             <h3 className="text-3xl font-serif font-bold text-white mb-8">
               The Ecosystem
             </h3>

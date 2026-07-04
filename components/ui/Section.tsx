@@ -23,10 +23,10 @@ export function Section({
 
   const bgMap = {
     white: 'bg-white',
-    light: 'bg-gradient-to-b from-white to-gray-50',
+    light: 'bg-white',
     dark: 'bg-midnight-950 text-white',
     'midnight-950': 'bg-midnight-950 text-white',
-    'gradient-subtle': 'bg-gradient-to-br from-white via-gray-50 to-gray-50',
+    'gradient-subtle': 'bg-white',
   };
 
   return (

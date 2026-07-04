@@ -23,13 +23,13 @@ interface FeaturedContentProps {
   viewAllLabel?: string;
 }
 
-const GRADIENTS = [
-  'from-indigo-500 to-violet-600',
-  'from-fuchsia-500 to-pink-600',
-  'from-cyan-500 to-indigo-600',
-  'from-amber-500 to-pink-500',
-  'from-violet-500 to-fuchsia-600',
-  'from-emerald-500 to-cyan-500',
+const COLORS = [
+  'indigo-600',
+  'indigo-600',
+  'indigo-600',
+  'indigo-600',
+  'indigo-600',
+  'indigo-600',
 ];
 
 const PILL_TONES = [
@@ -53,7 +53,7 @@ export function FeaturedContent({
   const splitPoint = Math.ceil(titleWords.length / 2);
 
   return (
-    <section className="relative py-24 md:py-32 bg-mesh overflow-hidden">
+    <section className="relative py-24 md:py-32 bg-white overflow-hidden">
       <Container className="relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -70,7 +70,7 @@ export function FeaturedContent({
           )}
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-[1.1]">
             {titleWords.slice(0, splitPoint).join(' ')}{' '}
-            <span className="text-gradient-primary">
+            <span className="text-indigo-600">
               {titleWords.slice(splitPoint).join(' ')}
             </span>
           </h2>
@@ -83,7 +83,7 @@ export function FeaturedContent({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 mb-12">
           {items.map((item, index) => {
-            const gradient = GRADIENTS[index % GRADIENTS.length];
+            const color = COLORS[index % COLORS.length];
             const pill = PILL_TONES[index % PILL_TONES.length];
             return (
               <motion.div
@@ -96,8 +96,8 @@ export function FeaturedContent({
               >
                 <Link href={item.href || '#'} className="group block h-full">
                   <div className="relative h-full p-7 md:p-8 rounded-3xl bg-white border border-gray-200/80 shadow-card group-hover:shadow-card-hover transition-all duration-500 flex flex-col overflow-hidden">
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient}`} />
-                    <div className={`absolute -right-20 -top-20 w-40 h-40 rounded-full bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500`} />
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-indigo-600`} />
+                    <div className={`absolute -right-20 -top-20 w-40 h-40 rounded-full bg-indigo-600 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500`} />
 
                     <div className="relative flex-1">
                       {item.category && (
@@ -120,7 +120,7 @@ export function FeaturedContent({
                     )}
 
                     {item.href && (
-                      <div className={`relative inline-flex items-center gap-2 font-semibold text-sm bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+                      <div className={`relative inline-flex items-center gap-2 font-semibold text-sm text-indigo-600`}>
                         <span>Learn More</span>
                         <ArrowRight size={16} className="text-indigo-600 transition-transform duration-300 group-hover:translate-x-1.5" />
                       </div>

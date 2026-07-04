@@ -36,15 +36,14 @@ export function Header() {
         <Container>
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-11 h-11 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-glow-violet group-hover:scale-110 transition-transform duration-300">
+              <div className="relative w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <Sparkles size={20} className="text-white" />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-aurora opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="text-xl md:text-2xl font-serif font-extrabold text-midnight-950 tracking-tight">
                   {BRAND.name}
                 </span>
-                <span className="text-[10px] md:text-xs font-semibold tracking-[0.2em] uppercase text-gradient-primary mt-0.5">
+                <span className="text-[10px] md:text-xs font-semibold tracking-[0.2em] uppercase text-indigo-600 mt-0.5">
                   {BRAND.tagline}
                 </span>
               </div>
@@ -58,7 +57,7 @@ export function Header() {
                   className="relative px-4 py-2 text-sm font-semibold text-midnight-800 rounded-xl hover:text-indigo-600 hover:bg-indigo-50/60 transition-all duration-300 group"
                 >
                   {item.label}
-                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </Link>
               ))}
             </nav>
@@ -66,8 +65,7 @@ export function Header() {
             <div className="flex items-center gap-3">
               <Link
                 href="/contact"
-                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm shadow-glow-violet hover:scale-105 active:scale-95 transition-transform duration-300"
-                style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm bg-indigo-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Get Started
                 <ArrowRight size={16} />
@@ -100,7 +98,7 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-gradient-cosmic shadow-2xl"
+              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-indigo-600 shadow-2xl"
             >
               <div className="pt-24 px-6 space-y-1">
                 {NAVIGATION.map((item, index) => (
@@ -129,8 +127,7 @@ export function Header() {
                   <Link
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-white shadow-glow-violet"
-                    style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-white bg-white text-indigo-600 shadow-lg"
                   >
                     Get Started
                     <ArrowRight size={16} />

@@ -22,7 +22,7 @@ export default function CompaniesPage() {
         <Container>
           <div className="mb-20">
             <div className="flex items-center gap-4 mb-12">
-              <div className="w-1.5 h-10 bg-gradient-to-b from-gold-600 to-gold-500 rounded-full" />
+              <div className="w-1.5 h-10 bg-gold-600 rounded-full" />
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950">
                 Our Organizations
               </h2>
@@ -61,7 +61,7 @@ export default function CompaniesPage() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-midnight-900 via-midnight-800 to-midnight-950 p-12 md:p-16 border border-gold-600 border-opacity-20">
+          <div className="relative overflow-hidden rounded-2xl bg-midnight-900 p-12 md:p-16 border border-gold-600 border-opacity-20">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
             

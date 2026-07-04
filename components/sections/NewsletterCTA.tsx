@@ -35,18 +35,7 @@ export function NewsletterCTA() {
   };
 
   return (
-    <section className="relative py-24 md:py-28 overflow-hidden">
-      {/* Decorative gradient layer */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-fuchsia-50/40 to-cyan-50" />
-      <div
-        className="absolute top-0 left-1/3 w-[600px] h-[600px] rounded-full opacity-30 blur-3xl pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)' }}
-      />
-      <div
-        className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full opacity-25 blur-3xl pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)' }}
-      />
-
+    <section className="relative py-24 md:py-28 overflow-hidden bg-white">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -56,14 +45,10 @@ export function NewsletterCTA() {
           className="relative max-w-3xl mx-auto"
         >
           <div className="relative p-8 md:p-12 lg:p-14 rounded-3xl glass-card shadow-premium overflow-hidden">
-            {/* Gradient accent stripe */}
-            <div
-              className="absolute top-0 left-0 right-0 h-1.5"
-              style={{ background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef, #ec4899)' }}
-            />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-indigo-600" />
 
             <div className="relative text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary mb-6 shadow-glow-violet">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 mb-6 shadow-lg">
                 <Mail size={28} className="text-white" />
               </div>
               <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-[0.2em]">
@@ -72,7 +57,7 @@ export function NewsletterCTA() {
               </span>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-4 leading-tight">
                 Join the{' '}
-                <span className="text-gradient-primary">Community</span>
+                <span className="text-indigo-600">Community</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-md mx-auto">
                 Weekly insights on leadership, faith, and systems thinking delivered to your inbox.
@@ -95,8 +80,7 @@ export function NewsletterCTA() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-white shadow-glow-violet hover:scale-[1.03] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)' }}
+                className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-white bg-indigo-600 shadow-lg hover:scale-[1.03] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden"
               >
                 {status === 'loading' ? (
                   <>

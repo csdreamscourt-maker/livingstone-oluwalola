@@ -16,7 +16,7 @@ export function Skeleton({
     card: 'h-64 rounded-xl',
   };
 
-  const baseClass = `${variantClasses[variant]} bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 animate-shimmer ${className}`;
+  const baseClass = `${variantClasses[variant]} bg-gray-100 animate-shimmer ${className}`;
 
   if (count === 1) {
     return <div className={baseClass} />;

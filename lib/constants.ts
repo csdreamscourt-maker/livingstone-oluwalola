@@ -7,14 +7,11 @@ export const BRAND = {
 
 export const NAVIGATION = [
   { label: 'Home', href: '/' },
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Dreams', href: '/dreams' },
+  { label: 'Insights', href: '/insights' },
   { label: 'About', href: '/about' },
-  { label: 'Ideas', href: '/ideas' },
-  { label: 'Frameworks', href: '/frameworks' },
-  { label: 'Articles', href: '/articles' },
-  { label: 'Speaking', href: '/speaking' },
   { label: 'Companies', href: '/companies' },
-  { label: 'Resources', href: '/resources' },
-  { label: 'Community', href: '/community' },
   { label: 'Contact', href: '/contact' },
 ];
 

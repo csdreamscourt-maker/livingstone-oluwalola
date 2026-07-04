@@ -1,19 +1,29 @@
 -- Livingstone Dreamscourt Database Schema
--- Supabase PostgreSQL Schema
+-- Neon PostgreSQL Schema
 
 -- Enable necessary extensions
 create extension if not exists "uuid-ossp";
 create extension if not exists "vector";
 
--- Users table (extends Supabase auth.users)
+-- Users table (standalone authentication)
 create table if not exists public.users (
-  id uuid references auth.users on delete cascade primary key,
-  email text not null,
+  id uuid default uuid_generate_v4() primary key,
+  email text unique not null,
+  password_hash text not null,
   full_name text,
   avatar_url text,
   bio text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Sessions table for authentication
+create table if not exists public.sessions (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid not null references public.users on delete cascade,
+  token text unique not null,
+  expires_at timestamp with time zone not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
 -- Dreams table

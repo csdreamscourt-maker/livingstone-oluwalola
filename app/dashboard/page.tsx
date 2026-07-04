@@ -1,61 +1,56 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Container, Section, Card } from '@/components/ui';
-import { BarChart3, BookOpen, Flame, Lightbulb, ArrowRight } from 'lucide-react';
+import { BarChart3, BookOpen, Flame, Lightbulb, ArrowRight, LogOut } from 'lucide-react';
 import type { User } from '@/types/database';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { createClient } = await import('@supabase/supabase-js');
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-        if (!supabaseUrl || !supabaseAnonKey) {
-          setError('Dashboard is not configured yet. Please try again later.');
-          setLoading(false);
+        const token = localStorage.getItem('auth_token');
+        
+        if (!token) {
+          router.push('/');
           return;
         }
 
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const response = await fetch('/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (!session) {
-          setError('Please log in to access the dashboard.');
-          setLoading(false);
+        if (!response.ok) {
+          localStorage.removeItem('auth_token');
+          router.push('/');
           return;
         }
 
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-
-        if (userError && userError.code !== 'PGRST116') {
-          throw userError;
-        }
-
+        const userData = await response.json();
         setUser(userData);
       } catch (err) {
-        setError('Failed to load dashboard.');
-        console.error(err);
+        console.error('Auth check failed:', err);
+        localStorage.removeItem('auth_token');
+        router.push('/');
       } finally {
         setLoading(false);
       }
     };
 
     checkAuth();
-  }, []);
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token');
+    router.push('/');
+  };
 
   if (loading) {
     return (
@@ -72,7 +67,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (error || !user) {
+  if (!user) {
     return (
       <Section padding="2xl">
         <Container size="md">
@@ -81,10 +76,10 @@ export default function DashboardPage() {
               Welcome to Your Dashboard
             </h1>
             <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-              {error || 'Please log in to access your personal dashboard and start your journey of discovery and growth.'}
+              Please log in to access your personal dashboard and start your journey of discovery and growth.
             </p>
             <a
-              href="/api/auth/login"
+              href="/auth/login"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95"
             >
               Sign In to Continue
@@ -100,13 +95,22 @@ export default function DashboardPage() {
     <>
       <Section padding="2xl" background="light">
         <Container>
-          <div className="mb-16">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-4">
-              Welcome, {user.full_name || 'Friend'}
-            </h1>
-            <p className="text-xl text-gray-600">
-              Your personal space for dreams, reflections, and spiritual growth.
-            </p>
+          <div className="flex items-center justify-between mb-16">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-4">
+                Welcome, {user.full_name || 'Friend'}
+              </h1>
+              <p className="text-xl text-gray-600">
+                Your personal space for dreams, reflections, and spiritual growth.
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-indigo-600 hover:scale-105 active:scale-95 transition-transform duration-300"
+            >
+              <LogOut className="w-4 h-4" />
+              Log Out
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

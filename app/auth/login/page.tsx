@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Section, Button } from '@/components/ui';
 import { ArrowRight, Mail, Lock, MoonStar } from 'lucide-react';
-import { loginUser } from '@/lib/auth';
+import { login } from '@/lib/api/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -19,8 +19,9 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await loginUser({ email, password });
+      await login({ email, password });
       router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {

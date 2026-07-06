@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Section, Button } from '@/components/ui';
 import { ArrowRight, Mail, Lock, UserCircle2 } from 'lucide-react';
-import { registerUser } from '@/lib/auth';
+import { signup } from '@/lib/api/auth';
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('');
@@ -20,8 +20,9 @@ export default function SignupPage() {
     setError(null);
 
     try {
-      await registerUser({ fullName, email, password });
+      await signup({ fullName, email, password });
       router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed');
     } finally {

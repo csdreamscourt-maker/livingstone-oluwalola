@@ -1,34 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getUser } from '@/lib/db';
+import { getSessionFromCookies } from '@/lib/session';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const authHeader = req.headers.get('authorization');
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const session = await getSessionFromCookies();
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = authHeader.substring(7);
-    
-    // For now, we'll decode the JWT token to get the user ID
-    // In production, you'd validate the token properly
-    let userId: string;
-    try {
-      const parts = token.split('.');
-      const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-      userId = payload.sub;
-    } catch {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    const user = await getUser(userId);
-    
+    const user = await getUser(session.sub);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({ user });
   } catch (error) {
     console.error('Auth check error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

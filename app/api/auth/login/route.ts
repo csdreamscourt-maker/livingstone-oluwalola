@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserByEmail, query } from '@/lib/db';
-import * as crypto from 'crypto';
-import * as jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+import bcrypt from 'bcryptjs';
+import { getUserAuthByEmail, getUser } from '@/lib/db';
+import { createSessionCookie } from '@/lib/session';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,46 +11,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const user = await getUserByEmail(email);
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const userAuth = await getUserAuthByEmail(normalizedEmail);
 
-    if (!user) {
+    if (!userAuth) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Verify password
-    const result = await query('SELECT password_hash FROM users WHERE id = $1', [user.id]);
-    const userRecord = result.rows[0];
-
-    if (!userRecord) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
-    }
-
-    const passwordMatch = crypto.timingSafeEqual(
-      Buffer.from(userRecord.password_hash),
-      Buffer.from(crypto.createHash('sha256').update(password).digest('hex'))
-    );
-
+    const passwordMatch = await bcrypt.compare(password, userAuth.password_hash);
     if (!passwordMatch) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Create JWT token
-    const token = jwt.sign(
-      { sub: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    await createSessionCookie({ sub: userAuth.id, email: userAuth.email });
 
-    return NextResponse.json({
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        full_name: user.full_name,
-        avatar_url: user.avatar_url,
-        bio: user.bio,
-      },
-    });
+    const user = await getUser(userAuth.id);
+    return NextResponse.json({ user });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

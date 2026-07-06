@@ -19,6 +19,9 @@ export type Dream = {
   tags?: string[];
   voice_recording_url?: string;
   is_private: boolean;
+  favorite: boolean;
+  is_archived: boolean;
+  clarity?: number;
   created_at: string;
   updated_at: string;
 };

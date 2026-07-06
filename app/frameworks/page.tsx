@@ -1,4 +1,4 @@
-import { Container, Section, Card, Badge, Button } from '@/components/ui';
+import { Container, Section, Card, Badge } from '@/components/ui';
 import { Hero } from '@/components/sections';
 import { FRAMEWORKS } from '@/lib/constants';
 import Link from 'next/link';
@@ -15,55 +15,51 @@ export default function FrameworksPage() {
   return (
     <>
       <Hero
-        subtitle="Intellectual Infrastructure"
-        title="Signature Frameworks & Models"
+        subtitle="Intellectual infrastructure"
+        title="Signature frameworks & models"
         description="A collection of signature frameworks designed to create clarity, drive strategy, and enable transformation across organizations and individuals."
       />
 
-      <Section padding="2xl">
+      <Section padding="xl">
         <Container>
-          <div className="mb-24">
-            <div className="mb-16">
-              <h2 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-4">
-                All Frameworks by Category
+          <div className="mb-16">
+            <div className="mb-10">
+              <h2 className="text-xl font-semibold text-midnight-950 mb-2 sm:text-2xl">
+                All frameworks by category
               </h2>
-              <p className="text-xl text-gray-600">
-                Industry-leading frameworks organized by domain of application
+              <p className="text-[15px] text-gray-500">
+                Organized by domain of application
               </p>
             </div>
 
-            {categories.map((category, categoryIndex) => (
-              <div key={category} className="mb-20">
-                <div className="flex items-center gap-4 mb-10">
-                  <div className="w-1.5 h-10 bg-gold-600 rounded-full" />
-                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-midnight-950">
-                    {category}
-                  </h3>
-                </div>
+            {categories.map((category) => (
+              <div key={category} className="mb-14">
+                <h3 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-gray-500 mb-6 pb-3 border-b border-midnight-950/10">
+                  {category}
+                </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {FRAMEWORKS.filter((f) => f.category === category).map((framework, frameIndex) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {FRAMEWORKS.filter((f) => f.category === category).map((framework) => (
                     <Card
                       key={framework.id}
                       variant="bordered"
-                      className="group flex flex-col h-full hover:border-gold-600 hover:shadow-lg transition-all duration-300 animate-slideUp"
-                      style={{ animationDelay: `${(categoryIndex * 3 + frameIndex) * 100}ms` }}
+                      className="group flex flex-col h-full"
                     >
-                      <Badge variant="outline" className="mb-4 w-fit group-hover:bg-gold-600 group-hover:text-midnight-950 transition-all">
+                      <Badge variant="outline" className="mb-3 w-fit">
                         {framework.category}
                       </Badge>
-                      <h4 className="text-xl font-serif font-bold text-midnight-950 mb-3 group-hover:text-gold-600 transition-colors">
+                      <h4 className="text-[15px] font-semibold text-midnight-950 mb-2">
                         {framework.title}
                       </h4>
-                      <p className="text-gray-600 leading-relaxed mb-6 flex-1">
+                      <p className="text-gray-600 text-sm leading-6 mb-5 flex-1">
                         {framework.description}
                       </p>
                       <Link
                         href={`/frameworks/${framework.id}`}
-                        className="flex items-center gap-2 text-gold-600 hover:text-gold-700 font-semibold group/link transition-all"
+                        className="flex items-center gap-1.5 text-sm text-gold-600 hover:text-gold-700 font-semibold group/link transition-colors duration-200"
                       >
-                        Explore Framework
-                        <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                        Explore framework
+                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
                       </Link>
                     </Card>
                   ))}
@@ -72,26 +68,21 @@ export default function FrameworksPage() {
             ))}
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-white p-12 md:p-16 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-6">
-                Ready to Apply These Frameworks?
-              </h2>
-              <p className="text-lg text-gray-700 mb-8 max-w-2xl leading-relaxed">
-                Access detailed framework guides, implementation templates, and community insights through our integrated platform. Transform your organization with proven intellectual systems.
-              </p>
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gold-600 text-midnight-950 font-semibold rounded-lg hover:bg-gold-500 hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105 active:scale-95 group"
-              >
-                Access the Platform
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
+          <Card variant="bordered" padding="xl">
+            <h2 className="text-xl font-semibold text-midnight-950 mb-3 sm:text-2xl">
+              Ready to apply these frameworks?
+            </h2>
+            <p className="text-[15px] text-gray-600 mb-6 max-w-2xl leading-7">
+              Access detailed framework guides, implementation templates, and community insights through our integrated platform.
+            </p>
+            <Link
+              href="/dashboard"
+              className="group inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700"
+            >
+              Access the platform
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </Card>
         </Container>
       </Section>
     </>

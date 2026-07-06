@@ -2,7 +2,7 @@ import { Container, Section, Card, Badge } from '@/components/ui';
 import { COMPANIES } from '@/lib/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 const COMPANY_DETAILS: Record<string, { name: string; tagline: string; summary: string; highlights: string[] }> = {
   dreamscourt: {
@@ -107,50 +107,48 @@ export default async function CompanyDetailPage({ params }: CompanyPageProps) {
           <div className="mb-8">
             <Link
               href="/companies"
-              className="inline-flex items-center gap-2 text-gold-600 hover:text-gold-700 font-semibold transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-midnight-950 font-semibold transition-colors duration-200"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-3.5 h-3.5" />
               Back to companies
             </Link>
           </div>
 
-          <Card variant="bordered" className="overflow-hidden">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-              <div>
-                <Badge variant="outline" className="mb-4">
-                  Active initiative
-                </Badge>
-                <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-4">
-                  {company.name}
-                </h1>
-                <p className="text-xl text-gold-700 font-semibold mb-6">
-                  {company.tagline}
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                  {company.summary}
-                </p>
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <Card variant="bordered" padding="lg">
+              <Badge variant="outline" className="mb-4">
+                Active initiative
+              </Badge>
+              <h1 className="text-2xl font-semibold text-midnight-950 mb-3 sm:text-3xl">
+                {company.name}
+              </h1>
+              <p className="text-[15px] text-gold-700 font-semibold mb-5">
+                {company.tagline}
+              </p>
+              <p className="text-[15px] text-gray-600 leading-7 mb-6">
+                {company.summary}
+              </p>
 
-                <div className="flex flex-wrap gap-3">
-                  {company.highlights.map((highlight) => (
-                    <div
-                      key={highlight}
-                      className="inline-flex items-center gap-2 rounded-full border border-gold-600/20 bg-gold-50 px-4 py-2 text-sm font-medium text-midnight-900"
-                    >
-                      <Sparkles className="w-4 h-4 text-gold-600" />
-                      {highlight}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ul className="space-y-2">
+                {company.highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="flex items-start gap-2.5 text-sm text-gray-600 leading-6"
+                  >
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold-600" />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            </Card>
 
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
-                <h2 className="text-2xl font-serif font-bold mb-4 text-midnight-950">What this work looks like</h2>
-                <p className="text-gray-700 leading-relaxed">
-                  This initiative is part of Livingstone’s broader ecosystem of mission-driven work, connecting faith, leadership, systems, and innovation in practical ways.
-                </p>
-              </div>
-            </div>
-          </Card>
+            <Card variant="bordered" padding="lg">
+              <h2 className="text-lg font-semibold mb-3 text-midnight-950">What this work looks like</h2>
+              <p className="text-sm text-gray-600 leading-6">
+                This initiative is part of Livingstone&rsquo;s broader ecosystem of mission-driven work, connecting faith, leadership, systems, and innovation in practical ways.
+              </p>
+            </Card>
+          </div>
         </Container>
       </Section>
     </>

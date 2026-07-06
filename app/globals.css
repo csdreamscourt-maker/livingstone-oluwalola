@@ -2,19 +2,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-midnight-950: #050511;
-  --color-midnight-900: #0a0a1f;
-  --color-midnight-800: #12102e;
-  --color-midnight-700: #1a1840;
-  --color-midnight-600: #2a2660;
-  --color-midnight-500: #3d3680;
+  --color-paper: #f5f6f8;
 
-  --color-gold-700: #b8860b;
-  --color-gold-600: #d4af37;
-  --color-gold-500: #e6c75d;
-  --color-gold-400: #f0d86a;
-  --color-gold-300: #f5e6a0;
-  --color-gold-100: #fef3c7;
+  --color-midnight-950: #0b0e14;
+  --color-midnight-900: #10141c;
+  --color-midnight-800: #171c27;
+  --color-midnight-700: #202836;
+  --color-midnight-600: #2e3a4c;
+  --color-midnight-500: #3f4e63;
+
+  --color-gold-700: #7c5e2a;
+  --color-gold-600: #9c7a3c;
+  --color-gold-500: #b08f4f;
+  --color-gold-400: #c2a46a;
+  --color-gold-300: #d8c293;
+  --color-gold-100: #f1e9d6;
 
   --color-indigo-950: #0f0a2e;
   --color-indigo-900: #1e1b4b;
@@ -154,7 +156,7 @@ html {
 }
 
 body {
-  background: #fafafa;
+  background: var(--color-paper);
   color: #18181b;
   font-family: var(--font-sans);
   font-weight: 400;
@@ -164,10 +166,10 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
-  font-weight: 700;
-  line-height: 1.15;
-  color: #0a0a1f;
-  letter-spacing: -0.025em;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-midnight-950);
+  letter-spacing: -0.02em;
 }
 
 p {

@@ -1,5 +1,6 @@
 export { Hero } from './Hero';
 export { FeaturedContent } from './FeaturedContent';
+export { ComingSoon } from './ComingSoon';
 export { NewsletterCTA } from './NewsletterCTA';
 export { PageTransition } from './PageTransition';
 export { ScrollReveal } from './ScrollReveal';

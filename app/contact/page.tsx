@@ -54,9 +54,9 @@ export default function ContactPage() {
         description="Reach out with inquiries, partnership opportunities, or to learn more about our work."
       />
 
-      <Section padding="2xl">
+      <Section padding="xl">
         <Container size="lg">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
             {[
               {
                 icon: Mail,
@@ -70,25 +70,22 @@ export default function ContactPage() {
               },
               {
                 icon: Clock,
-                title: 'Response Time',
+                title: 'Response time',
                 content: '24-48 hours',
               },
-            ].map((item, index) => {
+            ].map((item) => {
               const Icon = item.icon;
               return (
                 <Card
                   key={item.title}
                   variant="bordered"
-                  className="text-center hover:border-gold-600 hover:shadow-lg transition-all duration-300 animate-slideUp"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="text-center"
                 >
-                  <div className="inline-block p-3 bg-gold-600 bg-opacity-10 rounded-lg mb-4">
-                    <Icon className="w-6 h-6 text-gold-600" />
-                  </div>
-                  <p className="text-sm font-medium text-gold-600 mb-2 uppercase tracking-wider">
+                  <Icon className="w-4 h-4 text-gold-600 mx-auto mb-3" />
+                  <p className="text-[11px] font-semibold text-gray-500 mb-1.5 uppercase tracking-[0.1em]">
                     {item.title}
                   </p>
-                  <p className="text-lg text-midnight-950 font-serif font-bold">
+                  <p className="text-[15px] text-midnight-950 font-semibold">
                     {item.content}
                   </p>
                 </Card>
@@ -97,12 +94,12 @@ export default function ContactPage() {
           </div>
 
           <div className="max-w-2xl mx-auto">
-            <div className="mb-12">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-4">
-                Send us a Message
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-midnight-950 mb-2 sm:text-2xl">
+                Send us a message
               </h2>
-              <p className="text-lg text-gray-600">
-                We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+              <p className="text-[15px] text-gray-600">
+                We&apos;d love to hear from you. Fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
 

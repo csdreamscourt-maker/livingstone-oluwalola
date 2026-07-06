@@ -15,12 +15,12 @@ export function Textarea({
   className = '',
   ...props
 }: TextareaProps) {
-  const baseStyles = `w-full px-4 py-3 rounded-lg transition-all duration-300 font-sans text-base border-2 border-gray-200 bg-white text-midnight-950 placeholder-gray-400
-    focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent focus:bg-white
+  const baseStyles = `w-full px-4 py-2.5 rounded-md transition-colors duration-200 font-sans text-[15px] border border-gray-200 bg-white text-midnight-950 placeholder-gray-400
+    focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500
     hover:border-gray-300
     disabled:bg-gray-50 disabled:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
     resize-vertical min-h-[120px]
-    ${error ? 'border-red-500 focus:ring-red-500' : ''}`;
+    ${error ? 'border-red-500 focus:ring-red-500/40' : ''}`;
 
   return (
     <div className="w-full">

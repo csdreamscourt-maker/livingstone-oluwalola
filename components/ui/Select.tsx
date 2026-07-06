@@ -23,12 +23,12 @@ export function Select({
   className = '',
   ...props
 }: SelectProps) {
-  const baseStyles = `w-full px-4 py-3 rounded-lg transition-all duration-300 font-sans text-base appearance-none bg-white text-midnight-950 min-h-[44px] md:min-h-auto
-    focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent
-    border-2 border-gray-200 hover:border-gray-300
+  const baseStyles = `w-full px-4 py-2.5 rounded-md transition-colors duration-200 font-sans text-[15px] appearance-none bg-white text-midnight-950 min-h-[44px] md:min-h-auto
+    focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500
+    border border-gray-200 hover:border-gray-300
     disabled:bg-gray-50 disabled:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
     cursor-pointer
-    ${error ? 'border-red-500 focus:ring-red-500' : ''}`;
+    ${error ? 'border-red-500 focus:ring-red-500/40' : ''}`;
 
   return (
     <div className="w-full">

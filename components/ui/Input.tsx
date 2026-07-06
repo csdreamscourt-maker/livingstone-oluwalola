@@ -17,15 +17,15 @@ export function Input({
   className = '',
   ...props
 }: InputProps) {
-  const baseStyles = 'w-full px-4 py-3 md:py-3 rounded-lg transition-all duration-300 font-sans text-base min-h-[44px] md:min-h-auto';
+  const baseStyles = 'w-full px-4 py-2.5 md:py-2.5 rounded-md transition-colors duration-200 font-sans text-[15px] min-h-[44px] md:min-h-auto';
 
   const variants = {
-    primary: `${baseStyles} border-2 border-gray-200 bg-white text-midnight-950 placeholder-gray-400
-      focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent focus:bg-white
+    primary: `${baseStyles} border border-gray-200 bg-white text-midnight-950 placeholder-gray-400
+      focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500
       hover:border-gray-300
       disabled:bg-gray-50 disabled:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
-      ${error ? 'border-red-500 focus:ring-red-500' : ''}`,
-    minimal: `${baseStyles} border-b-2 border-gray-200 bg-transparent text-midnight-950 placeholder-gray-400
+      ${error ? 'border-red-500 focus:ring-red-500/40' : ''}`,
+    minimal: `${baseStyles} border-b border-gray-200 bg-transparent text-midnight-950 placeholder-gray-400
       focus:outline-none focus:border-gold-500 focus:bg-gray-50
       hover:border-gray-300
       disabled:border-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed

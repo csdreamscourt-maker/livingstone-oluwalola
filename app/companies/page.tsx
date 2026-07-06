@@ -13,70 +13,61 @@ export default function CompaniesPage() {
   return (
     <>
       <Hero
-        subtitle="The Ecosystem"
-        title="Mission-Driven Organizations"
+        subtitle="The ecosystem"
+        title="Mission-driven organizations"
         description="A portfolio of integrated companies and initiatives working at the intersection of faith, leadership, technology, and social impact."
       />
 
-      <Section padding="2xl">
+      <Section padding="xl">
         <Container>
-          <div className="mb-20">
-            <div className="flex items-center gap-4 mb-12">
-              <div className="w-1.5 h-10 bg-gold-600 rounded-full" />
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950">
-                Our Organizations
-              </h2>
-            </div>
+          <div className="mb-16">
+            <h2 className="text-xl font-semibold text-midnight-950 mb-8 sm:text-2xl">
+              Our organizations
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              {COMPANIES.map((company, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+              {COMPANIES.map((company) => (
                 <Card
                   key={company.id}
                   variant="bordered"
-                  className="group flex flex-col h-full hover:border-gold-600 hover:shadow-lg transition-all duration-300 animate-slideUp"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="group flex flex-col h-full"
                 >
-                  <div className="flex items-start justify-between mb-6">
-                    <h3 className="text-2xl font-serif font-bold text-midnight-950 group-hover:text-gold-600 transition-colors">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-midnight-950">
                       {company.name}
                     </h3>
-                    <Badge variant="outline" className="flex-shrink-0 group-hover:bg-gold-600 group-hover:text-midnight-950 transition-all">
+                    <Badge variant="outline" className="flex-shrink-0">
                       {company.status}
                     </Badge>
                   </div>
 
-                  <p className="text-lg text-gray-600 mb-8 flex-1 leading-relaxed">
+                  <p className="text-[15px] text-gray-600 mb-6 flex-1 leading-6">
                     {company.description}
                   </p>
 
                   <Link
                     href={company.href}
-                    className="flex items-center gap-2 text-gold-600 hover:text-gold-700 font-semibold group/link transition-all"
+                    className="flex items-center gap-1.5 text-sm text-gold-600 hover:text-gold-700 font-semibold group/link transition-colors duration-200"
                   >
-                    Learn More
-                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                    Learn more
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
                   </Link>
                 </Card>
               ))}
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl bg-white p-12 md:p-16 border border-gray-200 shadow-[0_16px_50px_-30px_rgba(15,23,42,0.2)]">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gold-500 opacity-5 rounded-full blur-3xl" />
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-midnight-950 mb-8">
-                A Unified Vision
-              </h2>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                These organizations aren't separate ventures. They operate as an integrated ecosystem, each bringing specialized expertise while contributing to a singular mission: building people, businesses, and institutions that stand the test of time.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Through technology, education, advisory, publishing, and direct engagement, we work to create a world where excellence, integrity, and transformative impact are the norm rather than the exception.
-              </p>
-            </div>
-          </div>
+          <Card variant="bordered" padding="xl">
+            <h2 className="text-xl font-semibold text-midnight-950 mb-4 sm:text-2xl">
+              A unified vision
+            </h2>
+            <p className="text-[15px] text-gray-600 mb-4 leading-7">
+              These organizations aren&apos;t separate ventures. They operate as an integrated ecosystem, each bringing specialized expertise while contributing to a singular mission: building people, businesses, and institutions that stand the test of time.
+            </p>
+            <p className="text-[15px] text-gray-600 leading-7">
+              Through technology, education, advisory, publishing, and direct engagement, we work to create a world where excellence, integrity, and transformative impact are the norm rather than the exception.
+            </p>
+          </Card>
         </Container>
       </Section>
     </>

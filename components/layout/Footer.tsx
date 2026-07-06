@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/ui';
-import { Mail, Send, MessageCircle, Sparkles, ArrowUpRight } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -24,42 +24,39 @@ export function Footer() {
       { label: 'Privacy Policy', href: '#' },
       { label: 'Terms of Service', href: '#' },
       { label: 'Contact', href: '/contact' },
-      { label: 'Newsletter', href: '#' },
     ],
   };
 
   return (
-    <footer className="relative overflow-hidden bg-[#f7f8fc] border-t border-gray-200">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gold-600" />
-
-      <Container className="relative">
-        <div className="py-16 md:py-24">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-16">
+    <footer className="border-t border-midnight-950/8 bg-paper">
+      <Container>
+        <div className="py-14 md:py-20">
+          <div className="grid grid-cols-2 gap-10 md:grid-cols-4 md:gap-10 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="inline-flex items-center gap-3 group mb-6">
-                <div className="relative w-11 h-11 rounded-2xl bg-gold-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-gold-600">
-                  <Sparkles size={20} className="text-gold-400" />
-                </div>
+              <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
+                <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[4px] border-[1.4px] border-midnight-950">
+                  <span className="h-[6px] w-[6px] rounded-[1px] bg-gold-600" />
+                </span>
+                <span className="text-sm font-semibold tracking-[-0.01em] text-midnight-950">Livingstone</span>
               </Link>
-              <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
+              <p className="text-gray-500 text-sm leading-6 max-w-xs">
                 Building systems and frameworks for lasting impact across faith, leadership, technology, and human development.
               </p>
             </div>
 
             {Object.entries(links).map(([category, items]) => (
               <div key={category}>
-                <h4 className="text-midnight-950 font-serif font-bold mb-5 text-sm uppercase tracking-[0.15em]">
-                  <span className="text-midnight-950">{category}</span>
+                <h4 className="text-midnight-950 font-semibold mb-4 text-[11px] uppercase tracking-[0.12em]">
+                  {category}
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-2.5">
                   {items.map((item) => (
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className="group inline-flex items-center gap-1 text-gray-600 hover:text-gold-700 transition-colors duration-300 text-sm"
+                        className="text-gray-500 hover:text-midnight-950 transition-colors duration-200 text-sm"
                       >
                         {item.label}
-                        <ArrowUpRight size={12} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                       </Link>
                     </li>
                   ))}
@@ -68,27 +65,19 @@ export function Footer() {
             ))}
           </div>
 
-          <div className="border-t border-white/10 pt-10">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="border-t border-midnight-950/8 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-500 text-sm">
                 © {currentYear} Livingstone. All rights reserved.
               </p>
-              <div className="flex items-center gap-3">
-                {[
-                  { icon: Mail, href: 'mailto:contact@livingstone.com', label: 'Email' },
-                  { icon: Send, href: '#', label: 'Send' },
-                  { icon: MessageCircle, href: '#', label: 'Contact' },
-                ].map(({ icon: Icon, href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="group inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-gray-200 text-gold-700 hover:text-gold-800 hover:border-gold-300 hover:scale-110 transition-all duration-300"
-                  >
-                    <Icon size={16} />
-                  </a>
-                ))}
-              </div>
+              <a
+                href="mailto:contact@livingstone.com"
+                aria-label="Email"
+                className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-midnight-950 transition-colors duration-200"
+              >
+                <Mail size={14} />
+                contact@livingstone.com
+              </a>
             </div>
           </div>
         </div>

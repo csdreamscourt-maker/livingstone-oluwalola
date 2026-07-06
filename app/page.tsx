@@ -1,107 +1,112 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Hero, FeaturedContent } from '@/components/sections';
+import { FeaturedContent } from '@/components/sections';
 import { Container } from '@/components/ui';
 import { FRAMEWORKS, COMPANIES, SAMPLE_ARTICLES } from '@/lib/constants';
 import Link from 'next/link';
-import { ArrowRight, Layers, Building2, Users, Sparkles, BrainCircuit, Compass } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 14 },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.7, ease: EASE },
+    transition: { delay: i * 0.05, duration: 0.5, ease: EASE },
   }),
 };
 
 const stats = [
-  { number: '7', label: 'Operating companies', icon: Building2 },
-  { number: '100+', label: 'Frameworks & models', icon: Layers },
-  { number: '1000+', label: 'Leaders impacted', icon: Users },
+  { number: '07', label: 'Operating companies' },
+  { number: '100+', label: 'Frameworks & models' },
+  { number: '1,000+', label: 'Leaders impacted' },
 ];
 
 const pillars = [
   {
     title: 'Systems thinking',
     description: 'Clarity, discipline and durable strategy for mission-driven organizations.',
-    icon: BrainCircuit,
   },
   {
     title: 'Reflective product design',
     description: 'Experiences shaped for calm, modern use and long-term trust.',
-    icon: Compass,
   },
   {
     title: 'Human-centered leadership',
     description: 'A platform built to support growth, wisdom and meaningful execution.',
-    icon: Sparkles,
   },
 ];
 
 export default function Home() {
   return (
     <>
-      <Hero
-        subtitle="Livingstone • Modern Systems for Human Growth"
-        title="The digital headquarters for bold thinking and calm execution"
-        description="Explore strategic frameworks, elegant digital experiences, and living institutions shaped for the future."
-        cta={{ label: 'Explore Frameworks', href: '/frameworks' }}
-        cta2={{ label: 'Read Latest Insights', href: '/articles' }}
-      />
-
-      <section className="relative overflow-hidden bg-[#f8f8fc] py-24 md:py-32">
-        <Container>
-          <div className="mb-12 max-w-3xl">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-indigo-700">
-              <Sparkles size={13} />
-              A sharper operating layer
-            </span>
-            <h2 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl lg:text-5xl">
-              Built for leaders who want both depth and elegance.
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
-              The Livingstone ecosystem blends strategic thinking, product craft, and spiritual reflection into a single modern experience.
-            </p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-            <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={fadeUp} className="rounded-[2rem] border border-gray-200 bg-white p-8 shadow-[0_18px_60px_-30px_rgba(15,23,42,0.24)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500">What we stand for</p>
-              <div className="mt-6 space-y-4">
-                {pillars.map((pillar) => {
-                  const Icon = pillar.icon;
-                  return (
-                    <div key={pillar.title} className="flex gap-4 rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-                      <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
-                        <Icon size={18} />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-midnight-950">{pillar.title}</p>
-                        <p className="mt-1 text-sm leading-7 text-gray-600">{pillar.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+      <section className="border-b border-midnight-950/8 bg-paper">
+        <Container className="py-16 md:py-24">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <motion.div initial="hidden" animate="show" variants={fadeUp} className="max-w-xl">
+              <span className="mb-4 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+                <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
+                Livingstone — systems for human growth
+              </span>
+              <h1 className="text-3xl font-semibold leading-[1.12] tracking-[-0.02em] text-midnight-950 sm:text-4xl">
+                The digital headquarters for bold thinking and calm execution.
+              </h1>
+              <p className="mt-5 max-w-md text-base leading-7 text-gray-600">
+                Explore strategic frameworks, elegant digital experiences, and living institutions shaped for the future.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link href="/frameworks" className="inline-flex items-center justify-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
+                  Explore frameworks
+                  <ArrowRight size={16} />
+                </Link>
+                <Link href="/articles" className="inline-flex items-center justify-center gap-2 rounded-md border border-midnight-950/15 px-5 py-2.5 text-sm font-semibold text-midnight-950 transition-colors duration-200 hover:border-midnight-950/30">
+                  Read latest insights
+                </Link>
               </div>
             </motion.div>
 
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <motion.div key={stat.label} custom={index} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} variants={fadeUp} className="rounded-[1.6rem] border border-gray-200 bg-white p-6 shadow-[0_10px_40px_-24px_rgba(15,23,42,0.18)]">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
-                      <Icon size={18} />
-                    </div>
-                    <p className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950">{stat.number}</p>
-                    <p className="mt-2 text-sm leading-7 text-gray-600">{stat.label}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
+            <motion.div initial="hidden" animate="show" custom={1} variants={fadeUp} className="border-t border-midnight-950/10">
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex items-baseline justify-between border-b border-midnight-950/10 py-3.5">
+                  <span className="text-[13px] text-gray-500">{stat.label}</span>
+                  <span className="font-mono text-lg font-semibold tabular-nums text-midnight-950">{stat.number}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-b border-midnight-950/8 bg-white py-16 md:py-24">
+        <Container>
+          <div className="mb-10 max-w-xl">
+            <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+              <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
+              What we stand for
+            </span>
+            <h2 className="text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
+              Built for leaders who want both depth and elegance.
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              The Livingstone ecosystem blends strategic thinking, product craft, and spiritual reflection into a single operating system.
+            </p>
+          </div>
+
+          <div className="border-t border-midnight-950/10">
+            {pillars.map((pillar, index) => (
+              <motion.div
+                key={pillar.title}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="grid gap-2 border-b border-midnight-950/10 py-5 sm:grid-cols-[220px_1fr] sm:gap-8"
+              >
+                <span className="text-[15px] font-semibold tracking-[-0.01em] text-midnight-950">{pillar.title}</span>
+                <span className="max-w-xl text-sm leading-6 text-gray-600">{pillar.description}</span>
+              </motion.div>
+            ))}
           </div>
         </Container>
       </section>
@@ -121,33 +126,33 @@ export default function Home() {
         viewAllLabel="Explore all frameworks"
       />
 
-      <section className="relative overflow-hidden bg-white py-24 md:py-32">
+      <section className="border-b border-midnight-950/8 bg-paper py-16 md:py-24">
         <Container>
-          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl">
-              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-fuchsia-200 bg-fuchsia-50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-fuchsia-700">
-                <Building2 size={13} />
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-xl">
+              <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+                <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
                 Ecosystem
               </span>
-              <h2 className="text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl">
+              <h2 className="text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
                 A portfolio of focused initiatives.
               </h2>
             </div>
-            <Link href="/companies" className="inline-flex items-center gap-2 text-base font-semibold text-midnight-950 transition-colors duration-300 hover:text-indigo-600">
+            <Link href="/companies" className="whitespace-nowrap border-b border-midnight-950/20 pb-0.5 text-sm font-semibold text-gray-600 transition-colors duration-200 hover:border-midnight-950 hover:text-midnight-950">
               View all companies
-              <ArrowRight size={18} />
             </Link>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-px overflow-hidden rounded-lg border border-midnight-950/10 bg-midnight-950/10 sm:grid-cols-2 xl:grid-cols-4">
             {COMPANIES.slice(0, 4).map((company, index) => (
-              <motion.div key={company.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.6, delay: index * 0.06 }}>
-                <Link href={company.href} className="group block h-full rounded-[1.6rem] border border-gray-200 bg-[#fcfcfd] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-[0_16px_60px_-30px_rgba(79,70,229,0.35)]">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">
-                    <Building2 size={18} />
+              <motion.div key={company.id} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: index * 0.05 }}>
+                <Link href={company.href} className="group flex h-full flex-col gap-3 bg-white p-6 transition-colors duration-200 hover:bg-gold-600/[0.04]">
+                  <div className="flex items-start justify-between">
+                    <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-gray-400">Active</span>
+                    <ArrowUpRight size={16} className="text-gray-400 transition-colors duration-200 group-hover:text-gold-600" />
                   </div>
-                  <h3 className="mt-6 text-xl font-semibold tracking-[-0.02em] text-midnight-950">{company.name}</h3>
-                  <p className="mt-3 text-sm leading-7 text-gray-600">{company.description}</p>
+                  <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-midnight-950">{company.name}</h3>
+                  <p className="text-sm leading-6 text-gray-600">{company.description}</p>
                 </Link>
               </motion.div>
             ))}
@@ -164,27 +169,27 @@ export default function Home() {
           title: article.title,
           description: article.excerpt,
           category: article.category,
-          metadata: `${article.date} • ${article.readTime}`,
+          metadata: `${article.date} · ${article.readTime}`,
         }))}
         viewAllHref="/articles"
         viewAllLabel="Read all articles"
       />
 
-      <section className="relative overflow-hidden bg-[#f8f8fc] py-24 md:py-28">
-        <Container>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7 }} className="mx-auto max-w-3xl rounded-[2rem] border border-gray-200 bg-white p-8 text-center shadow-[0_20px_70px_-35px_rgba(15,23,42,0.28)]">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500">Take the next step</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-midnight-950 sm:text-4xl">
+      <section className="bg-white py-16 md:py-24">
+        <Container size="md">
+          <div className="rounded-lg border border-midnight-950/10 p-8 text-center md:p-12">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">Take the next step</span>
+            <h2 className="mt-3 text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
               Ready to build something enduring?
             </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            <p className="mt-3 text-sm leading-6 text-gray-600 max-w-md mx-auto">
               Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link href="/contact" className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-gold-600 px-6 py-3.5 font-semibold text-midnight-950 transition-transform duration-300 hover:-translate-y-0.5">
+            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
               Get started
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </Link>
-          </motion.div>
+          </div>
         </Container>
       </section>
     </>

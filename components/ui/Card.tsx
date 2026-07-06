@@ -18,29 +18,29 @@ export function Card({
   hover = true,
 }: CardProps) {
   const variants = {
-    default: 'bg-white border border-gray-100 shadow-subtle',
-    elevated: 'bg-white shadow-lg',
-    bordered: 'bg-white border border-gray-200 hover:border-indigo-600',
-    gradient: 'bg-white border border-gray-200 hover:border-indigo-600',
-    dark: 'bg-midnight-950 border border-gray-700 text-white',
+    default: 'bg-white border border-midnight-950/8',
+    elevated: 'bg-white border border-midnight-950/8 shadow-[0_1px_2px_rgba(11,14,20,0.04)]',
+    bordered: 'bg-white border border-midnight-950/10',
+    gradient: 'bg-white border border-midnight-950/10',
+    dark: 'bg-midnight-950 border border-white/10 text-white',
   };
 
   const paddings = {
     sm: 'p-4',
     md: 'p-6',
-    lg: 'p-8',
-    xl: 'p-10',
+    lg: 'p-7',
+    xl: 'p-9',
   };
 
   const hoverClass = hover
-    ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1'
+    ? 'transition-colors duration-200 hover:border-midnight-950/20'
     : '';
 
   return (
     <div
       style={style}
       className={`
-        rounded-xl
+        rounded-lg
         ${variants[variant]}
         ${paddings[padding]}
         ${hoverClass}

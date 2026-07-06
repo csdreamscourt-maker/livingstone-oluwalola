@@ -4,18 +4,11 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container } from '@/components/ui';
-import { BRAND, NAVIGATION } from '@/lib/constants';
-import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
+import { NAVIGATION } from '@/lib/constants';
+import { Menu, X, ArrowRight } from 'lucide-react';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setHasScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
@@ -23,33 +16,24 @@ export function Header() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`sticky top-0 z-50 transition-all duration-500 ${
-          hasScrolled
-            ? 'bg-white/95 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.24)] border-b border-gray-200'
-            : 'bg-white border-b border-transparent'
-        }`}
-      >
+      <header className="sticky top-0 z-50 border-b border-midnight-950/8 bg-paper/90 backdrop-blur-md">
         <Container>
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
-              <div className="relative w-11 h-11 rounded-2xl bg-gold-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 border border-white/10">
-                <Sparkles size={20} className="text-[#0f1328]" />
-              </div>
+          <div className="flex h-16 items-center justify-between">
+            <Link href="/" className="group flex flex-shrink-0 items-center gap-2.5">
+              <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[4px] border-[1.4px] border-midnight-950">
+                <span className="h-[6px] w-[6px] rounded-[1px] bg-gold-600" />
+              </span>
+              <span className="text-sm font-semibold tracking-[-0.01em] text-midnight-950">Livingstone</span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-7">
               {NAVIGATION.slice(0, 5).map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative px-4 py-2 text-sm font-semibold text-midnight-950 rounded-xl hover:text-gold-700 hover:bg-gold-50 transition-all duration-300 group"
+                  className="text-[13.5px] font-medium text-gray-600 transition-colors duration-200 hover:text-midnight-950"
                 >
                   {item.label}
-                  <span className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-full bg-gold-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </Link>
               ))}
             </nav>
@@ -57,23 +41,23 @@ export function Header() {
             <div className="flex items-center gap-3">
               <Link
                 href="/contact"
-                className="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-[#0f1328] text-sm bg-gold-600 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="hidden lg:inline-flex items-center gap-1.5 rounded-md bg-gold-600 px-4 py-2 text-[13.5px] font-semibold text-white transition-colors duration-200 hover:bg-gold-700"
               >
-                Get Started
-                <ArrowRight size={16} />
+                Get in touch
+                <ArrowRight size={14} />
               </Link>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2.5 rounded-xl text-midnight-950 hover:bg-gold-50 transition-colors duration-300"
+                className="lg:hidden p-2 rounded-md text-midnight-950 hover:bg-gray-100 transition-colors duration-200"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X size={22} /> : <Menu size={22} />}
+                {isOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
         </Container>
-      </motion.header>
+      </header>
 
       <AnimatePresence>
         {isOpen && (
@@ -82,49 +66,37 @@ export function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-[#0f1328]/70 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-midnight-950/60 z-40 lg:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-[#0f1328] shadow-2xl"
+              transition={{ type: 'tween', duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-white border-l border-midnight-950/10"
             >
-              <div className="pt-24 px-6 space-y-1">
-                {NAVIGATION.map((item, index) => (
-                  <motion.div
+              <div className="pt-20 px-6 space-y-1">
+                {NAVIGATION.map((item) => (
+                  <Link
                     key={item.href || item.label}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 + 0.1 }}
+                    href={item.href}
+                    className="flex items-center justify-between px-3 py-3 text-[15px] font-medium text-midnight-950 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
                   >
-                    <Link
-                      href={item.href}
-                      className="flex items-center justify-between px-4 py-3.5 text-base font-semibold text-midnight-950 hover:text-gold-700 hover:bg-gold-50 rounded-xl transition-all duration-300 group"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span>{item.label}</span>
-                      <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                    </Link>
-                  </motion.div>
+                    <span>{item.label}</span>
+                  </Link>
                 ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="pt-6"
-                >
+                <div className="pt-5">
                   <Link
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl font-semibold text-[#0f1328] bg-gold-600 shadow-lg"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-md font-semibold text-white bg-gold-600"
                   >
-                    Get Started
+                    Get in touch
                     <ArrowRight size={16} />
                   </Link>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </>

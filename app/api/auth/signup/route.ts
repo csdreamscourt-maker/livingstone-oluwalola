@@ -5,6 +5,11 @@ import { createSessionCookie } from '@/lib/session';
 
 export async function POST(req: NextRequest) {
   try {
+    if (!process.env.JWT_SECRET) {
+      console.error('Signup error: JWT_SECRET is not set');
+      return NextResponse.json({ error: 'Server misconfigured: JWT_SECRET is not set' }, { status: 500 });
+    }
+
     const { fullName, email, password } = await req.json();
 
     if (!email || !password) {

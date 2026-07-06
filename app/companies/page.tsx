@@ -47,7 +47,7 @@ export default function CompaniesPage() {
 
                   <Link
                     href={company.href}
-                    className="flex items-center gap-1.5 text-sm text-gold-600 hover:text-gold-700 font-semibold group/link transition-colors duration-200"
+                    className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
                   >
                     Learn more
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />

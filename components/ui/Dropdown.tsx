@@ -57,7 +57,7 @@ export function Dropdown({ trigger, items, align = 'left' }: DropdownProps) {
                     item.onClick();
                     setIsOpen(false);
                   }}
-                  className="w-full text-left px-4 py-3 text-sm text-midnight-950 hover:bg-gold-50 transition-colors duration-200 flex items-center gap-3"
+                  className="w-full text-left px-4 py-3 text-sm text-midnight-950 hover:bg-gray-50 transition-colors duration-200 flex items-center gap-3"
                 >
                   {item.icon && <span className="text-gray-400">{item.icon}</span>}
                   {item.label}

@@ -41,7 +41,7 @@ export function Hero({ title, subtitle, description, cta, cta2 }: HeroProps) {
           {(cta || cta2) && (
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               {cta && (
-                <Link href={cta.href} className="group inline-flex items-center justify-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
+                <Link href={cta.href} className="group inline-flex items-center justify-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
                   {cta.label}
                   <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Link>

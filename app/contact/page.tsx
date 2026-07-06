@@ -151,7 +151,7 @@ export default function ContactPage() {
 
               <Button
                 type="submit"
-                variant="gold"
+                variant="primary"
                 size="lg"
                 disabled={status === 'loading'}
                 className="w-full"

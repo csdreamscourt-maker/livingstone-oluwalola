@@ -56,7 +56,7 @@ export default function FrameworksPage() {
                       </p>
                       <Link
                         href={`/frameworks/${framework.id}`}
-                        className="flex items-center gap-1.5 text-sm text-gold-600 hover:text-gold-700 font-semibold group/link transition-colors duration-200"
+                        className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
                       >
                         Explore framework
                         <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
@@ -77,7 +77,7 @@ export default function FrameworksPage() {
             </p>
             <Link
               href="/dashboard"
-              className="group inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700"
+              className="group inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800"
             >
               Access the platform
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />

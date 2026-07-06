@@ -31,7 +31,7 @@ export default function ArticlesPage() {
               onClick={() => setSelectedCategory(null)}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-200 ${
                 selectedCategory === null
-                  ? 'bg-gold-600 text-white'
+                  ? 'bg-midnight-950 text-white'
                   : 'border border-midnight-950/15 text-midnight-950 hover:border-midnight-950/30'
               }`}
             >
@@ -43,7 +43,7 @@ export default function ArticlesPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-200 ${
                   selectedCategory === category
-                    ? 'bg-gold-600 text-white'
+                    ? 'bg-midnight-950 text-white'
                     : 'border border-midnight-950/15 text-midnight-950 hover:border-midnight-950/30'
                 }`}
               >
@@ -86,7 +86,7 @@ export default function ArticlesPage() {
 
                 <Link
                   href={`/articles/${article.id}`}
-                  className="flex items-center gap-1.5 text-sm text-gold-600 hover:text-gold-700 font-semibold group/link transition-colors duration-200"
+                  className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
                 >
                   Read article
                   <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
@@ -102,7 +102,7 @@ export default function ArticlesPage() {
               </p>
               <button
                 onClick={() => setSelectedCategory(null)}
-                className="text-gold-600 hover:text-gold-700 font-semibold text-sm transition-colors duration-200"
+                className="text-midnight-700 hover:text-midnight-950 font-semibold text-sm transition-colors duration-200"
               >
                 View all articles
               </button>

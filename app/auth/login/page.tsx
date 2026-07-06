@@ -62,13 +62,13 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <Button type="submit" variant="gold" disabled={loading} className="w-full">
+              <Button type="submit" variant="primary" disabled={loading} className="w-full">
                 {loading ? 'Signing in...' : 'Sign in'}
                 <ArrowRight size={16} className="ml-2" />
               </Button>
             </form>
 
-            <p className="mt-5 text-center text-sm text-gray-600">Need an account? <a href="/auth/signup" className="font-semibold text-gold-700">Create one</a></p>
+            <p className="mt-5 text-center text-sm text-gray-600">Need an account? <a href="/auth/signup" className="font-semibold text-midnight-950">Create one</a></p>
           </div>
         </div>
       </Container>

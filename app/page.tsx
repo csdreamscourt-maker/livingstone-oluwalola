@@ -56,7 +56,7 @@ export default function Home() {
                 Explore strategic frameworks, elegant digital experiences, and living institutions shaped for the future.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href="/frameworks" className="inline-flex items-center justify-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
+                <Link href="/frameworks" className="inline-flex items-center justify-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
                   Explore frameworks
                   <ArrowRight size={16} />
                 </Link>
@@ -146,10 +146,10 @@ export default function Home() {
           <div className="grid gap-px overflow-hidden rounded-lg border border-midnight-950/10 bg-midnight-950/10 sm:grid-cols-2 xl:grid-cols-4">
             {COMPANIES.slice(0, 4).map((company, index) => (
               <motion.div key={company.id} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: index * 0.05 }}>
-                <Link href={company.href} className="group flex h-full flex-col gap-3 bg-white p-6 transition-colors duration-200 hover:bg-gold-600/[0.04]">
+                <Link href={company.href} className="group flex h-full flex-col gap-3 bg-white p-6 transition-colors duration-200 hover:bg-midnight-950/[0.03]">
                   <div className="flex items-start justify-between">
                     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-gray-400">Active</span>
-                    <ArrowUpRight size={16} className="text-gray-400 transition-colors duration-200 group-hover:text-gold-600" />
+                    <ArrowUpRight size={16} className="text-gray-400 transition-colors duration-200 group-hover:text-midnight-700" />
                   </div>
                   <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-midnight-950">{company.name}</h3>
                   <p className="text-sm leading-6 text-gray-600">{company.description}</p>
@@ -185,7 +185,7 @@ export default function Home() {
             <p className="mt-3 text-sm leading-6 text-gray-600 max-w-md mx-auto">
               Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
+            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
               Get started
               <ArrowRight size={16} />
             </Link>

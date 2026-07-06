@@ -240,7 +240,7 @@ export function DreamscourtShell({ initialView = 'overview' }: DreamscourtShellP
           <textarea value={draft} onChange={(event) => setDraft(event.target.value)} className="mt-4 min-h-[140px] w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-3 text-sm text-midnight-950 outline-none placeholder:text-gray-500 focus:border-gold-500" placeholder="I dreamt that..." />
           <div className="mt-4 flex items-center justify-between">
             <p className="text-xs text-gray-500">Saved to your account.</p>
-            <button onClick={handleQuickCapture} className="rounded-md bg-gold-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">Save dream</button>
+            <button onClick={handleQuickCapture} className="rounded-md bg-midnight-950 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">Save dream</button>
           </div>
         </section>
 
@@ -326,7 +326,7 @@ export function DreamscourtShell({ initialView = 'overview' }: DreamscourtShellP
               <option key={type} value={type} className="capitalize">{type}</option>
             ))}
           </select>
-          <button className="rounded-md bg-gold-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">Save entry</button>
+          <button className="rounded-md bg-midnight-950 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">Save entry</button>
         </form>
       </section>
 
@@ -523,7 +523,7 @@ export function DreamscourtShell({ initialView = 'overview' }: DreamscourtShellP
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <button key={item.key} onClick={() => setView(item.key)} className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${view === item.key ? 'bg-gold-600/10 text-gold-700' : 'text-gray-600 hover:bg-gray-50 hover:text-midnight-950'}`}>
+                <button key={item.key} onClick={() => setView(item.key)} className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${view === item.key ? 'bg-midnight-950/8 text-midnight-950' : 'text-gray-600 hover:bg-gray-50 hover:text-midnight-950'}`}>
                   <Icon className="h-4 w-4" />
                   {item.label}
                 </button>

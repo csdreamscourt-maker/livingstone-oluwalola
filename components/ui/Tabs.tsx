@@ -35,7 +35,7 @@ export function Tabs({
             className={`flex items-center gap-2 font-medium text-base transition-all duration-300 ${
               activeTab === tab.id
                 ? variant === 'line'
-                  ? `${lineVariant} text-gold-600 border-gold-600`
+                  ? `${lineVariant} text-midnight-950 border-midnight-950`
                   : `${pillVariant} bg-white text-midnight-950 shadow-sm`
                 : variant === 'line'
                   ? `${lineVariant} text-gray-600 border-transparent hover:text-midnight-950 hover:border-gray-300`

@@ -41,7 +41,7 @@ export function Header() {
             <div className="flex items-center gap-3">
               <Link
                 href="/contact"
-                className="hidden lg:inline-flex items-center gap-1.5 rounded-md bg-gold-600 px-4 py-2 text-[13.5px] font-semibold text-white transition-colors duration-200 hover:bg-gold-700"
+                className="hidden lg:inline-flex items-center gap-1.5 rounded-md bg-midnight-950 px-4 py-2 text-[13.5px] font-semibold text-white transition-colors duration-200 hover:bg-midnight-800"
               >
                 Get in touch
                 <ArrowRight size={14} />
@@ -91,7 +91,7 @@ export function Header() {
                   <Link
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-md font-semibold text-white bg-gold-600"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-md font-semibold text-white bg-midnight-950"
                   >
                     Get in touch
                     <ArrowRight size={16} />

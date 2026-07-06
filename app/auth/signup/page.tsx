@@ -67,12 +67,12 @@ export default function SignupPage() {
                   <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required className="w-full rounded-md border border-midnight-950/10 bg-gray-50 py-2.5 pl-10 pr-4 text-[15px] outline-none focus:border-gold-500" placeholder="Create a secure password" />
                 </div>
               </div>
-              <Button type="submit" variant="gold" disabled={loading} className="w-full">
+              <Button type="submit" variant="primary" disabled={loading} className="w-full">
                 {loading ? 'Creating account...' : 'Create account'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
-            <p className="mt-5 text-center text-sm text-gray-600">Already have a Dreamscourt account? <a href="/auth/login" className="font-semibold text-gold-700">Sign in</a></p>
+            <p className="mt-5 text-center text-sm text-gray-600">Already have a Dreamscourt account? <a href="/auth/login" className="font-semibold text-midnight-950">Sign in</a></p>
           </div>
         </div>
       </Container>

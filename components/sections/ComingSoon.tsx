@@ -16,7 +16,7 @@ export function ComingSoon({ description, ctaLabel, ctaHref }: ComingSoonProps) 
           <p className="mt-4 max-w-md mx-auto text-sm leading-6 text-gray-600">{description}</p>
           <a
             href={ctaHref}
-            className="mt-6 inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800"
           >
             {ctaLabel}
             <ArrowRight size={16} />

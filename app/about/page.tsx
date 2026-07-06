@@ -153,7 +153,7 @@ export default function AboutPage() {
             <h2 className="text-xl font-semibold text-midnight-950 mb-6 sm:text-2xl">
               Ready to explore our frameworks?
             </h2>
-            <a href="/frameworks" className="group inline-flex items-center gap-2 rounded-md bg-gold-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-gold-700">
+            <a href="/frameworks" className="group inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
               Browse frameworks
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>

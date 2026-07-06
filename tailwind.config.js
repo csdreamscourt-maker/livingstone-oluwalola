@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#f5f6f8',
+        paper: '#f6f5f1',
         midnight: {
           950: '#0b0e14',
           900: '#10141c',
@@ -151,11 +151,6 @@ export default {
       },
       ringOffsetColor: {
         DEFAULT: '#ffffff',
-      },
-      backgroundImage: {
-        'gradient-gold': 'linear-gradient(135deg, #d4af37 0%, #f0d86a 100%)',
-        'gradient-midnight': 'linear-gradient(135deg, #0a0a14 0%, #1a2333 100%)',
-        'gradient-subtle': 'linear-gradient(135deg, rgba(212,175,55,0.1) 0%, transparent 100%)',
       },
       backdropBlur: {
         xs: '2px',

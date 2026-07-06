@@ -31,40 +31,40 @@ export default function SignupPage() {
   };
 
   return (
-    <Section padding="2xl" className="bg-[#f7f8fc]">
+    <Section padding="xl" className="bg-paper">
       <Container size="sm">
-        <div className="py-16">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-gold-600/20 bg-gold-50 px-3 py-1 text-sm font-semibold text-gold-700 mb-4">
-              <UserCircle2 className="w-4 h-4" />
+        <div className="py-10">
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 mb-4">
+              <UserCircle2 className="w-3.5 h-3.5 text-gold-600" />
               Dreamscourt account
-            </div>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-midnight-950 mb-3">Create your private sanctuary</h1>
-            <p className="text-lg text-gray-600">Your dreams, reflections, and spiritual growth deserve a secure home.</p>
+            </span>
+            <h1 className="text-2xl font-semibold text-midnight-950 mb-2 sm:text-3xl">Create your private sanctuary</h1>
+            <p className="text-[15px] text-gray-600">Your dreams, reflections, and spiritual growth deserve a secure home.</p>
           </div>
 
-          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
-            {error && <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="rounded-lg border border-midnight-950/10 bg-white p-7">
+            {error && <div className="mb-5 rounded-md border border-red-200 bg-red-50 p-3.5 text-sm text-red-600">{error}</div>}
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="mb-2 block text-sm font-semibold text-midnight-950">Full name</label>
+                <label className="mb-1.5 block text-sm font-semibold text-midnight-950">Full name</label>
                 <div className="relative">
-                  <UserCircle2 className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input value={fullName} onChange={(event) => setFullName(event.target.value)} required className="w-full rounded-2xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 outline-none focus:border-gold-600" placeholder="Arielle Johnson" />
+                  <UserCircle2 className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input value={fullName} onChange={(event) => setFullName(event.target.value)} required className="w-full rounded-md border border-midnight-950/10 bg-gray-50 py-2.5 pl-10 pr-4 text-[15px] outline-none focus:border-gold-500" placeholder="Arielle Johnson" />
                 </div>
               </div>
               <div>
-                <label className="mb-2 block text-sm font-semibold text-midnight-950">Email address</label>
+                <label className="mb-1.5 block text-sm font-semibold text-midnight-950">Email address</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required className="w-full rounded-2xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 outline-none focus:border-gold-600" placeholder="you@example.com" />
+                  <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required className="w-full rounded-md border border-midnight-950/10 bg-gray-50 py-2.5 pl-10 pr-4 text-[15px] outline-none focus:border-gold-500" placeholder="you@example.com" />
                 </div>
               </div>
               <div>
-                <label className="mb-2 block text-sm font-semibold text-midnight-950">Password</label>
+                <label className="mb-1.5 block text-sm font-semibold text-midnight-950">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required className="w-full rounded-2xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 outline-none focus:border-gold-600" placeholder="Create a secure password" />
+                  <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required className="w-full rounded-md border border-midnight-950/10 bg-gray-50 py-2.5 pl-10 pr-4 text-[15px] outline-none focus:border-gold-500" placeholder="Create a secure password" />
                 </div>
               </div>
               <Button type="submit" variant="gold" disabled={loading} className="w-full">
@@ -72,7 +72,7 @@ export default function SignupPage() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
-            <p className="mt-6 text-center text-sm text-gray-600">Already have a Dreamscourt account? <a href="/auth/login" className="font-semibold text-gold-700">Sign in</a></p>
+            <p className="mt-5 text-center text-sm text-gray-600">Already have a Dreamscourt account? <a href="/auth/login" className="font-semibold text-gold-700">Sign in</a></p>
           </div>
         </div>
       </Container>

@@ -4,7 +4,7 @@ interface CardProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  variant?: 'default' | 'elevated' | 'bordered' | 'gradient' | 'dark';
+  variant?: 'default' | 'elevated' | 'bordered' | 'dark';
   padding?: 'sm' | 'md' | 'lg' | 'xl';
   hover?: boolean;
 }
@@ -21,7 +21,6 @@ export function Card({
     default: 'bg-white border border-midnight-950/8',
     elevated: 'bg-white border border-midnight-950/8 shadow-[0_1px_2px_rgba(11,14,20,0.04)]',
     bordered: 'bg-white border border-midnight-950/10',
-    gradient: 'bg-white border border-midnight-950/10',
     dark: 'bg-midnight-950 border border-white/10 text-white',
   };
 

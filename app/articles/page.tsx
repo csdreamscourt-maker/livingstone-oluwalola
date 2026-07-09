@@ -3,18 +3,18 @@
 import { useState } from 'react';
 import { Container, Section, Card, Badge } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { SAMPLE_ARTICLES } from '@/lib/constants';
+import { ARTICLES } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
 
-const CATEGORIES = Array.from(new Set(SAMPLE_ARTICLES.map((a) => a.category)));
+const CATEGORIES = Array.from(new Set(ARTICLES.map((a) => a.category)));
 
 export default function ArticlesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredArticles = selectedCategory
-    ? SAMPLE_ARTICLES.filter((a) => a.category === selectedCategory)
-    : SAMPLE_ARTICLES;
+    ? ARTICLES.filter((a) => a.category === selectedCategory)
+    : ARTICLES;
 
   return (
     <>

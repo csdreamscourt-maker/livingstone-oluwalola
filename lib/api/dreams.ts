@@ -1,4 +1,4 @@
-import type { Dream } from '@/types/database';
+import type { Dream, DreamInterpretation } from '@/types/database';
 
 async function parseOrThrow<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => ({}));
@@ -48,4 +48,14 @@ export async function updateDream(id: string, patch: Partial<DreamDraft & { favo
 export async function deleteDream(id: string): Promise<void> {
   const res = await fetch(`/api/dreams/${id}`, { method: 'DELETE' });
   await parseOrThrow(res);
+}
+
+export async function interpretDream(dreamId: string): Promise<DreamInterpretation> {
+  const res = await fetch('/api/dreams/interpret', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ dreamId }),
+  });
+  const data = await parseOrThrow<{ interpretation: DreamInterpretation }>(res);
+  return data.interpretation;
 }

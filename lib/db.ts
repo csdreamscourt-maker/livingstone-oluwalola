@@ -15,7 +15,7 @@ export function getPool(): Pool {
   return pool;
 }
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params?: unknown[]) {
   const result = await getPool().query(text, params);
   return result;
 }
@@ -136,6 +136,53 @@ export async function deleteDream(userId: string, id: string) {
   await query('DELETE FROM dreams WHERE id = $1 AND user_id = $2', [id, userId]);
 }
 
+export async function getDreamById(userId: string, id: string) {
+  const result = await query(
+    `SELECT ${DREAM_COLUMNS} FROM dreams WHERE id = $1 AND user_id = $2`,
+    [id, userId]
+  );
+  return result.rows[0] || null;
+}
+
+export type DreamInterpretationInput = {
+  interpretation: string;
+  key_themes?: string[] | null;
+  symbolic_meanings?: string | null;
+  psychological_insights?: string | null;
+  biblical_references?: string[] | null;
+  confidence_score?: number | null;
+  model_used?: string | null;
+};
+
+export async function upsertDreamInterpretation(dreamId: string, userId: string, input: DreamInterpretationInput) {
+  const result = await query(
+    `INSERT INTO dream_interpretations
+       (dream_id, user_id, interpretation, key_themes, symbolic_meanings, psychological_insights, biblical_references, confidence_score, model_used)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+     ON CONFLICT (dream_id) DO UPDATE SET
+       interpretation = EXCLUDED.interpretation,
+       key_themes = EXCLUDED.key_themes,
+       symbolic_meanings = EXCLUDED.symbolic_meanings,
+       psychological_insights = EXCLUDED.psychological_insights,
+       biblical_references = EXCLUDED.biblical_references,
+       confidence_score = EXCLUDED.confidence_score,
+       model_used = EXCLUDED.model_used
+     RETURNING *`,
+    [
+      dreamId,
+      userId,
+      input.interpretation,
+      input.key_themes ?? null,
+      input.symbolic_meanings ?? null,
+      input.psychological_insights ?? null,
+      input.biblical_references ?? null,
+      input.confidence_score ?? null,
+      input.model_used ?? null,
+    ]
+  );
+  return result.rows[0];
+}
+
 export type JournalEntryInput = {
   title: string;
   content: string;
@@ -195,4 +242,35 @@ export async function updateJournalEntry(userId: string, id: string, updates: Jo
 
 export async function deleteJournalEntry(userId: string, id: string) {
   await query('DELETE FROM prayer_journal WHERE id = $1 AND user_id = $2', [id, userId]);
+}
+
+export type ContactMessageInput = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
+
+export async function createContactMessage(input: ContactMessageInput) {
+  const result = await query(
+    `INSERT INTO contact_messages (name, email, subject, message)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, name, email, subject, message, created_at`,
+    [input.name, input.email, input.subject, input.message]
+  );
+  return result.rows[0];
+}
+
+export async function subscribeToNewsletter(email: string) {
+  const result = await query(
+    `INSERT INTO newsletter_subscriptions (email, is_subscribed, subscribed_at, unsubscribed_at)
+     VALUES ($1, true, timezone('utc'::text, now()), null)
+     ON CONFLICT (email) DO UPDATE SET
+       is_subscribed = true,
+       subscribed_at = timezone('utc'::text, now()),
+       unsubscribed_at = null
+     RETURNING id, email, is_subscribed, subscribed_at`,
+    [email]
+  );
+  return result.rows[0];
 }

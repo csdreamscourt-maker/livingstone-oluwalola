@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
+import { Lora, Inter } from "next/font/google";
 import "./globals.css";
 import { LayoutShell } from '@/components/layout/LayoutShell';
 
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-lora",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Livingstone | Faith, Leadership, Systems, Innovation",
-  description: "The digital headquarters of Livingstone - building people, businesses, and institutions through faith-driven strategic thinking.",
+  title: "Livingstone Oluwalola | Faith, Leadership, Systems, Innovation",
+  description: "The digital headquarters of Livingstone Oluwalola - building people, businesses, and institutions through faith-driven strategic thinking.",
   keywords: [
     "Leadership",
     "Strategy",
@@ -13,7 +28,6 @@ export const metadata: Metadata = {
     "Institutional Development",
     "Human Development",
   ],
-  metadataBase: new URL("https://livingstone.com"),
 };
 
 export default function RootLayout({
@@ -22,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${lora.variable} ${inter.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

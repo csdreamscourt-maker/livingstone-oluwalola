@@ -2,30 +2,12 @@
 
 import Link from 'next/link';
 import { Container } from '@/components/ui';
+import { FOOTER_NAVIGATION } from '@/lib/constants';
 import { Mail } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-
-  const links = {
-    Product: [
-      { label: 'Frameworks', href: '/frameworks' },
-      { label: 'Articles', href: '/articles' },
-      { label: 'Companies', href: '/companies' },
-      { label: 'About', href: '/about' },
-    ],
-    Resources: [
-      { label: 'Ideas', href: '/ideas' },
-      { label: 'Speaking', href: '/speaking' },
-      { label: 'Resources', href: '/resources' },
-      { label: 'Community', href: '/community' },
-    ],
-    Legal: [
-      { label: 'Privacy Policy', href: '#' },
-      { label: 'Terms of Service', href: '#' },
-      { label: 'Contact', href: '/contact' },
-    ],
-  };
+  const links = FOOTER_NAVIGATION;
 
   return (
     <footer className="border-t border-midnight-950/8 bg-paper">

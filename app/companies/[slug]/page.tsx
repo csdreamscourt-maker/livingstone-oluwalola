@@ -49,17 +49,6 @@ const COMPANY_DETAILS: Record<string, { name: string; tagline: string; summary: 
       'A platform for shaping meaningful conversations',
     ],
   },
-  'faith-expressions': {
-    name: 'Faith Expressions',
-    tagline: 'Faith-based media and communications',
-    summary:
-      'Faith Expressions creates stories and communications that amplify truth, identity, and transformation.',
-    highlights: [
-      'Content and storytelling for faith-centered missions',
-      'Creative communication with purpose and clarity',
-      'Tools for reaching audiences with conviction',
-    ],
-  },
   'young-ministers': {
     name: 'Young Ministers Training School',
     tagline: 'Leadership development for emerging ministers',

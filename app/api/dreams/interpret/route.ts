@@ -1,22 +1,31 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
+import { getSessionFromCookies } from '@/lib/session';
+import { getDreamById, upsertDreamInterpretation } from '@/lib/db';
 
-export async function POST(request: Request) {
-  try {
-    const { dreamId, userId, dreamContent } = await request.json();
+export async function POST(req: NextRequest) {
+  const session = await getSessionFromCookies();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-    if (!dreamId || !userId || !dreamContent) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 });
-    }
+  const { dreamId } = await req.json();
+  if (!dreamId) {
+    return NextResponse.json({ error: 'dreamId is required' }, { status: 400 });
+  }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return Response.json({ error: 'OpenAI API key not configured' }, { status: 500 });
-    }
+  const dream = await getDreamById(session.sub, dreamId);
+  if (!dream) {
+    return NextResponse.json({ error: 'Dream not found' }, { status: 404 });
+  }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 });
+  }
 
-    const prompt = `You are a thoughtful dream interpretation expert with knowledge of psychology, spirituality, and symbolism. Analyze the following dream and provide:
+  const dreamContent = [dream.title, dream.description, dream.content].filter(Boolean).join('\n\n');
+
+  const prompt = `You are a thoughtful dream interpretation expert with knowledge of psychology, spirituality, and symbolism. Analyze the following dream and provide:
 1. A comprehensive interpretation
 2. Key themes and patterns
 3. Symbolic meanings
@@ -25,26 +34,24 @@ export async function POST(request: Request) {
 
 Dream: ${dreamContent}
 
-Please format your response as JSON with the following structure:
+Respond with JSON only, in this exact shape:
 {
   "interpretation": "...",
-  "key_themes": ["theme1", "theme2", ...],
+  "key_themes": ["theme1", "theme2"],
   "symbolic_meanings": "...",
   "psychological_insights": "...",
-  "biblical_references": ["reference1", "reference2", ...],
+  "biblical_references": ["reference1", "reference2"],
   "confidence_score": 0.85
 }`;
 
+  try {
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
       max_tokens: 1000,
+      response_format: { type: 'json_object' },
     });
 
     const responseText = completion.choices[0].message.content;
@@ -52,41 +59,21 @@ Please format your response as JSON with the following structure:
       throw new Error('No response from OpenAI');
     }
 
-    const interpretation = JSON.parse(responseText);
+    const parsed = JSON.parse(responseText);
 
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+    const saved = await upsertDreamInterpretation(dreamId, session.sub, {
+      interpretation: parsed.interpretation,
+      key_themes: parsed.key_themes,
+      symbolic_meanings: parsed.symbolic_meanings,
+      psychological_insights: parsed.psychological_insights,
+      biblical_references: parsed.biblical_references,
+      confidence_score: parsed.confidence_score,
+      model_used: 'gpt-4o',
+    });
 
-    if (!supabaseUrl || !supabaseKey) {
-      return Response.json({ error: 'Database not configured' }, { status: 500 });
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { data, error } = await supabase
-      .from('dream_interpretations')
-      .insert([
-        {
-          dream_id: dreamId,
-          user_id: userId,
-          interpretation: interpretation.interpretation,
-          key_themes: interpretation.key_themes,
-          symbolic_meanings: interpretation.symbolic_meanings,
-          psychological_insights: interpretation.psychological_insights,
-          biblical_references: interpretation.biblical_references,
-          confidence_score: interpretation.confidence_score,
-          model_used: 'gpt-4',
-        },
-      ])
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return Response.json(data);
+    return NextResponse.json({ interpretation: saved });
   } catch (error) {
     console.error('Dream interpretation error:', error);
-    return Response.json({ error: 'Failed to interpret dream' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to interpret dream' }, { status: 500 });
   }
 }

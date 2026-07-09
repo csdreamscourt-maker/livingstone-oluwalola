@@ -20,42 +20,44 @@ export default function CompaniesPage() {
 
       <Section padding="xl">
         <Container>
-          <div className="mb-16">
-            <h2 className="text-xl font-semibold text-midnight-950 mb-8 sm:text-2xl">
-              Our organizations
-            </h2>
+          {(['Companies & Startups', 'Social Impact', 'Faith-Based'] as const).map((category) => (
+            <div key={category} className="mb-16">
+              <h2 className="text-xl font-semibold text-midnight-950 mb-8 sm:text-2xl">
+                {category}
+              </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-              {COMPANIES.map((company) => (
-                <Card
-                  key={company.id}
-                  variant="bordered"
-                  className="group flex flex-col h-full"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-midnight-950">
-                      {company.name}
-                    </h3>
-                    <Badge variant="outline" className="flex-shrink-0">
-                      {company.status}
-                    </Badge>
-                  </div>
-
-                  <p className="text-[15px] text-gray-600 mb-6 flex-1 leading-6">
-                    {company.description}
-                  </p>
-
-                  <Link
-                    href={company.href}
-                    className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {COMPANIES.filter((company) => company.category === category).map((company) => (
+                  <Card
+                    key={company.id}
+                    variant="bordered"
+                    className="group flex flex-col h-full"
                   >
-                    Learn more
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
-                  </Link>
-                </Card>
-              ))}
+                    <div className="flex items-start justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-midnight-950">
+                        {company.name}
+                      </h3>
+                      <Badge variant="outline" className="flex-shrink-0">
+                        Active
+                      </Badge>
+                    </div>
+
+                    <p className="text-[15px] text-gray-600 mb-6 flex-1 leading-6">
+                      {company.description}
+                    </p>
+
+                    <Link
+                      href={company.href}
+                      className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
+                    >
+                      Learn more
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5" />
+                    </Link>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
+          ))}
 
           <Card variant="bordered" padding="xl">
             <h2 className="text-xl font-semibold text-midnight-950 mb-4 sm:text-2xl">

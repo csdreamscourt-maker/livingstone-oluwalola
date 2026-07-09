@@ -1,7 +1,12 @@
 'use client';
 
-import { DreamscourtShell } from '@/components/dreamscourt/DreamscourtShell';
+import { DreamscourtLayout } from '@/components/dreamscourt/DreamscourtLayout';
+import { JournalView } from '@/components/dreamscourt/views/JournalView';
 
 export default function JournalPage() {
-  return <DreamscourtShell initialView="journal" />;
+  return (
+    <DreamscourtLayout>
+      <JournalView />
+    </DreamscourtLayout>
+  );
 }

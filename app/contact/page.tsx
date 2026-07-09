@@ -161,7 +161,7 @@ export default function ContactPage() {
 
               {status === 'success' && (
                 <Alert type="success" title="Success!">
-                  Message sent successfully. We'll get back to you soon.
+                  Message sent successfully. We&apos;ll get back to you soon.
                 </Alert>
               )}
 

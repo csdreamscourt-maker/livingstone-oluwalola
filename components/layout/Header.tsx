@@ -1,18 +1,29 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container } from '@/components/ui';
 import { NAVIGATION } from '@/lib/constants';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
+
+  const openMenuNow = (label: string) => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    setOpenMenu(label);
+  };
+
+  const scheduleClose = () => {
+    closeTimeout.current = setTimeout(() => setOpenMenu(null), 120);
+  };
 
   return (
     <>
@@ -26,15 +37,47 @@ export function Header() {
               <span className="text-sm font-semibold tracking-[-0.01em] text-midnight-950">Livingstone</span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-7">
-              {NAVIGATION.slice(0, 5).map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-[13.5px] font-medium text-gray-600 transition-colors duration-200 hover:text-midnight-950"
+            <nav className="hidden lg:flex items-center gap-1">
+              {NAVIGATION.map((item) => (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => item.children && openMenuNow(item.label)}
+                  onMouseLeave={() => item.children && scheduleClose()}
                 >
-                  {item.label}
-                </Link>
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-1 rounded-md px-3 py-2 text-[13.5px] font-medium text-gray-600 transition-colors duration-200 hover:text-midnight-950"
+                  >
+                    {item.label}
+                    {item.children && <ChevronDown size={13} className="text-gray-400" />}
+                  </Link>
+
+                  <AnimatePresence>
+                    {item.children && openMenu === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 top-full pt-2"
+                      >
+                        <div className="w-72 rounded-lg border border-midnight-950/10 bg-white p-2 shadow-lg">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="block rounded-md px-3 py-2.5 transition-colors duration-150 hover:bg-gray-50"
+                            >
+                              <span className="block text-[13.5px] font-semibold text-midnight-950">{child.label}</span>
+                              <span className="block text-xs leading-5 text-gray-500">{child.description}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ))}
             </nav>
 
@@ -74,18 +117,33 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-white border-l border-midnight-950/10"
+              className="fixed right-0 top-0 h-full w-80 max-w-[85%] z-50 lg:hidden bg-white border-l border-midnight-950/10 overflow-y-auto"
             >
-              <div className="pt-20 px-6 space-y-1">
+              <div className="pt-20 px-6 pb-8 space-y-1">
                 {NAVIGATION.map((item) => (
-                  <Link
-                    key={item.href || item.label}
-                    href={item.href}
-                    className="flex items-center justify-between px-3 py-3 text-[15px] font-medium text-midnight-950 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span>{item.label}</span>
-                  </Link>
+                  <div key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="flex items-center justify-between px-3 py-3 text-[15px] font-medium text-midnight-950 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span>{item.label}</span>
+                    </Link>
+                    {item.children && (
+                      <div className="ml-3 border-l border-midnight-950/10 pl-3 mb-1">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="block px-3 py-2 text-[13.5px] text-gray-600 hover:text-midnight-950 transition-colors duration-200"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
                 <div className="pt-5">
                   <Link

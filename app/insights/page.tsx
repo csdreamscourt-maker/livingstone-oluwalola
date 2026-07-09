@@ -1,7 +1,12 @@
 'use client';
 
-import { DreamscourtShell } from '@/components/dreamscourt/DreamscourtShell';
+import { DreamscourtLayout } from '@/components/dreamscourt/DreamscourtLayout';
+import { InsightsView } from '@/components/dreamscourt/views/InsightsView';
 
 export default function InsightsPage() {
-  return <DreamscourtShell initialView="insights" />;
+  return (
+    <DreamscourtLayout>
+      <InsightsView />
+    </DreamscourtLayout>
+  );
 }

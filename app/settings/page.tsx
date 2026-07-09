@@ -1,7 +1,12 @@
 'use client';
 
-import { DreamscourtShell } from '@/components/dreamscourt/DreamscourtShell';
+import { DreamscourtLayout } from '@/components/dreamscourt/DreamscourtLayout';
+import { SettingsView } from '@/components/dreamscourt/views/SettingsView';
 
 export default function SettingsPage() {
-  return <DreamscourtShell initialView="settings" />;
+  return (
+    <DreamscourtLayout>
+      <SettingsView />
+    </DreamscourtLayout>
+  );
 }

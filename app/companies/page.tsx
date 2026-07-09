@@ -9,6 +9,12 @@ export const metadata = {
   description: 'Explore the ecosystem of mission-driven organizations operating at the frontlines of leadership, technology, and social impact.',
 };
 
+const categoryBackground = {
+  'Companies & Startups': 'white',
+  'Social Impact': 'gold',
+  'Faith-Based': 'dark',
+} as const;
+
 export default function CompaniesPage() {
   return (
     <>
@@ -18,11 +24,13 @@ export default function CompaniesPage() {
         description="A portfolio of integrated companies and initiatives working at the intersection of faith, leadership, technology, and social impact."
       />
 
-      <Section padding="xl">
-        <Container>
-          {(['Companies & Startups', 'Social Impact', 'Faith-Based'] as const).map((category) => (
-            <div key={category} className="mb-16">
-              <h2 className="text-xl font-semibold text-midnight-950 mb-8 sm:text-2xl">
+      {(['Companies & Startups', 'Social Impact', 'Faith-Based'] as const).map((category) => {
+        const background = categoryBackground[category];
+        const isSolid = background !== 'white';
+        return (
+          <Section key={category} padding="lg" background={background}>
+            <Container>
+              <h2 className={`text-xl font-semibold mb-8 sm:text-2xl ${isSolid ? 'text-white' : 'text-midnight-950'}`}>
                 {category}
               </h2>
 
@@ -30,7 +38,7 @@ export default function CompaniesPage() {
                 {COMPANIES.filter((company) => company.category === category).map((company) => (
                   <Card
                     key={company.id}
-                    variant="bordered"
+                    variant={isSolid ? 'elevated' : 'bordered'}
                     className="group flex flex-col h-full"
                   >
                     <div className="flex items-start justify-between mb-4">
@@ -56,17 +64,21 @@ export default function CompaniesPage() {
                   </Card>
                 ))}
               </div>
-            </div>
-          ))}
+            </Container>
+          </Section>
+        );
+      })}
 
-          <Card variant="bordered" padding="xl">
-            <h2 className="text-xl font-semibold text-midnight-950 mb-4 sm:text-2xl">
+      <Section padding="xl">
+        <Container>
+          <Card variant="dark" padding="xl">
+            <h2 className="text-xl font-semibold text-white mb-4 sm:text-2xl">
               A unified vision
             </h2>
-            <p className="text-[15px] text-gray-600 mb-4 leading-7">
+            <p className="text-[15px] text-white/70 mb-4 leading-7">
               These organizations aren&apos;t separate ventures. They operate as an integrated ecosystem, each bringing specialized expertise while contributing to a singular mission: building people, businesses, and institutions that stand the test of time.
             </p>
-            <p className="text-[15px] text-gray-600 leading-7">
+            <p className="text-[15px] text-white/70 leading-7">
               Through technology, education, advisory, publishing, and direct engagement, we work to create a world where excellence, integrity, and transformative impact are the norm rather than the exception.
             </p>
           </Card>

@@ -50,13 +50,21 @@ export default function CommunityPage() {
 
       <Section padding="xl">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
-            {pillars.map((pillar) => (
-              <Card key={pillar.title} variant="bordered">
-                <h3 className="text-[15px] font-semibold text-midnight-950 mb-2">{pillar.title}</h3>
-                <p className="text-sm text-gray-600 leading-6">{pillar.description}</p>
-              </Card>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+            {pillars.map((pillar, index) => {
+              const tone = index % 2 === 0 ? 'navy' : 'gold';
+              return (
+                <div
+                  key={pillar.title}
+                  className={`rounded-xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${
+                    tone === 'navy' ? 'bg-midnight-950 text-white' : 'bg-gold-600 text-white'
+                  }`}
+                >
+                  <h3 className="text-[15px] font-semibold text-white mb-2">{pillar.title}</h3>
+                  <p className={`text-sm leading-6 ${tone === 'navy' ? 'text-white/70' : 'text-white/85'}`}>{pillar.description}</p>
+                </div>
+              );
+            })}
           </div>
 
           <Card variant="bordered" padding="lg" className="max-w-lg mx-auto text-center">

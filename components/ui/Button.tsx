@@ -21,7 +21,7 @@ export function Button({
   disabled = false,
   type = 'button',
 }: ButtonProps) {
-  const baseStyles = 'font-semibold transition-colors duration-200 rounded-md inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseStyles = 'font-semibold transition-all duration-200 ease-out rounded-md inline-flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 focus:outline-none focus:ring-2 focus:ring-offset-2 hover:scale-[1.03] active:scale-[0.98]';
 
   const variants = {
     primary: 'bg-midnight-950 text-white hover:bg-midnight-800 focus:ring-midnight-950',

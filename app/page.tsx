@@ -56,11 +56,17 @@ export default function Home() {
                 Explore strategic frameworks, elegant digital experiences, and living institutions — built at the intersection of faith, leadership, and technology.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href="/frameworks" className="inline-flex items-center justify-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
+                <Link
+                  href="/frameworks"
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.03] hover:bg-midnight-800 active:scale-[0.98]"
+                >
                   Explore frameworks
                   <ArrowRight size={16} />
                 </Link>
-                <Link href="/about" className="inline-flex items-center justify-center gap-2 rounded-md border border-midnight-950/15 px-5 py-2.5 text-sm font-semibold text-midnight-950 transition-colors duration-200 hover:border-midnight-950/30">
+                <Link
+                  href="/about"
+                  className="inline-flex items-center justify-center gap-2 rounded-md border border-midnight-950/15 px-5 py-2.5 text-sm font-semibold text-midnight-950 transition-all duration-200 hover:scale-[1.03] hover:border-midnight-950/30 active:scale-[0.98]"
+                >
                   Meet Livingstone
                 </Link>
               </div>
@@ -90,33 +96,34 @@ export default function Home() {
         </Container>
       </section>
 
-      <section className="border-b border-midnight-950/8 bg-white py-16 md:py-24">
+      <section className="border-b border-midnight-950/8 bg-midnight-950 py-16 md:py-24">
         <Container>
-          <div className="mb-10 max-w-xl">
-            <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
-              <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
+          <div className="mb-12 max-w-xl">
+            <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-300">
+              <span className="h-[5px] w-[5px] rounded-full bg-gold-400" />
               What we stand for
             </span>
-            <h2 className="text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
+            <h2 className="text-xl font-semibold tracking-[-0.015em] text-white sm:text-2xl">
               Built for leaders who want both depth and elegance.
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <p className="mt-2 text-sm leading-6 text-white/60">
               The Livingstone ecosystem blends strategic thinking, product craft, and spiritual reflection into a single operating system.
             </p>
           </div>
 
-          <div className="border-t border-midnight-950/10">
+          <div className="grid gap-5 sm:grid-cols-3">
             {pillars.map((pillar, index) => (
               <motion.div
                 key={pillar.title}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="grid gap-2 border-b border-midnight-950/10 py-5 sm:grid-cols-[220px_1fr] sm:gap-8"
+                transition={{ duration: 0.45, delay: index * 0.07, ease: EASE }}
+                className="rounded-xl border border-white/10 bg-white/[0.04] p-6"
               >
-                <span className="text-[15px] font-semibold tracking-[-0.01em] text-midnight-950">{pillar.title}</span>
-                <span className="max-w-xl text-sm leading-6 text-gray-600">{pillar.description}</span>
+                <span className="font-mono text-2xl font-semibold text-gold-400">0{index + 1}</span>
+                <h3 className="mt-4 text-[15px] font-semibold tracking-[-0.01em] text-white">{pillar.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-white/60">{pillar.description}</p>
               </motion.div>
             ))}
           </div>
@@ -127,6 +134,7 @@ export default function Home() {
         subtitle="Signature systems"
         title="Frameworks for transformation"
         description="Practical models, strategic lenses, and structures for growth at every level."
+        variant="tiles"
         items={FRAMEWORKS.map((fw) => ({
           id: fw.id,
           title: fw.title,
@@ -138,27 +146,34 @@ export default function Home() {
         viewAllLabel="Explore all frameworks"
       />
 
-      <section className="border-b border-midnight-950/8 bg-paper py-16 md:py-24">
+      <section className="border-b border-midnight-950/8 bg-gold-600 py-16 md:py-24">
         <Container>
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-xl">
-              <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
-                <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
+              <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/80">
+                <span className="h-[5px] w-[5px] rounded-full bg-white" />
                 Ecosystem
               </span>
-              <h2 className="text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
+              <h2 className="text-xl font-semibold tracking-[-0.015em] text-white sm:text-2xl">
                 A portfolio of focused initiatives.
               </h2>
             </div>
-            <Link href="/companies" className="whitespace-nowrap border-b border-midnight-950/20 pb-0.5 text-sm font-semibold text-gray-600 transition-colors duration-200 hover:border-midnight-950 hover:text-midnight-950">
+            <Link href="/companies" className="whitespace-nowrap border-b border-white/40 pb-0.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white">
               View all companies
             </Link>
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-lg border border-midnight-950/10 bg-midnight-950/10 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {COMPANIES.slice(0, 4).map((company, index) => (
-              <motion.div key={company.id} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.4, delay: index * 0.05 }}>
-                <Link href={company.href} className="group flex h-full flex-col gap-3 bg-white p-6 transition-colors duration-200 hover:bg-midnight-950/[0.03]">
+              <motion.div
+                key={company.id}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.4, delay: index * 0.05, ease: EASE }}
+                whileHover={{ y: -4 }}
+              >
+                <Link href={company.href} className="group flex h-full flex-col gap-3 rounded-xl bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-xl">
                   <div className="flex items-start justify-between">
                     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-gray-400">{company.category}</span>
                     <ArrowUpRight size={16} className="text-gray-400 transition-colors duration-200 group-hover:text-midnight-700" />
@@ -176,6 +191,7 @@ export default function Home() {
         subtitle="Ideas library"
         title="Recent essays & perspectives"
         description="Thoughtful writing for leaders navigating complexity with clarity."
+        background="paper"
         items={ARTICLES.map((article) => ({
           id: article.id,
           title: article.title,
@@ -188,17 +204,20 @@ export default function Home() {
         viewAllLabel="Read all articles"
       />
 
-      <section className="bg-white py-16 md:py-24">
+      <section className="bg-midnight-950 py-16 md:py-24">
         <Container size="md">
-          <div className="rounded-lg border border-midnight-950/10 p-8 text-center md:p-12">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">Take the next step</span>
-            <h2 className="mt-3 text-xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-2xl">
+          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-8 text-center md:p-12">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-300">Take the next step</span>
+            <h2 className="mt-3 text-xl font-semibold tracking-[-0.015em] text-white sm:text-2xl">
               Ready to build something enduring?
             </h2>
-            <p className="mt-3 text-sm leading-6 text-gray-600 max-w-md mx-auto">
+            <p className="mt-3 text-sm leading-6 text-white/60 max-w-md mx-auto">
               Bring strategy, reflection and modern product thinking into one coherent operating system.
             </p>
-            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
+            <Link
+              href="/contact"
+              className="mt-6 inline-flex items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 text-sm font-semibold text-midnight-950 transition-all duration-200 hover:scale-[1.03] hover:bg-gold-400 active:scale-[0.98]"
+            >
               Get started
               <ArrowRight size={16} />
             </Link>

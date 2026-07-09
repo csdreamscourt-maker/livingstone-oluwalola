@@ -35,7 +35,7 @@ export default function AboutPage() {
     <>
       <Section padding="xl">
         <Container size="lg">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-14 items-center mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-14 items-center mb-16">
             <FounderPortrait
               src="/founder/founder-03-navy-suit-white-wall.jpg"
               alt="Livingstone Oluwalola"
@@ -60,40 +60,50 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-20">
-            <Card variant="bordered" padding="lg">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">Vision</span>
-              <p className="mt-3 text-[15px] text-midnight-950 leading-7 font-medium">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card variant="dark" padding="lg">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-300">Vision</span>
+              <p className="mt-3 text-[15px] text-white leading-7 font-medium">
                 The LO brand exists to build leaders and institutions.
               </p>
             </Card>
-            <Card variant="bordered" padding="lg">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">Mission</span>
-              <p className="mt-3 text-[15px] text-midnight-950 leading-7 font-medium">
+            <Card variant="gold" padding="lg">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/80">Mission</span>
+              <p className="mt-3 text-[15px] text-white leading-7 font-medium">
                 To coach and influence a generation of leaders, innovators, and changemakers by sharing models and frameworks that help them scale their personal growth and professional expertise.
               </p>
             </Card>
           </div>
+        </Container>
+      </Section>
 
-          <div className="mb-20">
-            <h2 className="text-xl font-semibold text-midnight-950 mb-8 sm:text-2xl">
-              What anchors the work
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px overflow-hidden rounded-lg border border-midnight-950/10 bg-midnight-950/10">
-              {values.map((value) => (
-                <div key={value.title} className="bg-white p-6">
-                  <h4 className="text-[15px] font-semibold text-midnight-950 mb-2">
-                    {value.title}
-                  </h4>
-                  <p className="text-gray-600 text-sm leading-6">
-                    {value.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+      <Section padding="xl" background="dark">
+        <Container size="lg">
+          <span className="mb-3 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-300">
+            <span className="h-[5px] w-[5px] rounded-full bg-gold-400" />
+            Brand values
+          </span>
+          <h2 className="text-xl font-semibold text-white mb-8 sm:text-2xl">
+            What anchors the work
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {values.map((value) => (
+              <div key={value.title} className="rounded-xl border border-white/10 bg-white/[0.04] p-6">
+                <h4 className="text-[15px] font-semibold text-white mb-2">
+                  {value.title}
+                </h4>
+                <p className="text-white/60 text-sm leading-6">
+                  {value.description}
+                </p>
+              </div>
+            ))}
           </div>
+        </Container>
+      </Section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center mb-20">
+      <Section padding="xl">
+        <Container size="lg">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
             <div className="order-2 lg:order-1">
               <span className="mb-4 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
                 <span className="h-[5px] w-[5px] rounded-full bg-gold-600" />
@@ -125,8 +135,12 @@ export default function AboutPage() {
               className="order-1 lg:order-2 max-w-md mx-auto lg:max-w-none"
             />
           </div>
+        </Container>
+      </Section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-center mb-20">
+      <Section padding="xl" background="light">
+        <Container size="lg">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-center">
             <FounderPortrait
               src="/founder/founder-07-sweater-side-profile.jpg"
               alt="Livingstone Oluwalola"
@@ -149,8 +163,12 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
+        </Container>
+      </Section>
 
-          <Card variant="bordered" padding="xl">
+      <Section padding="xl" background="gold">
+        <Container>
+          <div className="rounded-xl bg-white p-8 md:p-10 mb-8">
             <h2 className="text-xl font-semibold text-midnight-950 mb-4 sm:text-2xl">
               The ecosystem
             </h2>
@@ -160,11 +178,11 @@ export default function AboutPage() {
             <p className="text-[15px] text-gray-600 leading-7">
               Whether through technology, education, advisory, or direct engagement, every initiative is grounded in the same commitment: building a world where excellence, integrity, and transformative impact are the norm rather than the exception.
             </p>
-          </Card>
+          </div>
 
-          <div className="mt-8 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             {['Leadership Development', 'Institutional Transformation', 'Strategic Innovation', 'Human Potential', 'Faith Integration', 'Technology Solutions', 'Systems Thinking'].map((area) => (
-              <Badge key={area} variant="outline">
+              <Badge key={area} variant="dark">
                 {area}
               </Badge>
             ))}
@@ -172,13 +190,16 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <Section padding="xl">
+      <Section padding="xl" background="dark">
         <Container>
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-midnight-950 mb-6 sm:text-2xl">
+            <h2 className="text-xl font-semibold text-white mb-6 sm:text-2xl">
               Ready to explore our frameworks?
             </h2>
-            <Link href="/frameworks" className="group inline-flex items-center gap-2 rounded-md bg-midnight-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-midnight-800">
+            <Link
+              href="/frameworks"
+              className="group inline-flex items-center gap-2 rounded-md bg-gold-500 px-5 py-2.5 text-sm font-semibold text-midnight-950 transition-all duration-200 hover:scale-[1.03] hover:bg-gold-400 active:scale-[0.98]"
+            >
               Browse frameworks
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>

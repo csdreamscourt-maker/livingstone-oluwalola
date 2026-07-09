@@ -114,30 +114,39 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-body {
-  background: var(--color-paper);
-  color: #18181b;
-  font-family: var(--font-sans);
-  font-weight: 400;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
+/*
+ * These base element styles must live in Tailwind's `base` layer.
+ * Unlayered CSS always wins over layered CSS regardless of specificity,
+ * so a plain `h1 { color: ... }` rule here would silently override every
+ * `text-white` (or any color) utility applied to a heading anywhere on
+ * a dark section.
+ */
+@layer base {
+  body {
+    background: var(--color-paper);
+    color: #18181b;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-midnight-950);
-  letter-spacing: -0.02em;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-midnight-950);
+    letter-spacing: -0.02em;
+  }
 
-p {
-  line-height: 1.7;
-}
+  p {
+    line-height: 1.7;
+  }
 
-a {
-  text-decoration: none;
-  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  a {
+    text-decoration: none;
+    transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 ::selection {

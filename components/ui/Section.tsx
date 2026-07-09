@@ -4,7 +4,7 @@ interface SectionProps {
   children: ReactNode;
   className?: string;
   padding?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  background?: 'white' | 'light' | 'dark' | 'midnight-950';
+  background?: 'white' | 'light' | 'dark' | 'midnight-950' | 'gold';
 }
 
 export function Section({
@@ -23,9 +23,10 @@ export function Section({
 
   const bgMap = {
     white: 'bg-white',
-    light: 'bg-white',
+    light: 'bg-paper',
     dark: 'bg-midnight-950 text-white',
     'midnight-950': 'bg-midnight-950 text-white',
+    gold: 'bg-gold-600 text-white',
   };
 
   return (

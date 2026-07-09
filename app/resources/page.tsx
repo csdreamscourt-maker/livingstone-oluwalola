@@ -1,8 +1,8 @@
-import { Container, Section, Card, Badge } from '@/components/ui';
+import { Container, Section, Card } from '@/components/ui';
 import { Hero } from '@/components/sections';
 import { FRAMEWORKS } from '@/lib/constants';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 export default function ResourcesPage() {
   return (
@@ -15,25 +15,34 @@ export default function ResourcesPage() {
         cta2={{ label: 'View all frameworks', href: '/frameworks' }}
       />
 
-      <Section padding="xl">
+      <Section padding="xl" background="light">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
-            {FRAMEWORKS.map((framework) => (
-              <Card key={framework.id} variant="bordered" className="flex flex-col h-full">
-                <Badge variant="outline" className="mb-3 w-fit">
-                  {framework.category}
-                </Badge>
-                <h3 className="text-[15px] font-semibold text-midnight-950 mb-2">{framework.title}</h3>
-                <p className="text-sm text-gray-600 leading-6 mb-5 flex-1">{framework.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+            {FRAMEWORKS.map((framework, index) => {
+              const tone = index % 2 === 0 ? 'navy' : 'gold';
+              return (
                 <Link
+                  key={framework.id}
                   href={`/frameworks/${framework.id}`}
-                  className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group transition-colors duration-200"
+                  className={`group flex h-full flex-col gap-3 rounded-xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${
+                    tone === 'navy' ? 'bg-midnight-950 text-white' : 'bg-gold-600 text-white'
+                  }`}
                 >
-                  Open framework
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  <div className="flex items-start justify-between gap-4">
+                    <span className={`text-[11px] font-semibold uppercase tracking-[0.1em] ${tone === 'navy' ? 'text-gold-300' : 'text-white/80'}`}>
+                      {framework.category}
+                    </span>
+                    <ArrowUpRight size={16} className="shrink-0 text-white/60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white" />
+                  </div>
+                  <h3 className="text-[15px] font-semibold text-white">{framework.title}</h3>
+                  <p className={`text-sm leading-6 flex-1 ${tone === 'navy' ? 'text-white/70' : 'text-white/85'}`}>{framework.description}</p>
+                  <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
+                    Open framework
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </span>
                 </Link>
-              </Card>
-            ))}
+              );
+            })}
           </div>
 
           <Card variant="bordered" padding="lg">

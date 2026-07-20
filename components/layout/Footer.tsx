@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Container } from '@/components/ui';
 import { FOOTER_NAVIGATION } from '@/lib/constants';
 import { Mail } from 'lucide-react';
@@ -15,11 +16,8 @@ export function Footer() {
         <div className="py-14 md:py-20">
           <div className="grid grid-cols-2 gap-10 md:grid-cols-4 md:gap-10 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
-                <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[4px] border-[1.4px] border-midnight-950">
-                  <span className="h-[6px] w-[6px] rounded-[1px] bg-gold-600" />
-                </span>
-                <span className="text-sm font-semibold tracking-[-0.01em] text-midnight-950">Livingstone</span>
+              <Link href="/" className="inline-flex items-center mb-4">
+                <Image src="/brand/livingstone-logo-full.png" alt="Livingstone Oluwalola" width={1267} height={423} className="h-10 w-auto" />
               </Link>
               <p className="text-gray-500 text-sm leading-6 max-w-xs">
                 Building systems and frameworks for lasting impact across faith, leadership, technology, and human development.

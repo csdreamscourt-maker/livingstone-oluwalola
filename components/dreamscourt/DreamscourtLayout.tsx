@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useDreamscourtWorkspace } from '@/lib/dreamscourt/useDreamscourtWorkspace';
 import { DreamscourtContext } from '@/lib/dreamscourt/context';
@@ -10,7 +11,6 @@ import {
   LayoutDashboard,
   Lightbulb,
   LogOut,
-  MoonStar,
   PenTool,
   Settings,
   X,
@@ -63,9 +63,7 @@ export function DreamscourtLayout({ children }: { children: ReactNode }) {
         <div className="relative flex min-h-screen flex-col lg:flex-row">
           <aside className="w-full border-b border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl lg:w-64 lg:border-b-0 lg:border-r">
             <div className="flex items-center gap-2.5">
-              <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[4px] border-[1.4px] border-gold-400/70">
-                <MoonStar className="h-3 w-3 text-gold-300" />
-              </span>
+              <Image src="/brand/dreamscourt-icon-white.png" alt="" width={470} height={425} className="h-7 w-auto" priority />
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/40">Dreamscourt</p>
                 <p className="text-sm font-semibold text-white">Private workspace</p>

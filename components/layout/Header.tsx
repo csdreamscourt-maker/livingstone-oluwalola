@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Container } from '@/components/ui';
@@ -31,9 +32,7 @@ export function Header() {
         <Container>
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="group flex flex-shrink-0 items-center gap-2.5">
-              <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-[4px] border-[1.4px] border-midnight-950">
-                <span className="h-[6px] w-[6px] rounded-[1px] bg-gold-600" />
-              </span>
+              <Image src="/brand/livingstone-icon.png" alt="" width={22} height={40} className="h-6 w-auto" priority />
               <span className="text-sm font-semibold tracking-[-0.01em] text-midnight-950">Livingstone</span>
             </Link>
 

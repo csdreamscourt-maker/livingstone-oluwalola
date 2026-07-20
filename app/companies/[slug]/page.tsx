@@ -1,10 +1,11 @@
 import { Container, Section, Card, Badge } from '@/components/ui';
 import { COMPANIES } from '@/lib/constants';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
-const COMPANY_DETAILS: Record<string, { name: string; tagline: string; summary: string; highlights: string[] }> = {
+const COMPANY_DETAILS: Record<string, { name: string; tagline: string; summary: string; highlights: string[]; logo?: string }> = {
   dreamscourt: {
     name: 'Dreamscourt',
     tagline: 'AI-powered dream journal and spiritual insights platform',
@@ -15,6 +16,7 @@ const COMPANY_DETAILS: Record<string, { name: string; tagline: string; summary: 
       'AI-powered interpretations rooted in personal insight and spiritual context',
       'A calm, modern experience for growth and self-discovery',
     ],
+    logo: '/brand/dreamscourt-logo-color.png',
   },
   'house-of-uphaz': {
     name: 'House of Uphaz',
@@ -105,6 +107,11 @@ export default async function CompanyDetailPage({ params }: CompanyPageProps) {
 
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <Card variant="bordered" padding="lg">
+              {company.logo && (
+                <div className="mb-5 inline-flex rounded-lg bg-black p-4">
+                  <Image src={company.logo} alt={`${company.name} logo`} width={990} height={402} className="h-8 w-auto" />
+                </div>
+              )}
               <Badge variant="outline" className="mb-4">
                 Active initiative
               </Badge>

@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Container, Section, Button } from '@/components/ui';
-import { ArrowRight, Mail, Lock, MoonStar } from 'lucide-react';
+import { ArrowRight, Mail, Lock } from 'lucide-react';
 import { login } from '@/lib/api/auth';
 
 export default function LoginPage() {
@@ -35,10 +36,7 @@ export default function LoginPage() {
       <Container size="sm">
         <div className="py-10">
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40 mb-4">
-              <MoonStar className="w-3.5 h-3.5 text-gold-300" />
-              Dreamscourt access
-            </span>
+            <Image src="/brand/dreamscourt-logo-full.png" alt="Dreamscourt" width={1075} height={435} className="mx-auto mb-6 h-10 w-auto" priority />
             <h1 className="text-2xl font-semibold text-white mb-2 sm:text-3xl">Welcome back to your sanctuary</h1>
             <p className="text-[15px] text-white/50">Sign in to continue your dream journal and reflection practice.</p>
           </div>

@@ -7,22 +7,49 @@ import { usePathname } from 'next/navigation';
 import { useDreamscourtWorkspace } from '@/lib/dreamscourt/useDreamscourtWorkspace';
 import { DreamscourtContext } from '@/lib/dreamscourt/context';
 import {
+  BookOpen,
   Brain,
+  GraduationCap,
   LayoutDashboard,
   Lightbulb,
   LogOut,
+  MessageCircle,
   PenTool,
   Settings,
+  ShoppingBag,
+  Sparkles,
   X,
 } from 'lucide-react';
 
-const navItems = [
-  { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
-  { href: '/journal', label: 'Journal', icon: PenTool },
-  { href: '/dreams', label: 'Dreams', icon: Brain },
-  { href: '/insights', label: 'Insights', icon: Lightbulb },
-  { href: '/settings', label: 'Settings', icon: Settings },
+const navGroups = [
+  {
+    label: 'Practice',
+    items: [
+      { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+      { href: '/lab', label: 'Dream Lab', icon: Sparkles },
+      { href: '/dreams', label: 'Dreams', icon: Brain },
+      { href: '/journal', label: 'Journal', icon: PenTool },
+      { href: '/insights', label: 'Insights', icon: Lightbulb },
+    ],
+  },
+  {
+    label: 'Learn',
+    items: [
+      { href: '/academy', label: 'Academy', icon: GraduationCap },
+      { href: '/library', label: 'Library', icon: BookOpen },
+    ],
+  },
+  {
+    label: '',
+    items: [
+      { href: '/store', label: 'Store', icon: ShoppingBag },
+      { href: '/dream-community', label: 'Community', icon: MessageCircle },
+      { href: '/settings', label: 'Settings', icon: Settings },
+    ],
+  },
 ];
+
+const navItems = navGroups.flatMap((group) => group.items);
 
 function LoadingShell() {
   return (
@@ -70,23 +97,32 @@ export function DreamscourtLayout({ children }: { children: ReactNode }) {
               </div>
             </div>
 
-            <nav className="mt-8 space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = item === activeItem;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${
-                      isActive ? 'bg-white/10 text-gold-200' : 'text-white/60 hover:bg-white/5 hover:text-white'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
+            <nav className="mt-8 space-y-5">
+              {navGroups.map((group) => (
+                <div key={group.label || 'ungrouped'}>
+                  {group.label && (
+                    <p className="mb-1.5 px-3 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-white/30">{group.label}</p>
+                  )}
+                  <div className="space-y-1">
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = item === activeItem;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${
+                            isActive ? 'bg-white/10 text-gold-200' : 'text-white/60 hover:bg-white/5 hover:text-white'
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </nav>
 
             <div className="mt-8 rounded-md border border-white/10 bg-white/[0.03] p-4 text-sm text-white/50">

@@ -1,18 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { useDreamscourt } from '@/lib/dreamscourt/context';
 import { Eyebrow, GlassCard, IconBadge } from '../ui';
-import { BookOpen, Compass, Flame, Heart, Lightbulb, Sparkles } from 'lucide-react';
+import { uploadVoiceRecording } from '@/lib/api/dreams';
+import { BookOpen, Compass, Flame, Heart, Lightbulb, Mic, Sparkles, Square } from 'lucide-react';
 
 export function OverviewView() {
   const { user, dreams, stats, addDream, setError } = useDreamscourt();
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [uploadingVoice, setUploadingVoice] = useState(false);
+  const [voiceUrl, setVoiceUrl] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<BlobPart[]>([]);
 
   const handleQuickCapture = async () => {
-    if (!draft.trim()) return;
+    if (!draft.trim() && !voiceUrl) return;
     setSaving(true);
     try {
       await addDream({
@@ -20,13 +26,47 @@ export function OverviewView() {
         description: draft.trim(),
         date_occurred: new Date().toISOString(),
         tags: ['quick-capture'],
+        voice_recording_url: voiceUrl,
       });
       setDraft('');
+      setVoiceUrl(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save the dream');
     } finally {
       setSaving(false);
     }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
+      recorder.ondataavailable = (event) => chunksRef.current.push(event.data);
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        setUploadingVoice(true);
+        try {
+          const url = await uploadVoiceRecording(blob);
+          setVoiceUrl(url);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Voice recording could not be saved (storage not configured yet)');
+        } finally {
+          setUploadingVoice(false);
+        }
+      };
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      setRecording(true);
+    } catch {
+      setError('Microphone access was denied or is unavailable.');
+    }
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setRecording(false);
   };
 
   return (
@@ -43,11 +83,23 @@ export function OverviewView() {
 
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
         <GlassCard>
-          <div className="flex items-center gap-3">
-            <IconBadge>
-              <Compass className="h-4 w-4" />
-            </IconBadge>
-            <Eyebrow>Quick capture</Eyebrow>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <IconBadge>
+                <Compass className="h-4 w-4" />
+              </IconBadge>
+              <Eyebrow>Quick capture</Eyebrow>
+            </div>
+            <button
+              onClick={recording ? stopRecording : startRecording}
+              disabled={uploadingVoice}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors duration-200 disabled:opacity-50 ${
+                recording ? 'bg-red-500/15 text-red-300' : 'border border-white/15 text-white/50 hover:text-white'
+              }`}
+            >
+              {recording ? <Square className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
+              {recording ? 'Stop' : uploadingVoice ? 'Saving voice...' : 'Record voice'}
+            </button>
           </div>
           <textarea
             value={draft}
@@ -55,6 +107,9 @@ export function OverviewView() {
             className="mt-4 min-h-[140px] w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-gold-400/60"
             placeholder="I dreamt that..."
           />
+          {voiceUrl && (
+            <audio controls src={voiceUrl} className="mt-3 h-8 w-full" />
+          )}
           <div className="mt-4 flex items-center justify-between">
             <p className="text-xs text-white/40">Saved to your account.</p>
             <button

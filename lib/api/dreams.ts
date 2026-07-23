@@ -1,4 +1,4 @@
-import type { Dream, DreamInterpretation } from '@/types/database';
+import type { Dream, DreamFolder, DreamInterpretation } from '@/types/database';
 
 async function parseOrThrow<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => ({}));
@@ -17,6 +17,8 @@ export type DreamDraft = {
   tags?: string[];
   clarity?: number;
   is_private?: boolean;
+  folder_id?: string | null;
+  voice_recording_url?: string | null;
 };
 
 export async function fetchDreams(): Promise<Dream[]> {
@@ -58,4 +60,33 @@ export async function interpretDream(dreamId: string): Promise<DreamInterpretati
   });
   const data = await parseOrThrow<{ interpretation: DreamInterpretation }>(res);
   return data.interpretation;
+}
+
+export async function fetchDreamFolders(): Promise<DreamFolder[]> {
+  const res = await fetch('/api/dream-folders');
+  const data = await parseOrThrow<{ folders: DreamFolder[] }>(res);
+  return data.folders;
+}
+
+export async function createDreamFolder(name: string): Promise<DreamFolder> {
+  const res = await fetch('/api/dream-folders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  const data = await parseOrThrow<{ folder: DreamFolder }>(res);
+  return data.folder;
+}
+
+export async function deleteDreamFolder(id: string): Promise<void> {
+  const res = await fetch(`/api/dream-folders/${id}`, { method: 'DELETE' });
+  await parseOrThrow(res);
+}
+
+export async function uploadVoiceRecording(blob: Blob): Promise<string> {
+  const formData = new FormData();
+  formData.append('audio', blob, 'recording.webm');
+  const res = await fetch('/api/uploads/voice', { method: 'POST', body: formData });
+  const data = await parseOrThrow<{ url: string }>(res);
+  return data.url;
 }

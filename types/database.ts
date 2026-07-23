@@ -4,7 +4,78 @@ export type User = {
   full_name?: string;
   avatar_url?: string;
   bio?: string;
+  role: 'user' | 'admin';
   created_at: string;
+  updated_at: string;
+};
+
+export type DreamFolder = {
+  id: string;
+  user_id: string;
+  name: string;
+  created_at: string;
+};
+
+export type Course = {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  price_display?: string;
+  selar_url?: string;
+  thumbnail_url?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DreamSymbol = {
+  id: string;
+  term: string;
+  meaning: string;
+  category?: string;
+  scripture_reference?: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DreamArticle = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  body?: string;
+  category?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StoreProduct = {
+  id: string;
+  title: string;
+  description?: string;
+  price_display?: string;
+  selar_url?: string;
+  cover_image_url?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DreamLabSession = {
+  id: string;
+  user_id: string;
+  dream_id?: string;
+  prompt: string;
+  interpretation?: string;
+  image_url?: string;
+  created_at: string;
+};
+
+export type SiteSetting = {
+  key: string;
+  value: string;
   updated_at: string;
 };
 
@@ -22,6 +93,7 @@ export type Dream = {
   favorite: boolean;
   is_archived: boolean;
   clarity?: number;
+  folder_id?: string;
   created_at: string;
   updated_at: string;
 };

@@ -25,3 +25,9 @@ export async function getSessionFromCookies(): Promise<SessionPayload | null> {
   if (!token) return null;
   return verifySessionToken(token);
 }
+
+export async function requireAdminSession(): Promise<SessionPayload | null> {
+  const session = await getSessionFromCookies();
+  if (!session || session.role !== 'admin') return null;
+  return session;
+}

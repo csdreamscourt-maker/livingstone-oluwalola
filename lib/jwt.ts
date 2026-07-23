@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 export type SessionPayload = {
   sub: string;
   email: string;
+  role: 'user' | 'admin';
 };
 
 const JWT_SECRET = process.env.JWT_SECRET;

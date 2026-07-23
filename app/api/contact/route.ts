@@ -1,4 +1,5 @@
 import { createContactMessage } from '@/lib/db';
+import { sendEmailBestEffort } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -9,6 +10,15 @@ export async function POST(request: Request) {
     }
 
     await createContactMessage({ name, email, subject, message });
+
+    const notifyTo = process.env.ADMIN_NOTIFICATION_EMAIL;
+    if (notifyTo) {
+      await sendEmailBestEffort({
+        to: notifyTo,
+        subject: `New contact message: ${subject}`,
+        html: `<p><strong>${name}</strong> (${email}) wrote:</p><p>${message}</p>`,
+      });
+    }
 
     return Response.json({ success: true, message: 'Message received' });
   } catch (error) {

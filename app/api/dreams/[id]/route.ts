@@ -15,6 +15,8 @@ const ALLOWED_FIELDS = [
   'is_private',
   'favorite',
   'is_archived',
+  'folder_id',
+  'voice_recording_url',
 ] as const;
 
 export async function PATCH(req: NextRequest, ctx: Context) {

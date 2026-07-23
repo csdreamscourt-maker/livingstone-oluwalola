@@ -5,7 +5,19 @@ import type { ReactNode } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-const standalonePrefixes = ['/dashboard', '/journal', '/dreams', '/settings', '/auth'];
+const standalonePrefixes = [
+  '/dashboard',
+  '/journal',
+  '/dreams',
+  '/settings',
+  '/auth',
+  '/admin',
+  '/academy',
+  '/library',
+  '/store',
+  '/lab',
+  '/dream-community',
+];
 
 export function LayoutShell({ children }: { children: ReactNode }) {
   const pathname = usePathname() ?? '/';

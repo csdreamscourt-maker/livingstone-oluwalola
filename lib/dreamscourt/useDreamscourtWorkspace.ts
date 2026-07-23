@@ -83,7 +83,7 @@ export function useDreamscourtWorkspace() {
     router.push('/auth/login');
   };
 
-  const addDream = async (input: { title: string; description: string; date_occurred: string; tags: string[] }) => {
+  const addDream = async (input: { title: string; description: string; date_occurred: string; tags: string[]; folder_id?: string | null; voice_recording_url?: string | null }) => {
     const dream = await createDream(input);
     setDreams((prev) => [dream, ...prev]);
     return dream;
@@ -91,6 +91,11 @@ export function useDreamscourtWorkspace() {
 
   const toggleDreamFavorite = async (dream: Dream) => {
     const updated = await updateDream(dream.id, { favorite: !dream.favorite });
+    setDreams((prev) => prev.map((d) => (d.id === dream.id ? updated : d)));
+  };
+
+  const setDreamFolder = async (dream: Dream, folderId: string | null) => {
+    const updated = await updateDream(dream.id, { folder_id: folderId });
     setDreams((prev) => prev.map((d) => (d.id === dream.id ? updated : d)));
   };
 
@@ -130,6 +135,7 @@ export function useDreamscourtWorkspace() {
     addDream,
     toggleDreamFavorite,
     toggleDreamArchive,
+    setDreamFolder,
     removeDream,
     addJournalEntry,
     toggleAnswered,

@@ -1,4 +1,5 @@
 import { subscribeToNewsletter } from '@/lib/db';
+import { sendEmailBestEffort } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -9,6 +10,12 @@ export async function POST(request: Request) {
     }
 
     await subscribeToNewsletter(email);
+
+    await sendEmailBestEffort({
+      to: email,
+      subject: 'Welcome to Masterminds',
+      html: '<p>You\'re on the list — we\'ll be in touch as soon as Masterminds opens.</p>',
+    });
 
     return Response.json({ success: true, message: 'Subscribed successfully' });
   } catch (error) {

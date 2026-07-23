@@ -11,6 +11,7 @@ export default function AdminCompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,25 +30,45 @@ export default function AdminCompaniesPage() {
     })();
   }, []);
 
-  const handleCreate = async (event: React.FormEvent) => {
+  const startEdit = (company: Company) => {
+    setEditingId(company.id);
+    setForm({
+      name: company.name,
+      slug: company.slug,
+      category: company.category ?? '',
+      description: company.description ?? '',
+      tagline: company.tagline ?? '',
+      summary: company.summary ?? '',
+      highlights: (company.highlights ?? []).join('\n'),
+      logo_url: company.logo_url ?? '',
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!form.name.trim() || !form.slug.trim()) return;
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch('/api/admin/companies', {
-        method: 'POST',
+      const res = await fetch(editingId ? `/api/admin/companies/${editingId}` : '/api/admin/companies', {
+        method: editingId ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
           highlights: form.highlights.split('\n').map((s) => s.trim()).filter(Boolean),
         }),
       });
-      if (!res.ok) throw new Error((await res.json()).error || 'Failed to create company');
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed to save company');
       setForm(emptyForm);
+      setEditingId(null);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create company');
+      setError(err instanceof Error ? err.message : 'Failed to save company');
     } finally {
       setSaving(false);
     }
@@ -64,16 +85,19 @@ export default function AdminCompaniesPage() {
 
   const remove = async (id: string) => {
     const res = await fetch(`/api/admin/companies/${id}`, { method: 'DELETE' });
-    if (res.ok) await load();
+    if (res.ok) {
+      if (editingId === id) cancelEdit();
+      await load();
+    }
   };
 
   return (
     <AdminLayout title="Companies">
       <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">
-          <h3 className="mb-4 text-sm font-semibold text-midnight-950">New company</h3>
+          <h3 className="mb-4 text-sm font-semibold text-midnight-950">{editingId ? 'Edit company' : 'New company'}</h3>
           {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
-          <form onSubmit={handleCreate} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <Input placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             <Input placeholder="Slug (e.g. dreamscourt)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
             <Input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
@@ -82,9 +106,16 @@ export default function AdminCompaniesPage() {
             <Textarea placeholder="Summary (shown on the detail page)" value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} />
             <Textarea placeholder={'Highlights, one per line'} value={form.highlights} onChange={(e) => setForm({ ...form, highlights: e.target.value })} className="min-h-[100px]" />
             <Input placeholder="Logo URL" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} />
-            <Button type="submit" variant="gold" disabled={saving} className="w-full">
-              {saving ? 'Saving...' : 'Create company'}
-            </Button>
+            <div className="flex gap-2">
+              <Button type="submit" variant="gold" disabled={saving} className="flex-1">
+                {saving ? 'Saving...' : editingId ? 'Save changes' : 'Create company'}
+              </Button>
+              {editingId && (
+                <Button type="button" variant="secondary" onClick={cancelEdit}>
+                  Cancel
+                </Button>
+              )}
+            </div>
           </form>
         </div>
 
@@ -101,6 +132,9 @@ export default function AdminCompaniesPage() {
                 <div className="flex shrink-0 gap-2">
                   <button onClick={() => togglePublished(company)} className={`rounded-full px-3 py-1 text-xs font-semibold ${company.is_published ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
                     {company.is_published ? 'Published' : 'Draft'}
+                  </button>
+                  <button onClick={() => startEdit(company)} className="rounded-full border border-midnight-950/15 px-3 py-1 text-xs font-semibold text-gray-600 hover:border-midnight-950/30 hover:text-midnight-950">
+                    Edit
                   </button>
                   <button onClick={() => remove(company.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
                 </div>

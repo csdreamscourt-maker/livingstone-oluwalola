@@ -73,10 +73,10 @@ export function OverviewView() {
     <div className="space-y-5">
       <GlassCard>
         <Eyebrow>Dreamscourt · operational view</Eyebrow>
-        <h1 className="mt-3 text-2xl font-semibold tracking-[-0.015em] text-white sm:text-3xl">
+        <h1 className="mt-3 text-2xl font-semibold tracking-[-0.015em] text-midnight-950 sm:text-3xl">
           Welcome back, {user?.full_name || user?.email || 'friend'}
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/60">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
           A private sanctuary for capturing dreams, reflecting on patterns, and seeing your inner world with more clarity.
         </p>
       </GlassCard>
@@ -94,7 +94,7 @@ export function OverviewView() {
               onClick={recording ? stopRecording : startRecording}
               disabled={uploadingVoice}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors duration-200 disabled:opacity-50 ${
-                recording ? 'bg-red-500/15 text-red-300' : 'border border-white/15 text-white/50 hover:text-white'
+                recording ? 'bg-red-50 text-red-600' : 'border border-midnight-950/15 text-gray-500 hover:text-midnight-950'
               }`}
             >
               {recording ? <Square className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
@@ -104,14 +104,14 @@ export function OverviewView() {
           <textarea
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            className="mt-4 min-h-[140px] w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-gold-400/60"
+            className="mt-4 min-h-[140px] w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-3 text-sm text-midnight-950 outline-none placeholder:text-gray-400 focus:border-gold-400/60"
             placeholder="I dreamt that..."
           />
           {voiceUrl && (
             <audio controls src={voiceUrl} className="mt-3 h-8 w-full" />
           )}
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-xs text-white/40">Saved to your account.</p>
+            <p className="text-xs text-gray-500">Saved to your account.</p>
             <button
               onClick={handleQuickCapture}
               disabled={saving}
@@ -129,9 +129,9 @@ export function OverviewView() {
             </IconBadge>
             <Eyebrow>Current streak</Eyebrow>
           </div>
-          <p className="mt-5 font-mono text-3xl font-semibold tabular-nums text-white">
+          <p className="mt-5 font-mono text-3xl font-semibold tabular-nums text-midnight-950">
             {stats.streak}
-            <span className="ml-2 font-sans text-sm font-medium text-white/40">day{stats.streak === 1 ? '' : 's'}</span>
+            <span className="ml-2 font-sans text-sm font-medium text-gray-500">day{stats.streak === 1 ? '' : 's'}</span>
           </p>
         </GlassCard>
       </div>
@@ -151,8 +151,8 @@ export function OverviewView() {
                   <Icon className="h-4 w-4" />
                 </IconBadge>
                 <div>
-                  <p className="font-mono text-xl font-semibold tabular-nums text-white">{item.value}</p>
-                  <p className="text-xs text-white/40">{item.label}</p>
+                  <p className="font-mono text-xl font-semibold tabular-nums text-midnight-950">{item.value}</p>
+                  <p className="text-xs text-gray-500">{item.label}</p>
                 </div>
               </div>
             </GlassCard>
@@ -164,26 +164,26 @@ export function OverviewView() {
         <div className="mb-4 flex items-center justify-between">
           <div>
             <Eyebrow>Recent dreams</Eyebrow>
-            <h2 className="mt-2 text-lg font-semibold text-white">Your dream timeline</h2>
+            <h2 className="mt-2 text-lg font-semibold text-midnight-950">Your dream timeline</h2>
           </div>
-          <Link href="/dreams" className="text-sm font-semibold text-white/50 transition-colors duration-200 hover:text-white">
+          <Link href="/dreams" className="text-sm font-semibold text-gray-500 transition-colors duration-200 hover:text-midnight-950">
             Open archive
           </Link>
         </div>
         <div className="space-y-2">
           {dreams.length === 0 && (
-            <p className="text-sm text-white/50">No dreams recorded yet — capture your first one above.</p>
+            <p className="text-sm text-gray-500">No dreams recorded yet — capture your first one above.</p>
           )}
           {dreams.slice(0, 4).map((dream) => (
-            <div key={dream.id} className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-3">
+            <div key={dream.id} className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-3">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">{dream.title}</p>
-                  <p className="text-xs text-white/40">{new Date(dream.date_occurred).toLocaleDateString()}</p>
+                  <p className="text-sm font-semibold text-midnight-950">{dream.title}</p>
+                  <p className="text-xs text-gray-500">{new Date(dream.date_occurred).toLocaleDateString()}</p>
                 </div>
-                {dream.mood && <span className="text-xs capitalize text-gold-300">{dream.mood}</span>}
+                {dream.mood && <span className="text-xs capitalize text-gold-700">{dream.mood}</span>}
               </div>
-              {dream.description && <p className="mt-2 text-sm leading-6 text-white/60">{dream.description}</p>}
+              {dream.description && <p className="mt-2 text-sm leading-6 text-gray-600">{dream.description}</p>}
             </div>
           ))}
         </div>

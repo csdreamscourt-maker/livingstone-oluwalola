@@ -24,13 +24,13 @@ export function LibraryArticleView({ slug }: { slug: string }) {
     })();
   }, [slug]);
 
-  if (loading) return <p className="text-sm text-white/50">Loading...</p>;
+  if (loading) return <p className="text-sm text-gray-500">Loading...</p>;
 
   if (notFound || !article) {
     return (
       <GlassCard>
-        <p className="text-sm text-white/60">Article not found.</p>
-        <Link href="/library" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-300">
+        <p className="text-sm text-gray-600">Article not found.</p>
+        <Link href="/library" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-700">
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Library
         </Link>
@@ -40,17 +40,17 @@ export function LibraryArticleView({ slug }: { slug: string }) {
 
   return (
     <div className="space-y-5">
-      <Link href="/library" className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/50 hover:text-white">
+      <Link href="/library" className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-midnight-950">
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to Library
       </Link>
 
       <GlassCard>
         {article.category && <Eyebrow>{article.category}</Eyebrow>}
-        <h1 className="mt-3 text-2xl font-semibold text-white">{article.title}</h1>
+        <h1 className="mt-3 text-2xl font-semibold text-midnight-950">{article.title}</h1>
         <div className="mt-5 space-y-4">
           {(article.body || '').split('\n').filter(Boolean).map((paragraph, index) => (
-            <p key={index} className="text-sm leading-7 text-white/70">{paragraph}</p>
+            <p key={index} className="text-sm leading-7 text-gray-600">{paragraph}</p>
           ))}
         </div>
       </GlassCard>

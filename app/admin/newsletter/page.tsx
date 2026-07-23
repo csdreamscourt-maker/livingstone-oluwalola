@@ -27,17 +27,17 @@ export default function AdminNewsletterPage() {
 
   return (
     <AdminLayout title="Newsletter subscribers">
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-        {loading && <p className="p-5 text-sm text-white/50">Loading...</p>}
-        {!loading && subscribers.length === 0 && <p className="p-5 text-sm text-white/50">No subscribers yet.</p>}
+      <div className="overflow-hidden rounded-2xl border border-midnight-950/10 bg-white">
+        {loading && <p className="p-5 text-sm text-gray-500">Loading...</p>}
+        {!loading && subscribers.length === 0 && <p className="p-5 text-sm text-gray-500">No subscribers yet.</p>}
         {subscribers.map((sub) => (
-          <div key={sub.id} className="flex items-center justify-between border-b border-white/8 px-5 py-3.5 last:border-b-0">
-            <span className="text-sm text-white">{sub.email}</span>
+          <div key={sub.id} className="flex items-center justify-between border-b border-midnight-950/8 px-5 py-3.5 last:border-b-0">
+            <span className="text-sm text-midnight-950">{sub.email}</span>
             <div className="flex items-center gap-3">
-              <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${sub.is_subscribed ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10 text-white/40'}`}>
+              <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${sub.is_subscribed ? 'bg-emerald-100 text-emerald-700' : 'bg-midnight-950/8 text-gray-500'}`}>
                 {sub.is_subscribed ? 'Subscribed' : 'Unsubscribed'}
               </span>
-              <span className="text-xs text-white/40">{new Date(sub.subscribed_at).toLocaleDateString()}</span>
+              <span className="text-xs text-gray-500">{new Date(sub.subscribed_at).toLocaleDateString()}</span>
             </div>
           </div>
         ))}

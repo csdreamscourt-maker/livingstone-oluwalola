@@ -67,15 +67,15 @@ export default function AdminStoreProductsPage() {
   return (
     <AdminLayout title="Store products">
       <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">New product</h3>
-          {error && <p className="mb-3 text-sm text-red-300">{error}</p>}
+        <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">
+          <h3 className="mb-4 text-sm font-semibold text-midnight-950">New product</h3>
+          {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
           <form onSubmit={handleCreate} className="space-y-3">
-            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Price display (e.g. ₦8,000)" value={form.price_display} onChange={(e) => setForm({ ...form, price_display: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Selar checkout URL" value={form.selar_url} onChange={(e) => setForm({ ...form, selar_url: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Cover image URL" value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
+            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <Input placeholder="Price display (e.g. ₦8,000)" value={form.price_display} onChange={(e) => setForm({ ...form, price_display: e.target.value })} />
+            <Input placeholder="Selar checkout URL" value={form.selar_url} onChange={(e) => setForm({ ...form, selar_url: e.target.value })} />
+            <Input placeholder="Cover image URL" value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} />
             <Button type="submit" variant="gold" disabled={saving} className="w-full">
               {saving ? 'Saving...' : 'Create product'}
             </Button>
@@ -83,23 +83,23 @@ export default function AdminStoreProductsPage() {
         </div>
 
         <div className="space-y-3">
-          {loading && <p className="text-sm text-white/50">Loading...</p>}
-          {!loading && products.length === 0 && <p className="text-sm text-white/50">No products yet.</p>}
+          {loading && <p className="text-sm text-gray-500">Loading...</p>}
+          {!loading && products.length === 0 && <p className="text-sm text-gray-500">No products yet.</p>}
           {products.map((product) => (
-            <div key={product.id} className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
+            <div key={product.id} className="rounded-xl border border-midnight-950/10 bg-white p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">{product.title}</p>
-                  <p className="text-xs text-white/40">{product.price_display || 'no price set'}</p>
+                  <p className="text-sm font-semibold text-midnight-950">{product.title}</p>
+                  <p className="text-xs text-gray-500">{product.price_display || 'no price set'}</p>
                 </div>
                 <div className="flex shrink-0 gap-2">
-                  <button onClick={() => togglePublished(product)} className={`rounded-full px-3 py-1 text-xs font-semibold ${product.is_published ? 'bg-emerald-500/15 text-emerald-300' : 'border border-white/15 text-white/50'}`}>
+                  <button onClick={() => togglePublished(product)} className={`rounded-full px-3 py-1 text-xs font-semibold ${product.is_published ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
                     {product.is_published ? 'Published' : 'Draft'}
                   </button>
-                  <button onClick={() => remove(product.id)} className="rounded-full p-1.5 text-white/30 hover:text-red-400">×</button>
+                  <button onClick={() => remove(product.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
                 </div>
               </div>
-              {product.description && <p className="mt-2 text-sm leading-6 text-white/60">{product.description}</p>}
+              {product.description && <p className="mt-2 text-sm leading-6 text-gray-600">{product.description}</p>}
             </div>
           ))}
         </div>

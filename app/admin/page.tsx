@@ -43,14 +43,14 @@ export default function AdminOverviewPage() {
         {tiles.map((tile) => {
           const Icon = tile.icon;
           return (
-            <div key={tile.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+            <div key={tile.label} className="rounded-2xl border border-midnight-950/10 bg-white p-5">
               <div className="flex items-center gap-3">
-                <div className="rounded-md border border-white/10 bg-white/[0.04] p-2.5 text-gold-300">
+                <div className="rounded-md border border-midnight-950/10 bg-white p-2.5 text-gold-700">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-mono text-xl font-semibold tabular-nums text-white">{tile.value ?? '—'}</p>
-                  <p className="text-xs text-white/40">{tile.label}</p>
+                  <p className="font-mono text-xl font-semibold tabular-nums text-midnight-950">{tile.value ?? '—'}</p>
+                  <p className="text-xs text-gray-500">{tile.label}</p>
                 </div>
               </div>
             </div>

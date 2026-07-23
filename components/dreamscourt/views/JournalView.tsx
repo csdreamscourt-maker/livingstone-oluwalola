@@ -44,29 +44,29 @@ export function JournalView() {
           </IconBadge>
           <div>
             <Eyebrow>Prayer journal</Eyebrow>
-            <h2 className="mt-1 text-lg font-semibold text-white">Write before it fades</h2>
+            <h2 className="mt-1 text-lg font-semibold text-midnight-950">Write before it fades</h2>
           </div>
         </div>
         <form className="space-y-3" onSubmit={handleSubmit}>
           <input
             value={title}
             onChange={(event) => setTitle(event.target.value)}
-            className="w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30 focus:border-gold-400/60"
+            className="w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-2.5 text-sm text-midnight-950 outline-none placeholder:text-gray-400 focus:border-gold-400/60"
             placeholder="Entry title"
           />
           <textarea
             value={content}
             onChange={(event) => setContent(event.target.value)}
-            className="min-h-[160px] w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30 focus:border-gold-400/60"
+            className="min-h-[160px] w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-2.5 text-sm text-midnight-950 outline-none placeholder:text-gray-400 focus:border-gold-400/60"
             placeholder="What are you praying about?"
           />
           <select
             value={prayerType}
             onChange={(event) => setPrayerType(event.target.value)}
-            className="w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm capitalize text-white outline-none focus:border-gold-400/60"
+            className="w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-2.5 text-sm capitalize text-midnight-950 outline-none focus:border-gold-400/60"
           >
             {PRAYER_TYPES.map((type) => (
-              <option key={type} value={type} className="bg-midnight-950 capitalize">
+              <option key={type} value={type} className="capitalize">
                 {type}
               </option>
             ))}
@@ -83,27 +83,27 @@ export function JournalView() {
       <GlassCard>
         <div className="mb-4">
           <Eyebrow>Recent entries</Eyebrow>
-          <h2 className="mt-2 text-lg font-semibold text-white">Your reflection stream</h2>
+          <h2 className="mt-2 text-lg font-semibold text-midnight-950">Your reflection stream</h2>
         </div>
         <div className="space-y-2">
-          {journalEntries.length === 0 && <p className="text-sm text-white/50">No entries yet.</p>}
+          {journalEntries.length === 0 && <p className="text-sm text-gray-500">No entries yet.</p>}
           {journalEntries.map((entry) => (
-            <div key={entry.id} className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-3">
+            <div key={entry.id} className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-3">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">{entry.title}</p>
-                  <p className="text-xs text-white/40">{new Date(entry.date_prayed).toLocaleDateString()}</p>
+                  <p className="text-sm font-semibold text-midnight-950">{entry.title}</p>
+                  <p className="text-xs text-gray-500">{new Date(entry.date_prayed).toLocaleDateString()}</p>
                 </div>
                 <button
                   onClick={() => toggleAnswered(entry)}
                   className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    entry.is_answered ? 'bg-emerald-500/15 text-emerald-300' : 'border border-white/15 text-white/50'
+                    entry.is_answered ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'
                   }`}
                 >
                   {entry.is_answered ? 'Answered' : 'Mark answered'}
                 </button>
               </div>
-              <p className="mt-2 text-sm leading-6 text-white/60">{entry.content}</p>
+              <p className="mt-2 text-sm leading-6 text-gray-600">{entry.content}</p>
             </div>
           ))}
         </div>

@@ -67,15 +67,15 @@ export default function AdminDreamArticlesPage() {
   return (
     <AdminLayout title="Dream articles">
       <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">New article</h3>
-          {error && <p className="mb-3 text-sm text-red-300">{error}</p>}
+        <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">
+          <h3 className="mb-4 text-sm font-semibold text-midnight-950">New article</h3>
+          {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
           <form onSubmit={handleCreate} className="space-y-3">
-            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Textarea placeholder="Excerpt" value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Textarea placeholder="Body" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white min-h-[160px]" />
-            <Input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
+            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            <Input placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
+            <Textarea placeholder="Excerpt" value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} />
+            <Textarea placeholder="Body" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} className="min-h-[160px]" />
+            <Input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
             <Button type="submit" variant="gold" disabled={saving} className="w-full">
               {saving ? 'Saving...' : 'Publish article'}
             </Button>
@@ -83,23 +83,23 @@ export default function AdminDreamArticlesPage() {
         </div>
 
         <div className="space-y-3">
-          {loading && <p className="text-sm text-white/50">Loading...</p>}
-          {!loading && articles.length === 0 && <p className="text-sm text-white/50">No articles yet.</p>}
+          {loading && <p className="text-sm text-gray-500">Loading...</p>}
+          {!loading && articles.length === 0 && <p className="text-sm text-gray-500">No articles yet.</p>}
           {articles.map((article) => (
-            <div key={article.id} className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
+            <div key={article.id} className="rounded-xl border border-midnight-950/10 bg-white p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">{article.title}</p>
-                  <p className="text-xs text-white/40">/{article.slug}</p>
+                  <p className="text-sm font-semibold text-midnight-950">{article.title}</p>
+                  <p className="text-xs text-gray-500">/{article.slug}</p>
                 </div>
                 <div className="flex shrink-0 gap-2">
-                  <button onClick={() => togglePublished(article)} className={`rounded-full px-3 py-1 text-xs font-semibold ${article.is_published ? 'bg-emerald-500/15 text-emerald-300' : 'border border-white/15 text-white/50'}`}>
+                  <button onClick={() => togglePublished(article)} className={`rounded-full px-3 py-1 text-xs font-semibold ${article.is_published ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
                     {article.is_published ? 'Published' : 'Draft'}
                   </button>
-                  <button onClick={() => remove(article.id)} className="rounded-full p-1.5 text-white/30 hover:text-red-400">×</button>
+                  <button onClick={() => remove(article.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
                 </div>
               </div>
-              {article.excerpt && <p className="mt-2 text-sm leading-6 text-white/60">{article.excerpt}</p>}
+              {article.excerpt && <p className="mt-2 text-sm leading-6 text-gray-600">{article.excerpt}</p>}
             </div>
           ))}
         </div>

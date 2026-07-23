@@ -67,16 +67,16 @@ export default function AdminCoursesPage() {
   return (
     <AdminLayout title="Courses">
       <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-          <h3 className="mb-4 text-sm font-semibold text-white">New course</h3>
-          {error && <p className="mb-3 text-sm text-red-300">{error}</p>}
+        <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">
+          <h3 className="mb-4 text-sm font-semibold text-midnight-950">New course</h3>
+          {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
           <form onSubmit={handleCreate} className="space-y-3">
-            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Slug (e.g. dream-intelligence-101)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Price display (e.g. ₦25,000)" value={form.price_display} onChange={(e) => setForm({ ...form, price_display: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Selar checkout URL" value={form.selar_url} onChange={(e) => setForm({ ...form, selar_url: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
-            <Input placeholder="Thumbnail image URL" value={form.thumbnail_url} onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })} className="!bg-white/[0.03] !border-white/10 !text-white" />
+            <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+            <Input placeholder="Slug (e.g. dream-intelligence-101)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
+            <Textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <Input placeholder="Price display (e.g. ₦25,000)" value={form.price_display} onChange={(e) => setForm({ ...form, price_display: e.target.value })} />
+            <Input placeholder="Selar checkout URL" value={form.selar_url} onChange={(e) => setForm({ ...form, selar_url: e.target.value })} />
+            <Input placeholder="Thumbnail image URL" value={form.thumbnail_url} onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })} />
             <Button type="submit" variant="gold" disabled={saving} className="w-full">
               {saving ? 'Saving...' : 'Create course'}
             </Button>
@@ -84,23 +84,23 @@ export default function AdminCoursesPage() {
         </div>
 
         <div className="space-y-3">
-          {loading && <p className="text-sm text-white/50">Loading...</p>}
-          {!loading && courses.length === 0 && <p className="text-sm text-white/50">No courses yet.</p>}
+          {loading && <p className="text-sm text-gray-500">Loading...</p>}
+          {!loading && courses.length === 0 && <p className="text-sm text-gray-500">No courses yet.</p>}
           {courses.map((course) => (
-            <div key={course.id} className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
+            <div key={course.id} className="rounded-xl border border-midnight-950/10 bg-white p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-white">{course.title}</p>
-                  <p className="text-xs text-white/40">/{course.slug} · {course.price_display || 'no price set'}</p>
+                  <p className="text-sm font-semibold text-midnight-950">{course.title}</p>
+                  <p className="text-xs text-gray-500">/{course.slug} · {course.price_display || 'no price set'}</p>
                 </div>
                 <div className="flex shrink-0 gap-2">
-                  <button onClick={() => togglePublished(course)} className={`rounded-full px-3 py-1 text-xs font-semibold ${course.is_published ? 'bg-emerald-500/15 text-emerald-300' : 'border border-white/15 text-white/50'}`}>
+                  <button onClick={() => togglePublished(course)} className={`rounded-full px-3 py-1 text-xs font-semibold ${course.is_published ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
                     {course.is_published ? 'Published' : 'Draft'}
                   </button>
-                  <button onClick={() => remove(course.id)} className="rounded-full p-1.5 text-white/30 hover:text-red-400">×</button>
+                  <button onClick={() => remove(course.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
                 </div>
               </div>
-              {course.description && <p className="mt-2 text-sm leading-6 text-white/60">{course.description}</p>}
+              {course.description && <p className="mt-2 text-sm leading-6 text-gray-600">{course.description}</p>}
             </div>
           ))}
         </div>

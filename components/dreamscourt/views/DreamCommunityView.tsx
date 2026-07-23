@@ -21,8 +21,8 @@ export function DreamCommunityView() {
     <div className="space-y-5">
       <GlassCard>
         <Eyebrow>Community</Eyebrow>
-        <h1 className="mt-3 text-2xl font-semibold text-white">A thriving community of dream intelligence practitioners</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/60">
+        <h1 className="mt-3 text-2xl font-semibold text-midnight-950">A thriving community of dream intelligence practitioners</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
           Join lifelong learners, thinkers, and practitioners who believe dreams are a legitimate source of wisdom,
           insight, and personal transformation. Members journey together in discovery, growth, and meaningful
           conversation.
@@ -30,11 +30,11 @@ export function DreamCommunityView() {
       </GlassCard>
 
       <GlassCard className="text-center">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gold-300">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-midnight-950/10 bg-white text-gold-700">
           <MessageCircle className="h-5 w-5" />
         </div>
-        <h2 className="text-lg font-semibold text-white">Join the Dream Court community on WhatsApp</h2>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/60">
+        <h2 className="text-lg font-semibold text-midnight-950">Join the Dream Court community on WhatsApp</h2>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-600">
           Reflective conversation, shared discovery, and direct access to the wider community.
         </p>
         {whatsappLink ? (
@@ -48,7 +48,7 @@ export function DreamCommunityView() {
             <ArrowUpRight className="h-4 w-4" />
           </a>
         ) : (
-          <p className="mt-6 text-sm text-white/40">Community link not configured yet.</p>
+          <p className="mt-6 text-sm text-gray-500">Community link not configured yet.</p>
         )}
       </GlassCard>
     </div>

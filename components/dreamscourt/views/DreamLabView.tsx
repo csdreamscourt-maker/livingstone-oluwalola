@@ -73,8 +73,8 @@ export function DreamLabView() {
     <div className="space-y-5">
       <GlassCard>
         <Eyebrow>Dream Lab</Eyebrow>
-        <h1 className="mt-3 text-2xl font-semibold text-white">Discern the meaning of your dreams</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-white/60">
+        <h1 className="mt-3 text-2xl font-semibold text-midnight-950">Discern the meaning of your dreams</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
           Describe a dream in your own words. Dream Lab offers a grounded discernment integrating scriptural wisdom,
           psychology, and neuroscience — and can generate a visual for your vision.
         </p>
@@ -82,10 +82,10 @@ export function DreamLabView() {
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="mt-5 min-h-[140px] w-full rounded-md border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 focus:border-gold-400/60"
+          className="mt-5 min-h-[140px] w-full rounded-md border border-midnight-950/10 bg-gray-50 px-4 py-3 text-sm text-midnight-950 outline-none placeholder:text-gray-400 focus:border-gold-400/60"
           placeholder="I dreamt that..."
         />
-        {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
         <button
           onClick={handleInterpret}
           disabled={interpreting}
@@ -96,7 +96,7 @@ export function DreamLabView() {
         </button>
       </GlassCard>
 
-      {loading && <p className="text-sm text-white/50">Loading your Dream Lab history...</p>}
+      {loading && <p className="text-sm text-gray-500">Loading your Dream Lab history...</p>}
 
       <div className="space-y-4">
         {sessions.map((dreamLabSession) => (
@@ -105,22 +105,22 @@ export function DreamLabView() {
               <IconBadge>
                 <Sparkles className="h-4 w-4" />
               </IconBadge>
-              <span className="text-xs text-white/40">{new Date(dreamLabSession.created_at).toLocaleString()}</span>
+              <span className="text-xs text-gray-500">{new Date(dreamLabSession.created_at).toLocaleString()}</span>
             </div>
-            <p className="text-sm italic leading-6 text-white/50">&ldquo;{dreamLabSession.prompt}&rdquo;</p>
+            <p className="text-sm italic leading-6 text-gray-500">&ldquo;{dreamLabSession.prompt}&rdquo;</p>
             {dreamLabSession.interpretation && (
-              <p className="mt-3 whitespace-pre-line text-sm leading-7 text-white/80">{dreamLabSession.interpretation}</p>
+              <p className="mt-3 whitespace-pre-line text-sm leading-7 text-gray-700">{dreamLabSession.interpretation}</p>
             )}
 
             {dreamLabSession.image_url ? (
-              <div className="relative mt-4 aspect-square w-full max-w-xs overflow-hidden rounded-lg border border-white/10">
+              <div className="relative mt-4 aspect-square w-full max-w-xs overflow-hidden rounded-lg border border-midnight-950/10">
                 <Image src={dreamLabSession.image_url} alt="Generated vision" fill className="object-cover" unoptimized />
               </div>
             ) : (
               <button
                 onClick={() => handleGenerateImage(dreamLabSession)}
                 disabled={generatingImageFor === dreamLabSession.id}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-gold-300 transition-colors duration-200 hover:text-gold-200 disabled:opacity-50"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-gold-700 transition-colors duration-200 hover:text-midnight-950 disabled:opacity-50"
               >
                 <ImageIcon className="h-3.5 w-3.5" />
                 {generatingImageFor === dreamLabSession.id ? 'Generating vision...' : 'Generate a vision image'}

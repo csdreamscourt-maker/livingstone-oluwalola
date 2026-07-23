@@ -16,20 +16,20 @@ export function SettingsView() {
           </IconBadge>
           <div>
             <Eyebrow>Account</Eyebrow>
-            <h2 className="mt-1 text-lg font-semibold text-white">Your Dreamscourt profile</h2>
+            <h2 className="mt-1 text-lg font-semibold text-midnight-950">Your Dreamscourt profile</h2>
           </div>
         </div>
-        <div className="mt-5 space-y-2 text-sm text-white/60">
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
-            <span className="font-semibold text-white">Name: </span>
+        <div className="mt-5 space-y-2 text-sm text-gray-600">
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
+            <span className="font-semibold text-midnight-950">Name: </span>
             {user?.full_name || '—'}
           </div>
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
-            <span className="font-semibold text-white">Email: </span>
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
+            <span className="font-semibold text-midnight-950">Email: </span>
             {user?.email}
           </div>
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
-            <span className="font-semibold text-white">Member since: </span>
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
+            <span className="font-semibold text-midnight-950">Member since: </span>
             {user?.created_at ? new Date(user.created_at).toLocaleDateString() : '—'}
           </div>
         </div>
@@ -37,15 +37,15 @@ export function SettingsView() {
 
       <GlassCard>
         <Eyebrow>Summary</Eyebrow>
-        <h2 className="mt-2 text-lg font-semibold text-white">Your practice so far</h2>
-        <div className="mt-5 space-y-2 text-sm text-white/60">
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
+        <h2 className="mt-2 text-lg font-semibold text-midnight-950">Your practice so far</h2>
+        <div className="mt-5 space-y-2 text-sm text-gray-600">
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
             {stats.dreamCount} dream{stats.dreamCount === 1 ? '' : 's'} recorded
           </div>
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
             {journalEntries.length} journal entr{journalEntries.length === 1 ? 'y' : 'ies'}
           </div>
-          <div className="rounded-md border border-white/8 bg-white/[0.02] px-4 py-2.5">
+          <div className="rounded-md border border-midnight-950/8 bg-gray-50 px-4 py-2.5">
             {stats.answeredCount} answered prayer{stats.answeredCount === 1 ? '' : 's'}
           </div>
         </div>

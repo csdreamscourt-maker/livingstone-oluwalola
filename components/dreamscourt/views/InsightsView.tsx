@@ -17,10 +17,10 @@ export function InsightsView() {
           </IconBadge>
           <Eyebrow>Overview</Eyebrow>
         </div>
-        <p className="mt-4 text-[15px] font-semibold leading-6 text-white">
+        <p className="mt-4 text-[15px] font-semibold leading-6 text-midnight-950">
           {stats.dreamCount} dream{stats.dreamCount === 1 ? '' : 's'} recorded, average clarity {stats.averageClarity || '—'}/5.
         </p>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-gray-600">
           Current streak: <span className="font-mono tabular-nums">{stats.streak}</span> day{stats.streak === 1 ? '' : 's'}.
         </p>
       </GlassCard>
@@ -33,11 +33,11 @@ export function InsightsView() {
           <Eyebrow>Mood frequency</Eyebrow>
         </div>
         <div className="mt-4 space-y-2">
-          {moodEntries.length === 0 && <p className="text-sm text-white/50">No moods logged yet.</p>}
+          {moodEntries.length === 0 && <p className="text-sm text-gray-500">No moods logged yet.</p>}
           {moodEntries.map(([mood, count]) => (
-            <div key={mood} className="flex items-center justify-between rounded-md bg-white/[0.03] px-4 py-2 text-sm">
-              <span className="capitalize text-white">{mood}</span>
-              <span className="font-mono tabular-nums text-white/50">{count}</span>
+            <div key={mood} className="flex items-center justify-between rounded-md bg-gray-50 px-4 py-2 text-sm">
+              <span className="capitalize text-midnight-950">{mood}</span>
+              <span className="font-mono tabular-nums text-gray-500">{count}</span>
             </div>
           ))}
         </div>
@@ -51,9 +51,9 @@ export function InsightsView() {
           <Eyebrow>Recurring themes</Eyebrow>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
-          {stats.recurringThemes.length === 0 && <p className="text-sm text-white/50">No themes yet.</p>}
+          {stats.recurringThemes.length === 0 && <p className="text-sm text-gray-500">No themes yet.</p>}
           {stats.recurringThemes.map((theme) => (
-            <span key={theme} className="rounded-full border border-white/10 px-3 py-1 text-sm text-white/70">
+            <span key={theme} className="rounded-full border border-midnight-950/10 px-3 py-1 text-sm text-gray-600">
               {theme}
             </span>
           ))}

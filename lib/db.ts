@@ -1,4 +1,6 @@
 import { Pool } from 'pg';
+import type { Framework, Company, IdeasArticle } from '@/types/database';
+import { SETTINGS_DEFAULTS } from '@/lib/settingsSchema';
 
 let pool: Pool | null = null;
 
@@ -539,6 +541,39 @@ export async function setSiteSetting(key: string, value: string) {
   return result.rows[0];
 }
 
+export async function getPublicSiteSettings(): Promise<Record<string, string>> {
+  const rows = await listSiteSettings();
+  const settings = { ...SETTINGS_DEFAULTS };
+  for (const row of rows) {
+    settings[row.key] = row.value;
+  }
+  return settings;
+}
+
+// --- App secrets (encrypted third-party credentials) ---
+
+export async function getAppSecret(key: string): Promise<string | null> {
+  const result = await query('SELECT value_encrypted FROM app_secrets WHERE key = $1', [key]);
+  return result.rows[0]?.value_encrypted ?? null;
+}
+
+export async function listAppSecretKeys(): Promise<string[]> {
+  const result = await query('SELECT key FROM app_secrets');
+  return result.rows.map((row: { key: string }) => row.key);
+}
+
+export async function setAppSecret(key: string, encryptedValue: string): Promise<void> {
+  await query(
+    `INSERT INTO app_secrets (key, value_encrypted) VALUES ($1, $2)
+     ON CONFLICT (key) DO UPDATE SET value_encrypted = EXCLUDED.value_encrypted, updated_at = timezone('utc'::text, now())`,
+    [key, encryptedValue]
+  );
+}
+
+export async function deleteAppSecret(key: string): Promise<void> {
+  await query('DELETE FROM app_secrets WHERE key = $1', [key]);
+}
+
 // --- Dream Lab sessions ---
 
 export type DreamLabSessionInput = {
@@ -586,4 +621,172 @@ export async function getAdminOverviewStats() {
       (SELECT count(*) FROM store_products) AS product_count
   `);
   return result.rows[0];
+}
+
+// --- Frameworks (marketing CMS) ---
+
+export type FrameworkInput = {
+  slug: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  overview?: string | null;
+  applications?: string[] | null;
+  is_published?: boolean;
+};
+
+const FRAMEWORK_COLUMNS = 'id, slug, title, description, category, overview, applications, is_published, created_at, updated_at';
+
+export async function listFrameworks(publishedOnly: boolean): Promise<Framework[]> {
+  const result = await query(
+    `SELECT ${FRAMEWORK_COLUMNS} FROM frameworks ${publishedOnly ? 'WHERE is_published = true' : ''} ORDER BY created_at`
+  );
+  return result.rows;
+}
+
+export async function getFrameworkBySlug(slug: string): Promise<Framework | null> {
+  const result = await query(`SELECT ${FRAMEWORK_COLUMNS} FROM frameworks WHERE slug = $1`, [slug]);
+  return result.rows[0] || null;
+}
+
+export async function createFramework(input: FrameworkInput) {
+  const result = await query(
+    `INSERT INTO frameworks (slug, title, description, category, overview, applications, is_published)
+     VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7, true)) RETURNING ${FRAMEWORK_COLUMNS}`,
+    [input.slug, input.title, input.description ?? null, input.category ?? null, input.overview ?? null, input.applications ?? null, input.is_published ?? null]
+  );
+  return result.rows[0];
+}
+
+export async function updateFramework(id: string, updates: Partial<FrameworkInput>) {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE frameworks SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${FRAMEWORK_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteFramework(id: string) {
+  await query('DELETE FROM frameworks WHERE id = $1', [id]);
+}
+
+// --- Companies (marketing CMS) ---
+
+export type CompanyInput = {
+  slug: string;
+  name: string;
+  description?: string | null;
+  category?: string | null;
+  tagline?: string | null;
+  summary?: string | null;
+  highlights?: string[] | null;
+  logo_url?: string | null;
+  is_published?: boolean;
+};
+
+const COMPANY_COLUMNS = 'id, slug, name, description, category, tagline, summary, highlights, logo_url, is_published, created_at, updated_at';
+
+export async function listCompanies(publishedOnly: boolean): Promise<Company[]> {
+  const result = await query(
+    `SELECT ${COMPANY_COLUMNS} FROM companies ${publishedOnly ? 'WHERE is_published = true' : ''} ORDER BY created_at`
+  );
+  return result.rows;
+}
+
+export async function getCompanyBySlug(slug: string): Promise<Company | null> {
+  const result = await query(`SELECT ${COMPANY_COLUMNS} FROM companies WHERE slug = $1`, [slug]);
+  return result.rows[0] || null;
+}
+
+export async function createCompany(input: CompanyInput) {
+  const result = await query(
+    `INSERT INTO companies (slug, name, description, category, tagline, summary, highlights, logo_url, is_published)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, COALESCE($9, true)) RETURNING ${COMPANY_COLUMNS}`,
+    [input.slug, input.name, input.description ?? null, input.category ?? null, input.tagline ?? null, input.summary ?? null, input.highlights ?? null, input.logo_url ?? null, input.is_published ?? null]
+  );
+  return result.rows[0];
+}
+
+export async function updateCompany(id: string, updates: Partial<CompanyInput>) {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE companies SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${COMPANY_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteCompany(id: string) {
+  await query('DELETE FROM companies WHERE id = $1', [id]);
+}
+
+// --- Ideas articles (marketing CMS) ---
+
+export type IdeasArticleInput = {
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  category?: string | null;
+  read_time?: string | null;
+  published_date?: string | null;
+  body?: string[] | null;
+  is_published?: boolean;
+};
+
+const IDEAS_ARTICLE_COLUMNS = 'id, slug, title, excerpt, category, read_time, published_date, body, is_published, created_at, updated_at';
+
+export async function listIdeasArticles(publishedOnly: boolean): Promise<IdeasArticle[]> {
+  const result = await query(
+    `SELECT ${IDEAS_ARTICLE_COLUMNS} FROM ideas_articles ${publishedOnly ? 'WHERE is_published = true' : ''} ORDER BY published_date DESC NULLS LAST, created_at DESC`
+  );
+  return result.rows;
+}
+
+export async function getIdeasArticleBySlug(slug: string): Promise<IdeasArticle | null> {
+  const result = await query(`SELECT ${IDEAS_ARTICLE_COLUMNS} FROM ideas_articles WHERE slug = $1`, [slug]);
+  return result.rows[0] || null;
+}
+
+export async function createIdeasArticle(input: IdeasArticleInput) {
+  const result = await query(
+    `INSERT INTO ideas_articles (slug, title, excerpt, category, read_time, published_date, body, is_published)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8, true)) RETURNING ${IDEAS_ARTICLE_COLUMNS}`,
+    [input.slug, input.title, input.excerpt ?? null, input.category ?? null, input.read_time ?? null, input.published_date ?? null, input.body ?? null, input.is_published ?? null]
+  );
+  return result.rows[0];
+}
+
+export async function updateIdeasArticle(id: string, updates: Partial<IdeasArticleInput>) {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE ideas_articles SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${IDEAS_ARTICLE_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteIdeasArticle(id: string) {
+  await query('DELETE FROM ideas_articles WHERE id = $1', [id]);
 }

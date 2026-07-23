@@ -1,10 +1,13 @@
 import { Container, Section, Card } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { FRAMEWORKS } from '@/lib/constants';
+import { listFrameworks } from '@/lib/db';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
-export default function ResourcesPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ResourcesPage() {
+  const FRAMEWORKS = await listFrameworks(true);
   return (
     <>
       <Hero
@@ -23,7 +26,7 @@ export default function ResourcesPage() {
               return (
                 <Link
                   key={framework.id}
-                  href={`/frameworks/${framework.id}`}
+                  href={`/frameworks/${framework.slug}`}
                   className={`group flex h-full flex-col gap-3 rounded-xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${
                     tone === 'navy' ? 'bg-midnight-950 text-white' : 'bg-gold-600 text-white'
                   }`}

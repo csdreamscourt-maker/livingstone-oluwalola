@@ -1,10 +1,13 @@
 import 'server-only';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSecret } from '@/lib/secrets';
 
-function getR2Client(): S3Client {
-  const accountId = process.env.R2_ACCOUNT_ID;
-  const accessKeyId = process.env.R2_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
+async function getR2Client(): Promise<S3Client> {
+  const [accountId, accessKeyId, secretAccessKey] = await Promise.all([
+    getSecret('R2_ACCOUNT_ID'),
+    getSecret('R2_ACCESS_KEY_ID'),
+    getSecret('R2_SECRET_ACCESS_KEY'),
+  ]);
 
   if (!accountId || !accessKeyId || !secretAccessKey) {
     throw new Error('Storage is not configured (missing R2_ACCOUNT_ID / R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY)');
@@ -18,14 +21,13 @@ function getR2Client(): S3Client {
 }
 
 export async function uploadToR2(buffer: Buffer, key: string, contentType: string): Promise<string> {
-  const bucket = process.env.R2_BUCKET_NAME;
-  const publicUrl = process.env.R2_PUBLIC_URL;
+  const [bucket, publicUrl] = await Promise.all([getSecret('R2_BUCKET_NAME'), getSecret('R2_PUBLIC_URL')]);
 
   if (!bucket || !publicUrl) {
     throw new Error('Storage is not configured (missing R2_BUCKET_NAME / R2_PUBLIC_URL)');
   }
 
-  const client = getR2Client();
+  const client = await getR2Client();
   await client.send(
     new PutObjectCommand({
       Bucket: bucket,

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { getSessionFromCookies } from '@/lib/session';
 import { getDreamById, upsertDreamInterpretation } from '@/lib/db';
+import { getSecret } from '@/lib/secrets';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -19,7 +20,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Dream not found' }, { status: 404 });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  const apiKey = await getSecret('OPENAI_API_KEY');
+  if (!apiKey) {
     return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 });
   }
 
@@ -45,7 +47,7 @@ Respond with JSON only, in this exact shape:
 }`;
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openai = new OpenAI({ apiKey });
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],

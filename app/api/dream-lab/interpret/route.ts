@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
 import { getSessionFromCookies } from '@/lib/session';
 import { createDreamLabSession } from '@/lib/db';
+import { getSecret } from '@/lib/secrets';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -14,12 +15,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'prompt is required' }, { status: 400 });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  const apiKey = await getSecret('OPENAI_API_KEY');
+  if (!apiKey) {
     return NextResponse.json({ error: 'AI discernment is not configured yet (missing OPENAI_API_KEY)' }, { status: 500 });
   }
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openai = new OpenAI({ apiKey });
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [

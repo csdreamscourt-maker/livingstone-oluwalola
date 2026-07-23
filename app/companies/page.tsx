@@ -1,6 +1,6 @@
 import { Container, Section, Card, Badge } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { COMPANIES } from '@/lib/constants';
+import { listCompanies } from '@/lib/db';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -9,13 +9,16 @@ export const metadata = {
   description: 'Explore the ecosystem of mission-driven organizations operating at the frontlines of leadership, technology, and social impact.',
 };
 
+export const dynamic = 'force-dynamic';
+
 const categoryBackground = {
   'Companies & Startups': 'white',
   'Social Impact': 'gold',
   'Faith-Based': 'dark',
 } as const;
 
-export default function CompaniesPage() {
+export default async function CompaniesPage() {
+  const COMPANIES = await listCompanies(true);
   return (
     <>
       <Hero
@@ -55,7 +58,7 @@ export default function CompaniesPage() {
                     </p>
 
                     <Link
-                      href={company.href}
+                      href={`/companies/${company.slug}`}
                       className="flex items-center gap-1.5 text-sm text-midnight-700 hover:text-midnight-950 font-semibold group/link transition-colors duration-200"
                     >
                       Learn more

@@ -202,6 +202,48 @@ export type SavedFramework = {
   created_at: string;
 };
 
+export type Framework = {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  overview?: string;
+  applications?: string[];
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Company = {
+  id: string;
+  slug: string;
+  name: string;
+  description?: string;
+  category?: string;
+  tagline?: string;
+  summary?: string;
+  highlights?: string[];
+  logo_url?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type IdeasArticle = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string;
+  category?: string;
+  read_time?: string;
+  published_date?: string;
+  body?: string[];
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
 export type NewsletterSubscription = {
   id: string;
   email: string;

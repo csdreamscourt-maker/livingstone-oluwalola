@@ -3,6 +3,7 @@ import { OpenAI } from 'openai';
 import { getSessionFromCookies } from '@/lib/session';
 import { updateDreamLabSessionImage } from '@/lib/db';
 import { uploadToR2 } from '@/lib/storage/r2';
+import { getSecret } from '@/lib/secrets';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -15,12 +16,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'sessionId and prompt are required' }, { status: 400 });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  const apiKey = await getSecret('OPENAI_API_KEY');
+  if (!apiKey) {
     return NextResponse.json({ error: 'Image generation is not configured yet (missing OPENAI_API_KEY)' }, { status: 500 });
   }
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openai = new OpenAI({ apiKey });
     const result = await openai.images.generate({
       model: 'dall-e-3',
       prompt: `A symbolic, dreamlike visual for the following dream, evocative and painterly, no text or captions: ${prompt}`,

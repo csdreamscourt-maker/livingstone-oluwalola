@@ -1,5 +1,6 @@
 import { createContactMessage } from '@/lib/db';
 import { sendEmailBestEffort } from '@/lib/email';
+import { getSecret } from '@/lib/secrets';
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +12,7 @@ export async function POST(request: Request) {
 
     await createContactMessage({ name, email, subject, message });
 
-    const notifyTo = process.env.ADMIN_NOTIFICATION_EMAIL;
+    const notifyTo = await getSecret('ADMIN_NOTIFICATION_EMAIL');
     if (notifyTo) {
       await sendEmailBestEffort({
         to: notifyTo,

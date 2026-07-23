@@ -1,8 +1,10 @@
 import { Container, Section } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { ARTICLES } from '@/lib/constants';
+import { listIdeasArticles } from '@/lib/db';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
 
 const THEMES: { title: string; description: string; articleId?: string }[] = [
   {
@@ -42,7 +44,8 @@ const THEMES: { title: string; description: string; articleId?: string }[] = [
   },
 ];
 
-export default function IdeasPage() {
+export default async function IdeasPage() {
+  const ARTICLES = await listIdeasArticles(true);
   return (
     <>
       <Hero
@@ -55,7 +58,7 @@ export default function IdeasPage() {
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {THEMES.map((theme, index) => {
-              const article = theme.articleId ? ARTICLES.find((a) => a.id === theme.articleId) : undefined;
+              const article = theme.articleId ? ARTICLES.find((a) => a.slug === theme.articleId) : undefined;
               const tone = index % 2 === 0 ? 'navy' : 'gold';
               return (
                 <div
@@ -72,7 +75,7 @@ export default function IdeasPage() {
                   </p>
                   {article ? (
                     <Link
-                      href={`/articles/${article.id}`}
+                      href={`/articles/${article.slug}`}
                       className="group flex items-center gap-1.5 text-sm font-semibold text-white transition-colors duration-200"
                     >
                       Read &ldquo;{article.title}&rdquo;

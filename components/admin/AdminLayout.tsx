@@ -7,14 +7,18 @@ import { useAdminSession } from '@/lib/admin/useAdminSession';
 import {
   BarChart3,
   BookOpen,
+  Building2,
   GraduationCap,
   Inbox,
+  KeyRound,
+  Lightbulb,
   LogOut,
   Mail,
   Settings,
   ShoppingBag,
   Sparkles,
   Users,
+  Workflow,
 } from 'lucide-react';
 
 const navItems = [
@@ -22,11 +26,15 @@ const navItems = [
   { href: '/admin/messages', label: 'Messages', icon: Inbox },
   { href: '/admin/newsletter', label: 'Newsletter', icon: Mail },
   { href: '/admin/users', label: 'Users', icon: Users },
+  { href: '/admin/frameworks', label: 'Frameworks', icon: Workflow },
+  { href: '/admin/companies', label: 'Companies', icon: Building2 },
+  { href: '/admin/ideas-articles', label: 'Ideas & articles', icon: Lightbulb },
   { href: '/admin/courses', label: 'Courses', icon: GraduationCap },
   { href: '/admin/store-products', label: 'Store products', icon: ShoppingBag },
   { href: '/admin/dream-symbols', label: 'Dream symbols', icon: Sparkles },
   { href: '/admin/dream-articles', label: 'Dream articles', icon: BookOpen },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
+  { href: '/admin/integrations', label: 'Integrations & keys', icon: KeyRound },
 ];
 
 function LoadingShell() {

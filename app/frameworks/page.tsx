@@ -1,6 +1,6 @@
 import { Container, Section, Card } from '@/components/ui';
 import { Hero } from '@/components/sections';
-import { FRAMEWORKS } from '@/lib/constants';
+import { listFrameworks } from '@/lib/db';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
@@ -9,7 +9,10 @@ export const metadata = {
   description: 'Explore signature intellectual models and systems for leadership, strategy, and transformation.',
 };
 
-export default function FrameworksPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function FrameworksPage() {
+  const FRAMEWORKS = await listFrameworks(true);
   const categories = Array.from(new Set(FRAMEWORKS.map((f) => f.category)));
   let tileIndex = 0;
 
@@ -46,7 +49,7 @@ export default function FrameworksPage() {
                     return (
                       <Link
                         key={framework.id}
-                        href={`/frameworks/${framework.id}`}
+                        href={`/frameworks/${framework.slug}`}
                         className={`group flex h-full flex-col gap-3 rounded-xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${
                           tone === 'navy' ? 'bg-midnight-950 text-white' : 'bg-gold-600 text-white'
                         }`}

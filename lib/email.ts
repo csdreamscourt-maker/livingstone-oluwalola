@@ -1,5 +1,6 @@
 import 'server-only';
 import { Resend } from 'resend';
+import { getSecret } from '@/lib/secrets';
 
 type SendEmailInput = {
   to: string;
@@ -8,8 +9,8 @@ type SendEmailInput = {
 };
 
 export async function sendEmail({ to, subject, html }: SendEmailInput): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || 'Dreamscourt <no-reply@dreamscourt.app>';
+  const apiKey = await getSecret('RESEND_API_KEY');
+  const from = (await getSecret('EMAIL_FROM')) || 'Dreamscourt <no-reply@dreamscourt.app>';
 
   if (!apiKey) {
     throw new Error('Email is not configured (missing RESEND_API_KEY)');

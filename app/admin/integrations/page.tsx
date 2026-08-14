@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Input, Button } from '@/components/ui';
+import { ArrowRight } from 'lucide-react';
 
 type SecretStatus = { key: string; configured: boolean };
 
 const GROUPS: { label: string; keys: string[] }[] = [
-  { label: 'OpenAI (AI discernment & Dream Lab images)', keys: ['OPENAI_API_KEY'] },
+  { label: 'OpenAI (fallback key, used only when no AI provider is configured below)', keys: ['OPENAI_API_KEY'] },
   { label: 'Resend (email)', keys: ['RESEND_API_KEY', 'EMAIL_FROM', 'ADMIN_NOTIFICATION_EMAIL'] },
   {
     label: 'Cloudflare R2 (file storage)',
@@ -59,6 +61,18 @@ export default function AdminIntegrationsPage() {
         <p className="text-sm text-gray-600">
           Credentials are encrypted at rest and never shown once saved. Leave a field blank and save to clear it.
         </p>
+
+        <Link
+          href="/admin/ai"
+          className="group flex items-center justify-between rounded-xl border border-gold-600/30 bg-gold-100/50 p-5 transition-colors duration-200 hover:border-gold-600/50"
+        >
+          <div>
+            <p className="text-sm font-semibold text-midnight-950">Looking for Anthropic, Google, NVIDIA, or a custom AI provider?</p>
+            <p className="text-xs text-gray-600">Those live in the AI Control Center, where you can also register models and configure fallback routing per task.</p>
+          </div>
+          <ArrowRight className="w-4 h-4 shrink-0 text-gold-700 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </Link>
+
         {loading && <p className="text-sm text-gray-500">Loading...</p>}
         {!loading &&
           GROUPS.map((group) => (

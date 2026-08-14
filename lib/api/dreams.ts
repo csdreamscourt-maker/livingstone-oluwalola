@@ -1,4 +1,4 @@
-import type { Dream, DreamFolder, DreamInterpretation } from '@/types/database';
+import type { Dream, DreamFolder, DreamInterpretation, RecurringDreamPattern } from '@/types/database';
 
 async function parseOrThrow<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => ({}));
@@ -60,6 +60,12 @@ export async function interpretDream(dreamId: string): Promise<DreamInterpretati
   });
   const data = await parseOrThrow<{ interpretation: DreamInterpretation }>(res);
   return data.interpretation;
+}
+
+export async function fetchDreamPatterns(): Promise<RecurringDreamPattern[]> {
+  const res = await fetch('/api/dreams/patterns');
+  const data = await parseOrThrow<{ patterns: RecurringDreamPattern[] }>(res);
+  return data.patterns;
 }
 
 export async function fetchDreamFolders(): Promise<DreamFolder[]> {

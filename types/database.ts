@@ -112,6 +112,14 @@ export type DreamInterpretation = {
   created_at: string;
 };
 
+export type RecurringDreamPattern = {
+  element_type: 'person' | 'place' | 'number' | 'color' | 'symbol' | 'emotion';
+  value: string;
+  occurrences: number;
+  dream_titles: string[];
+  last_seen: string;
+};
+
 export type PrayerJournalEntry = {
   id: string;
   user_id: string;

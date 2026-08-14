@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
   try {
     const messages = await buildFounderGroundedMessages(
       prompt,
-      `A member of Dream Court shares the following dream. Offer a thoughtful, grounded discernment following the ground rules you were given.\n\nDream: ${prompt}`
+      `A member of Dream Court shares the following dream. Offer a thoughtful, grounded discernment following the ground rules you were given.\n\nDream: ${prompt}`,
+      session.sub
     );
 
     const completion = await runChatCompletion('dream_interpretation', {

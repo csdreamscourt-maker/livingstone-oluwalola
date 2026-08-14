@@ -206,6 +206,63 @@ export async function upsertDreamInterpretation(dreamId: string, userId: string,
   return result.rows[0];
 }
 
+// --- Personal Dream Memory (recurring element extraction) ---
+
+export type DreamElementType = 'person' | 'place' | 'number' | 'color' | 'symbol' | 'emotion';
+
+export type DreamElementInput = {
+  element_type: DreamElementType;
+  value: string;
+};
+
+/** Replaces a dream's extracted elements wholesale — safe to call again on re-interpretation. */
+export async function replaceDreamElements(dreamId: string, userId: string, elements: DreamElementInput[]) {
+  await query('DELETE FROM dream_elements WHERE dream_id = $1', [dreamId]);
+  if (elements.length === 0) return;
+
+  const values: unknown[] = [];
+  const rows: string[] = [];
+  elements.forEach((el, i) => {
+    const base = i * 4;
+    rows.push(`($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4})`);
+    values.push(dreamId, userId, el.element_type, el.value.trim().slice(0, 120));
+  });
+
+  await query(
+    `INSERT INTO dream_elements (dream_id, user_id, element_type, value) VALUES ${rows.join(', ')}`,
+    values
+  );
+}
+
+export type RecurringDreamPattern = {
+  element_type: DreamElementType;
+  value: string;
+  occurrences: number;
+  dream_titles: string[];
+  last_seen: string;
+};
+
+/** Elements that recur across at least `minOccurrences` distinct dreams, most frequent first. */
+export async function getRecurringPatternsForUser(userId: string, minOccurrences = 2, limit = 12): Promise<RecurringDreamPattern[]> {
+  const result = await query(
+    `SELECT
+       de.element_type,
+       min(de.value) as value,
+       count(distinct de.dream_id)::int as occurrences,
+       array_agg(distinct d.title) as dream_titles,
+       max(d.date_occurred) as last_seen
+     FROM dream_elements de
+     JOIN dreams d ON d.id = de.dream_id
+     WHERE de.user_id = $1
+     GROUP BY de.element_type, lower(de.value)
+     HAVING count(distinct de.dream_id) >= $2
+     ORDER BY occurrences DESC, last_seen DESC
+     LIMIT $3`,
+    [userId, minOccurrences, limit]
+  );
+  return result.rows;
+}
+
 export type JournalEntryInput = {
   title: string;
   content: string;

@@ -10,11 +10,11 @@ const EMBEDDING_TASK_KEY = 'knowledge_search';
  * Returns the most relevant chunks with full source attribution so callers can
  * cite them (e.g. "According to Demystifying Dreams...").
  */
-export async function searchFounderKnowledge(query: string, limit = 6): Promise<KnowledgeChunkMatch[]> {
+export async function searchFounderKnowledge(query: string, limit = 6, includeUnpublished = false): Promise<KnowledgeChunkMatch[]> {
   if (!query.trim()) return [];
   try {
     const { embedding } = await runEmbedding(EMBEDDING_TASK_KEY, query);
-    return await searchKnowledgeChunks(embedding, limit);
+    return await searchKnowledgeChunks(embedding, limit, includeUnpublished);
   } catch (error) {
     // Knowledge retrieval is an enhancement, not a hard dependency — if no embedding
     // provider is configured yet, interpretation should still work without grounding.

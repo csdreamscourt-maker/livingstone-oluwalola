@@ -1,6 +1,9 @@
 import 'server-only';
 import { searchFounderKnowledge, formatKnowledgeContext } from './retrieve';
+import { getPrompt } from '@/lib/ai/prompts';
 import type { ChatMessage } from '@/lib/ai/types';
+
+const DREAM_INTERPRETATION_PROMPT_KEY = 'dream_interpretation_methodology';
 
 /**
  * The founder's core dream-interpretation methodology, as taught in "Demystifying Dreams"
@@ -32,8 +35,11 @@ export async function buildKnowledgeContext(dreamText: string): Promise<string> 
 
 /** Assembles the system + context messages a founder-grounded interpretation call should send. */
 export async function buildFounderGroundedMessages(dreamText: string, userPrompt: string): Promise<ChatMessage[]> {
-  const knowledgeContext = await buildKnowledgeContext(dreamText);
-  const messages: ChatMessage[] = [{ role: 'system', content: FOUNDER_METHODOLOGY_PROMPT }];
+  const [systemPrompt, knowledgeContext] = await Promise.all([
+    getPrompt(DREAM_INTERPRETATION_PROMPT_KEY, FOUNDER_METHODOLOGY_PROMPT),
+    buildKnowledgeContext(dreamText),
+  ]);
+  const messages: ChatMessage[] = [{ role: 'system', content: systemPrompt }];
   if (knowledgeContext) {
     messages.push({ role: 'system', content: knowledgeContext });
   }

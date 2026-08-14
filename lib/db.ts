@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment, KnowledgeSource, KnowledgeChunkMatch } from '@/types/database';
+import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment, KnowledgeSource, KnowledgeChunkMatch, AiPromptSlot, AiPromptVersion } from '@/types/database';
 import { SETTINGS_DEFAULTS } from '@/lib/settingsSchema';
 
 let pool: Pool | null = null;
@@ -618,7 +618,15 @@ export async function getAdminOverviewStats() {
       (SELECT count(*) FROM contact_messages) AS message_count,
       (SELECT count(*) FROM newsletter_subscriptions WHERE is_subscribed = true) AS newsletter_count,
       (SELECT count(*) FROM courses) AS course_count,
-      (SELECT count(*) FROM store_products) AS product_count
+      (SELECT count(*) FROM store_products) AS product_count,
+      (SELECT count(*) FROM dream_lab_sessions) AS dream_lab_session_count,
+      (SELECT count(*) FROM knowledge_sources) AS knowledge_source_count,
+      (SELECT count(*) FROM knowledge_sources WHERE processing_status = 'published') AS knowledge_published_count,
+      (SELECT count(*) FROM knowledge_sources WHERE processing_status IN ('needs_review', 'indexed')) AS knowledge_pending_review_count,
+      (SELECT count(*) FROM knowledge_sources WHERE processing_status = 'failed') AS knowledge_failed_count,
+      (SELECT count(*) FROM ai_providers WHERE enabled = true) AS ai_provider_count,
+      (SELECT count(*) FROM ai_usage_logs WHERE created_at > now() - interval '24 hours') AS ai_requests_today,
+      (SELECT count(*) FROM ai_usage_logs WHERE created_at > now() - interval '24 hours' AND success = false) AS ai_errors_today
   `);
   return result.rows[0];
 }
@@ -1086,17 +1094,163 @@ export async function countKnowledgeChunksForSource(sourceId: string): Promise<n
   return result.rows[0]?.count ?? 0;
 }
 
-export async function searchKnowledgeChunks(queryEmbedding: number[], limit: number): Promise<KnowledgeChunkMatch[]> {
+export async function searchKnowledgeChunks(
+  queryEmbedding: number[],
+  limit: number,
+  includeUnpublished = false
+): Promise<KnowledgeChunkMatch[]> {
   const result = await query(
     `SELECT c.id, c.source_id, c.chunk_index, c.content, c.page, c.chapter,
             1 - (c.embedding <=> $1::vector) as similarity,
             s.title as source_title, s.author as source_author, s.source_type, s.tier as source_tier
      FROM knowledge_chunks c
      JOIN knowledge_sources s ON s.id = c.source_id
-     WHERE s.processing_status = 'published'
+     ${includeUnpublished ? '' : "WHERE s.processing_status = 'published'"}
      ORDER BY c.embedding <=> $1::vector
      LIMIT $2`,
     [toVectorLiteral(queryEmbedding), limit]
   );
   return result.rows;
+}
+
+// --- AI prompt management (versioned, admin-editable system prompts) ---
+
+export async function listAiPromptSlots(): Promise<AiPromptSlot[]> {
+  const result = await query('SELECT key, label, description, published_version_id, created_at, updated_at FROM ai_prompt_slots ORDER BY key');
+  return result.rows;
+}
+
+export async function getAiPromptSlot(key: string): Promise<AiPromptSlot | null> {
+  const result = await query('SELECT key, label, description, published_version_id, created_at, updated_at FROM ai_prompt_slots WHERE key = $1', [key]);
+  return result.rows[0] || null;
+}
+
+export async function ensureAiPromptSlot(key: string, label: string, description?: string): Promise<AiPromptSlot> {
+  const result = await query(
+    `INSERT INTO ai_prompt_slots (key, label, description) VALUES ($1, $2, $3)
+     ON CONFLICT (key) DO NOTHING
+     RETURNING key, label, description, published_version_id, created_at, updated_at`,
+    [key, label, description ?? null]
+  );
+  if (result.rows[0]) return result.rows[0];
+  const existing = await getAiPromptSlot(key);
+  if (!existing) throw new Error(`Failed to ensure prompt slot ${key}`);
+  return existing;
+}
+
+export async function getPublishedPromptContent(key: string): Promise<string | null> {
+  const result = await query(
+    `SELECT v.content FROM ai_prompt_slots s
+     JOIN ai_prompt_versions v ON v.id = s.published_version_id
+     WHERE s.key = $1`,
+    [key]
+  );
+  return result.rows[0]?.content ?? null;
+}
+
+export async function listAiPromptVersions(slotKey: string): Promise<AiPromptVersion[]> {
+  const result = await query(
+    'SELECT id, slot_key, content, status, author, created_at FROM ai_prompt_versions WHERE slot_key = $1 ORDER BY created_at DESC',
+    [slotKey]
+  );
+  return result.rows;
+}
+
+export async function createAiPromptVersion(slotKey: string, content: string, author?: string | null): Promise<AiPromptVersion> {
+  const result = await query(
+    `INSERT INTO ai_prompt_versions (slot_key, content, status, author) VALUES ($1, $2, 'draft', $3)
+     RETURNING id, slot_key, content, status, author, created_at`,
+    [slotKey, content, author ?? null]
+  );
+  return result.rows[0];
+}
+
+export async function publishAiPromptVersion(slotKey: string, versionId: string): Promise<AiPromptSlot> {
+  await query(`UPDATE ai_prompt_versions SET status = 'archived' WHERE slot_key = $1 AND status = 'published'`, [slotKey]);
+  await query(`UPDATE ai_prompt_versions SET status = 'published' WHERE id = $1 AND slot_key = $2`, [versionId, slotKey]);
+  const result = await query(
+    `UPDATE ai_prompt_slots SET published_version_id = $1, updated_at = timezone('utc'::text, now()) WHERE key = $2
+     RETURNING key, label, description, published_version_id, created_at, updated_at`,
+    [versionId, slotKey]
+  );
+  return result.rows[0];
+}
+
+export async function deleteAiPromptVersion(versionId: string): Promise<void> {
+  await query(`DELETE FROM ai_prompt_versions WHERE id = $1 AND status != 'published'`, [versionId]);
+}
+
+// --- AI usage observability ---
+
+export type AiUsageLogInput = {
+  task_key: string;
+  provider: string;
+  model: string;
+  success: boolean;
+  used_fallback: boolean;
+  latency_ms: number;
+  error_message?: string | null;
+};
+
+export async function logAiUsage(input: AiUsageLogInput): Promise<void> {
+  try {
+    await query(
+      `INSERT INTO ai_usage_logs (task_key, provider, model, success, used_fallback, latency_ms, error_message)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [input.task_key, input.provider, input.model, input.success, input.used_fallback, input.latency_ms, input.error_message ?? null]
+    );
+  } catch (error) {
+    // Logging must never break the actual AI call it's observing.
+    console.error('Failed to write AI usage log (non-fatal):', error instanceof Error ? error.message : error);
+  }
+}
+
+export type AiUsageSummary = {
+  total: number;
+  successes: number;
+  failures: number;
+  fallback_uses: number;
+  avg_latency_ms: number;
+  by_task: { task_key: string; total: number; successes: number }[];
+  by_provider: { provider: string; total: number; successes: number }[];
+};
+
+export async function getAiUsageSummary(sinceHours: number): Promise<AiUsageSummary> {
+  const totals = await query(
+    `SELECT count(*)::int as total,
+            count(*) filter (where success)::int as successes,
+            count(*) filter (where not success)::int as failures,
+            count(*) filter (where used_fallback)::int as fallback_uses,
+            coalesce(avg(latency_ms), 0)::int as avg_latency_ms
+     FROM ai_usage_logs WHERE created_at > now() - ($1 || ' hours')::interval`,
+    [sinceHours]
+  );
+  const byTask = await query(
+    `SELECT task_key, count(*)::int as total, count(*) filter (where success)::int as successes
+     FROM ai_usage_logs WHERE created_at > now() - ($1 || ' hours')::interval
+     GROUP BY task_key ORDER BY total DESC`,
+    [sinceHours]
+  );
+  const byProvider = await query(
+    `SELECT provider, count(*)::int as total, count(*) filter (where success)::int as successes
+     FROM ai_usage_logs WHERE created_at > now() - ($1 || ' hours')::interval
+     GROUP BY provider ORDER BY total DESC`,
+    [sinceHours]
+  );
+  const row = totals.rows[0] ?? { total: 0, successes: 0, failures: 0, fallback_uses: 0, avg_latency_ms: 0 };
+  return { ...row, by_task: byTask.rows, by_provider: byProvider.rows };
+}
+
+export async function listRecentAiUsage(limit: number) {
+  const result = await query(
+    `SELECT id, task_key, provider, model, success, used_fallback, latency_ms, error_message, created_at
+     FROM ai_usage_logs ORDER BY created_at DESC LIMIT $1`,
+    [limit]
+  );
+  return result.rows;
+}
+
+export async function purgeAiUsageLogsOlderThan(days: number): Promise<number> {
+  const result = await query(`DELETE FROM ai_usage_logs WHERE created_at < now() - ($1 || ' days')::interval`, [days]);
+  return result.rowCount ?? 0;
 }

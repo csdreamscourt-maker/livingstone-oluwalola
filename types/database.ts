@@ -328,6 +328,24 @@ export type KnowledgeChunkMatch = {
   source_tier: number;
 };
 
+export type AiPromptSlot = {
+  key: string;
+  label: string;
+  description?: string;
+  published_version_id?: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AiPromptVersion = {
+  id: string;
+  slot_key: string;
+  content: string;
+  status: 'draft' | 'published' | 'archived';
+  author?: string;
+  created_at: string;
+};
+
 export type NewsletterSubscription = {
   id: string;
   email: string;

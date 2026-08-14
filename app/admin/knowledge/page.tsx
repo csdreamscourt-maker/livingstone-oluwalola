@@ -36,6 +36,16 @@ const STATUS_STYLES: Record<string, string> = {
   needs_review: 'bg-amber-100 text-amber-700',
 };
 
+type SearchMatch = {
+  id: string;
+  content: string;
+  page?: number;
+  chapter?: string;
+  similarity: number;
+  source_title: string;
+  source_author?: string;
+};
+
 const emptyForm = { title: '', author: '', source_type: 'article', tier: '3', url: '', description: '', full_text: '' };
 
 export default function AdminKnowledgePage() {
@@ -45,6 +55,9 @@ export default function AdminKnowledgePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchMatch[] | null>(null);
+  const [searching, setSearching] = useState(false);
 
   const load = async () => {
     const res = await fetch('/api/admin/knowledge/sources');
@@ -107,6 +120,18 @@ export default function AdminKnowledgePage() {
     if (res.ok) await load();
   };
 
+  const runSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setSearching(true);
+    try {
+      const res = await fetch(`/api/admin/knowledge/search?q=${encodeURIComponent(searchQuery)}`);
+      if (res.ok) setSearchResults((await res.json()).matches);
+    } finally {
+      setSearching(false);
+    }
+  };
+
   return (
     <AdminLayout title="Founder Knowledge Library">
       <div className="space-y-6">
@@ -115,6 +140,35 @@ export default function AdminKnowledgePage() {
           that grounds Dream Lab and dream interpretation. Add a source, paste or upload its text, run ingestion to index it,
           then publish it once you&apos;ve reviewed the result. Only published sources are used in interpretations.
         </p>
+
+        <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">
+          <h3 className="mb-3 text-sm font-semibold text-midnight-950">Search the corpus</h3>
+          <form onSubmit={runSearch} className="flex gap-2">
+            <Input
+              placeholder='e.g. "what does the founder teach about snakes?"'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button type="submit" variant="secondary" disabled={searching}>
+              {searching ? 'Searching...' : 'Search'}
+            </Button>
+          </form>
+          {searchResults && (
+            <div className="mt-4 space-y-3">
+              {searchResults.length === 0 && <p className="text-sm text-gray-500">No matches found.</p>}
+              {searchResults.map((match) => (
+                <div key={match.id} className="rounded-xl border border-midnight-950/10 bg-gray-50 p-4">
+                  <p className="text-xs font-semibold text-gray-500">
+                    {match.source_title}
+                    {match.source_author ? ` · ${match.source_author}` : ''}
+                    {match.page ? ` · p.${match.page}` : ''} · {Math.round(match.similarity * 100)}% match
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-gray-700">{match.content}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-2xl border border-midnight-950/10 bg-white p-6">

@@ -1,7 +1,7 @@
 import 'server-only';
 import OpenAI from 'openai';
 import { getSecret, decryptSecret } from '@/lib/secrets';
-import { getAiTaskAssignment, getAiModelWithProvider } from '@/lib/db';
+import { getAiTaskAssignment, getAiModelWithProvider, logAiUsage } from '@/lib/db';
 import { createClientForKind } from './factory';
 import type { ChatCompletionParams, ChatCompletionResult, ImageGenerationParams, ImageGenerationResult, EmbeddingResult, ProviderClient } from './types';
 
@@ -58,22 +58,32 @@ async function legacyOpenAIEmbedding(text: string): Promise<EmbeddingResult> {
   return { embedding, model: 'text-embedding-3-small', provider: 'openai' };
 }
 
+function errorMessage(err: unknown): string {
+  return (err instanceof Error ? err.message : String(err)).slice(0, 500);
+}
+
 /**
  * Runs a chat completion for the given task, trying the admin-configured primary model,
  * then its fallback chain in order. If no admin routing is configured for the task yet
  * (fresh install), falls back to the original env-based OpenAI call so nothing regresses.
+ * Every attempt is logged (metadata only — never prompt/response content) for the AI
+ * observability dashboard.
  */
 export async function runChatCompletion(taskKey: string, params: ChatCompletionParams): Promise<ChatCompletionResult> {
   const candidates = await candidateModelIds(taskKey);
 
   let lastError: unknown;
-  for (const modelId of candidates) {
-    const resolved = await resolveModelClient(modelId);
+  for (let i = 0; i < candidates.length; i += 1) {
+    const resolved = await resolveModelClient(candidates[i]);
     if (!resolved) continue;
+    const startedAt = Date.now();
     try {
-      return await resolved.client.chatCompletion(resolved.modelId, params);
+      const result = await resolved.client.chatCompletion(resolved.modelId, params);
+      await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: i > 0, latency_ms: Date.now() - startedAt });
+      return result;
     } catch (err) {
       lastError = err;
+      await logAiUsage({ task_key: taskKey, provider: 'unknown', model: resolved.modelId, success: false, used_fallback: i > 0, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
     }
   }
 
@@ -82,20 +92,32 @@ export async function runChatCompletion(taskKey: string, params: ChatCompletionP
     throw new Error('No enabled AI provider is configured for this task');
   }
 
-  return legacyOpenAIChatCompletion(params);
+  const startedAt = Date.now();
+  try {
+    const result = await legacyOpenAIChatCompletion(params);
+    await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: false, latency_ms: Date.now() - startedAt });
+    return result;
+  } catch (err) {
+    await logAiUsage({ task_key: taskKey, provider: 'openai', model: 'gpt-4o', success: false, used_fallback: false, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
+    throw err;
+  }
 }
 
 export async function runImageGeneration(taskKey: string, params: ImageGenerationParams): Promise<ImageGenerationResult> {
   const candidates = await candidateModelIds(taskKey);
 
   let lastError: unknown;
-  for (const modelId of candidates) {
-    const resolved = await resolveModelClient(modelId);
+  for (let i = 0; i < candidates.length; i += 1) {
+    const resolved = await resolveModelClient(candidates[i]);
     if (!resolved || !resolved.client.generateImage) continue;
+    const startedAt = Date.now();
     try {
-      return await resolved.client.generateImage(resolved.modelId, params);
+      const result = await resolved.client.generateImage(resolved.modelId, params);
+      await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: i > 0, latency_ms: Date.now() - startedAt });
+      return result;
     } catch (err) {
       lastError = err;
+      await logAiUsage({ task_key: taskKey, provider: 'unknown', model: resolved.modelId, success: false, used_fallback: i > 0, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
     }
   }
 
@@ -104,20 +126,32 @@ export async function runImageGeneration(taskKey: string, params: ImageGeneratio
     throw new Error('No enabled image-generation AI provider is configured for this task');
   }
 
-  return legacyOpenAIImageGeneration(params);
+  const startedAt = Date.now();
+  try {
+    const result = await legacyOpenAIImageGeneration(params);
+    await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: false, latency_ms: Date.now() - startedAt });
+    return result;
+  } catch (err) {
+    await logAiUsage({ task_key: taskKey, provider: 'openai', model: 'dall-e-3', success: false, used_fallback: false, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
+    throw err;
+  }
 }
 
 export async function runEmbedding(taskKey: string, text: string): Promise<EmbeddingResult> {
   const candidates = await candidateModelIds(taskKey);
 
   let lastError: unknown;
-  for (const modelId of candidates) {
-    const resolved = await resolveModelClient(modelId);
+  for (let i = 0; i < candidates.length; i += 1) {
+    const resolved = await resolveModelClient(candidates[i]);
     if (!resolved || !resolved.client.createEmbedding) continue;
+    const startedAt = Date.now();
     try {
-      return await resolved.client.createEmbedding(resolved.modelId, text);
+      const result = await resolved.client.createEmbedding(resolved.modelId, text);
+      await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: i > 0, latency_ms: Date.now() - startedAt });
+      return result;
     } catch (err) {
       lastError = err;
+      await logAiUsage({ task_key: taskKey, provider: 'unknown', model: resolved.modelId, success: false, used_fallback: i > 0, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
     }
   }
 
@@ -126,5 +160,13 @@ export async function runEmbedding(taskKey: string, text: string): Promise<Embed
     throw new Error('No enabled embedding AI provider is configured for this task');
   }
 
-  return legacyOpenAIEmbedding(text);
+  const startedAt = Date.now();
+  try {
+    const result = await legacyOpenAIEmbedding(text);
+    await logAiUsage({ task_key: taskKey, provider: result.provider, model: result.model, success: true, used_fallback: false, latency_ms: Date.now() - startedAt });
+    return result;
+  } catch (err) {
+    await logAiUsage({ task_key: taskKey, provider: 'openai', model: 'text-embedding-3-small', success: false, used_fallback: false, latency_ms: Date.now() - startedAt, error_message: errorMessage(err) });
+    throw err;
+  }
 }

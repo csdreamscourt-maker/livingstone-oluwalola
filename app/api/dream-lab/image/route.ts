@@ -21,13 +21,18 @@ export async function POST(req: NextRequest) {
       size: '1024x1024',
     });
 
-    let finalUrl = image.url;
+    const contentType = image.contentType ?? 'image/png';
+    const extension = contentType === 'image/jpeg' ? 'jpg' : 'png';
+    const buffer = image.base64
+      ? Buffer.from(image.base64, 'base64')
+      : Buffer.from(await (await fetch(image.url!)).arrayBuffer());
+
+    let finalUrl: string;
     try {
-      const imageResponse = await fetch(image.url);
-      const buffer = Buffer.from(await imageResponse.arrayBuffer());
-      finalUrl = await uploadToR2(buffer, `dream-lab/${session.sub}/${sessionId}.png`, 'image/png');
+      finalUrl = await uploadToR2(buffer, `dream-lab/${session.sub}/${sessionId}.${extension}`, contentType);
     } catch {
-      // Storage isn't configured yet — fall back to the provider's temporary URL (may expire).
+      // Storage isn't configured yet — fall back to the provider's URL, or embed the image directly if there isn't one.
+      finalUrl = image.url ?? `data:${contentType};base64,${image.base64}`;
     }
 
     const dreamLabSession = await updateDreamLabSessionImage(sessionId, session.sub, finalUrl);

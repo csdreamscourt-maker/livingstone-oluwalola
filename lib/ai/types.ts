@@ -24,7 +24,12 @@ export type ImageGenerationParams = {
 };
 
 export type ImageGenerationResult = {
-  url: string;
+  /** Hosted URL (OpenAI-style providers return this — a fetchable, often temporary URL). */
+  url?: string;
+  /** Raw base64 image data (NVIDIA's genai endpoints return this instead of a URL). */
+  base64?: string;
+  /** MIME type of the image data — defaults to image/png when omitted. */
+  contentType?: string;
   model: string;
   provider: string;
 };

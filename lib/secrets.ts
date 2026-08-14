@@ -12,7 +12,8 @@ function getMasterKey(): Buffer {
   return crypto.createHash('sha256').update(key).digest();
 }
 
-function encrypt(plaintext: string): string {
+/** Generic AES-256-GCM encryption using the app's master key — reused anywhere a credential needs to be stored encrypted (e.g. per-provider AI API keys in lib/ai). */
+export function encryptSecret(plaintext: string): string {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv(ALGORITHM, getMasterKey(), iv);
   const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
@@ -20,7 +21,7 @@ function encrypt(plaintext: string): string {
   return Buffer.concat([iv, authTag, encrypted]).toString('base64');
 }
 
-function decrypt(payload: string): string {
+export function decryptSecret(payload: string): string {
   const raw = Buffer.from(payload, 'base64');
   const iv = raw.subarray(0, 12);
   const authTag = raw.subarray(12, 28);
@@ -54,13 +55,13 @@ export async function getSecret(key: SecretKey): Promise<string | null> {
   }
 
   const encrypted = await getAppSecret(key);
-  const value = encrypted ? decrypt(encrypted) : (process.env[key] ?? null);
+  const value = encrypted ? decryptSecret(encrypted) : (process.env[key] ?? null);
   cache.set(key, { value, expires: Date.now() + CACHE_TTL_MS });
   return value;
 }
 
 export async function setSecret(key: SecretKey, plaintext: string): Promise<void> {
-  await setAppSecret(key, encrypt(plaintext));
+  await setAppSecret(key, encryptSecret(plaintext));
   cache.delete(key);
 }
 

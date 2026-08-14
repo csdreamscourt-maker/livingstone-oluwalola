@@ -7,6 +7,7 @@ import { useAdminSession } from '@/lib/admin/useAdminSession';
 import {
   BarChart3,
   BookOpen,
+  Bot,
   Building2,
   GraduationCap,
   Inbox,
@@ -35,6 +36,7 @@ const navItems = [
   { href: '/admin/dream-articles', label: 'Dream articles', icon: BookOpen },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/integrations', label: 'Integrations & keys', icon: KeyRound },
+  { href: '/admin/ai', label: 'AI Control Center', icon: Bot },
 ];
 
 function LoadingShell() {

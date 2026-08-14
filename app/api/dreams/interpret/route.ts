@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenAI } from 'openai';
 import { getSessionFromCookies } from '@/lib/session';
 import { getDreamById, upsertDreamInterpretation } from '@/lib/db';
-import { getSecret } from '@/lib/secrets';
+import { runChatCompletion } from '@/lib/ai/router';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -18,11 +17,6 @@ export async function POST(req: NextRequest) {
   const dream = await getDreamById(session.sub, dreamId);
   if (!dream) {
     return NextResponse.json({ error: 'Dream not found' }, { status: 404 });
-  }
-
-  const apiKey = await getSecret('OPENAI_API_KEY');
-  if (!apiKey) {
-    return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 });
   }
 
   const dreamContent = [dream.title, dream.description, dream.content].filter(Boolean).join('\n\n');
@@ -47,21 +41,18 @@ Respond with JSON only, in this exact shape:
 }`;
 
   try {
-    const openai = new OpenAI({ apiKey });
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+    const completion = await runChatCompletion('dream_interpretation', {
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
-      max_tokens: 1000,
-      response_format: { type: 'json_object' },
+      maxTokens: 1000,
+      responseFormat: 'json_object',
     });
 
-    const responseText = completion.choices[0].message.content;
-    if (!responseText) {
-      throw new Error('No response from OpenAI');
+    if (!completion.content) {
+      throw new Error('No response from AI provider');
     }
 
-    const parsed = JSON.parse(responseText);
+    const parsed = JSON.parse(completion.content);
 
     const saved = await upsertDreamInterpretation(dreamId, session.sub, {
       interpretation: parsed.interpretation,
@@ -70,7 +61,7 @@ Respond with JSON only, in this exact shape:
       psychological_insights: parsed.psychological_insights,
       biblical_references: parsed.biblical_references,
       confidence_score: parsed.confidence_score,
-      model_used: 'gpt-4o',
+      model_used: completion.model,
     });
 
     return NextResponse.json({ interpretation: saved });

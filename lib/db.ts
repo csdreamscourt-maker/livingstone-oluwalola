@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import type { Framework, Company, IdeasArticle } from '@/types/database';
+import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment } from '@/types/database';
 import { SETTINGS_DEFAULTS } from '@/lib/settingsSchema';
 
 let pool: Pool | null = null;
@@ -789,4 +789,184 @@ export async function updateIdeasArticle(id: string, updates: Partial<IdeasArtic
 
 export async function deleteIdeasArticle(id: string) {
   await query('DELETE FROM ideas_articles WHERE id = $1', [id]);
+}
+
+// --- AI provider control center ---
+
+export type AiProviderInput = {
+  slug: string;
+  name: string;
+  kind: 'openai' | 'anthropic' | 'google' | 'nvidia' | 'custom';
+  base_url?: string | null;
+  api_key_encrypted?: string | null;
+  enabled?: boolean;
+};
+
+const AI_PROVIDER_COLUMNS =
+  'id, slug, name, kind, base_url, api_key_encrypted, enabled, last_tested_at, last_test_ok, last_test_message, created_at, updated_at';
+
+export async function listAiProviders(): Promise<AiProvider[]> {
+  const result = await query(`SELECT ${AI_PROVIDER_COLUMNS} FROM ai_providers ORDER BY created_at`);
+  return result.rows;
+}
+
+export async function getAiProviderById(id: string): Promise<AiProvider | null> {
+  const result = await query(`SELECT ${AI_PROVIDER_COLUMNS} FROM ai_providers WHERE id = $1`, [id]);
+  return result.rows[0] || null;
+}
+
+export async function createAiProvider(input: AiProviderInput): Promise<AiProvider> {
+  const result = await query(
+    `INSERT INTO ai_providers (slug, name, kind, base_url, api_key_encrypted, enabled)
+     VALUES ($1, $2, $3, $4, $5, COALESCE($6, true)) RETURNING ${AI_PROVIDER_COLUMNS}`,
+    [input.slug, input.name, input.kind, input.base_url ?? null, input.api_key_encrypted ?? null, input.enabled ?? null]
+  );
+  return result.rows[0];
+}
+
+type AiProviderUpdates = Partial<AiProviderInput> & {
+  last_tested_at?: string;
+  last_test_ok?: boolean;
+  last_test_message?: string;
+};
+
+export async function updateAiProvider(id: string, updates: AiProviderUpdates): Promise<AiProvider | null> {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE ai_providers SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${AI_PROVIDER_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteAiProvider(id: string): Promise<void> {
+  await query('DELETE FROM ai_providers WHERE id = $1', [id]);
+}
+
+export type AiModelInput = {
+  provider_id: string;
+  model_id: string;
+  display_name: string;
+  supports_text?: boolean;
+  supports_vision?: boolean;
+  supports_image_generation?: boolean;
+  supports_embeddings?: boolean;
+  context_window?: number | null;
+  cost_tier?: string | null;
+  enabled?: boolean;
+};
+
+const AI_MODEL_COLUMNS =
+  'id, provider_id, model_id, display_name, supports_text, supports_vision, supports_image_generation, supports_embeddings, context_window, cost_tier, enabled, created_at, updated_at';
+
+export async function listAiModels(): Promise<AiModelWithProvider[]> {
+  const result = await query(
+    `SELECT m.id, m.provider_id, m.model_id, m.display_name, m.supports_text, m.supports_vision,
+            m.supports_image_generation, m.supports_embeddings, m.context_window, m.cost_tier, m.enabled,
+            m.created_at, m.updated_at, p.slug as provider_slug, p.name as provider_name, p.kind as provider_kind
+     FROM ai_models m JOIN ai_providers p ON p.id = m.provider_id
+     ORDER BY m.created_at`
+  );
+  return result.rows;
+}
+
+export async function createAiModel(input: AiModelInput): Promise<AiModel> {
+  const result = await query(
+    `INSERT INTO ai_models (provider_id, model_id, display_name, supports_text, supports_vision, supports_image_generation, supports_embeddings, context_window, cost_tier, enabled)
+     VALUES ($1, $2, $3, COALESCE($4, true), COALESCE($5, false), COALESCE($6, false), COALESCE($7, false), $8, $9, COALESCE($10, true))
+     RETURNING ${AI_MODEL_COLUMNS}`,
+    [
+      input.provider_id,
+      input.model_id,
+      input.display_name,
+      input.supports_text ?? null,
+      input.supports_vision ?? null,
+      input.supports_image_generation ?? null,
+      input.supports_embeddings ?? null,
+      input.context_window ?? null,
+      input.cost_tier ?? null,
+      input.enabled ?? null,
+    ]
+  );
+  return result.rows[0];
+}
+
+export async function updateAiModel(id: string, updates: Partial<AiModelInput>): Promise<AiModel | null> {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE ai_models SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${AI_MODEL_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteAiModel(id: string): Promise<void> {
+  await query('DELETE FROM ai_models WHERE id = $1', [id]);
+}
+
+export type AiModelWithProviderSecret = {
+  id: string;
+  model_id: string;
+  model_enabled: boolean;
+  supports_image_generation: boolean;
+  provider_slug: string;
+  provider_name: string;
+  provider_kind: string;
+  base_url: string | null;
+  api_key_encrypted: string | null;
+  provider_enabled: boolean;
+};
+
+export async function getAiModelWithProvider(modelId: string): Promise<AiModelWithProviderSecret | null> {
+  const result = await query(
+    `SELECT m.id, m.model_id, m.enabled as model_enabled, m.supports_image_generation,
+            p.slug as provider_slug, p.name as provider_name, p.kind as provider_kind,
+            p.base_url, p.api_key_encrypted, p.enabled as provider_enabled
+     FROM ai_models m JOIN ai_providers p ON p.id = m.provider_id
+     WHERE m.id = $1`,
+    [modelId]
+  );
+  return result.rows[0] || null;
+}
+
+export async function getAiTaskAssignment(taskKey: string): Promise<AiTaskAssignment | null> {
+  const result = await query(
+    'SELECT task_key, primary_model_id, fallback_model_ids, updated_at FROM ai_task_assignments WHERE task_key = $1',
+    [taskKey]
+  );
+  return result.rows[0] || null;
+}
+
+export async function listAiTaskAssignments(): Promise<AiTaskAssignment[]> {
+  const result = await query('SELECT task_key, primary_model_id, fallback_model_ids, updated_at FROM ai_task_assignments ORDER BY task_key');
+  return result.rows;
+}
+
+export async function setAiTaskAssignment(
+  taskKey: string,
+  primaryModelId: string | null,
+  fallbackModelIds: string[]
+): Promise<AiTaskAssignment> {
+  const result = await query(
+    `INSERT INTO ai_task_assignments (task_key, primary_model_id, fallback_model_ids)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (task_key) DO UPDATE SET primary_model_id = EXCLUDED.primary_model_id, fallback_model_ids = EXCLUDED.fallback_model_ids, updated_at = timezone('utc'::text, now())
+     RETURNING task_key, primary_model_id, fallback_model_ids, updated_at`,
+    [taskKey, primaryModelId, fallbackModelIds]
+  );
+  return result.rows[0];
 }

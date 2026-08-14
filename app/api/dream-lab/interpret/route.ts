@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenAI } from 'openai';
 import { getSessionFromCookies } from '@/lib/session';
 import { createDreamLabSession } from '@/lib/db';
-import { getSecret } from '@/lib/secrets';
+import { runChatCompletion } from '@/lib/ai/router';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -15,15 +14,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'prompt is required' }, { status: 400 });
   }
 
-  const apiKey = await getSecret('OPENAI_API_KEY');
-  if (!apiKey) {
-    return NextResponse.json({ error: 'AI discernment is not configured yet (missing OPENAI_API_KEY)' }, { status: 500 });
-  }
-
   try {
-    const openai = new OpenAI({ apiKey });
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+    const completion = await runChatCompletion('dream_interpretation', {
       messages: [
         {
           role: 'user',
@@ -31,19 +23,21 @@ export async function POST(req: NextRequest) {
         },
       ],
       temperature: 0.7,
-      max_tokens: 700,
+      maxTokens: 700,
     });
 
-    const interpretation = completion.choices[0].message.content ?? '';
     const dreamLabSession = await createDreamLabSession(session.sub, {
       dream_id: dreamId ?? null,
       prompt,
-      interpretation,
+      interpretation: completion.content,
     });
 
     return NextResponse.json({ session: dreamLabSession });
   } catch (error) {
     console.error('Dream Lab interpretation error:', error);
-    return NextResponse.json({ error: 'Failed to discern this dream right now' }, { status: 500 });
+    const message = error instanceof Error && error.message.includes('configured')
+      ? 'AI discernment is not configured yet'
+      : 'Failed to discern this dream right now';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

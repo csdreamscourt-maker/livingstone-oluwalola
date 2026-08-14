@@ -244,6 +244,52 @@ export type IdeasArticle = {
   updated_at: string;
 };
 
+export type AiProviderKind = 'openai' | 'anthropic' | 'google' | 'nvidia' | 'custom';
+
+export type AiProvider = {
+  id: string;
+  slug: string;
+  name: string;
+  kind: AiProviderKind;
+  base_url?: string;
+  api_key_encrypted?: string;
+  enabled: boolean;
+  last_tested_at?: string;
+  last_test_ok?: boolean;
+  last_test_message?: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AiModel = {
+  id: string;
+  provider_id: string;
+  model_id: string;
+  display_name: string;
+  supports_text: boolean;
+  supports_vision: boolean;
+  supports_image_generation: boolean;
+  supports_embeddings: boolean;
+  context_window?: number;
+  cost_tier?: string;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AiModelWithProvider = AiModel & {
+  provider_slug: string;
+  provider_name: string;
+  provider_kind: AiProviderKind;
+};
+
+export type AiTaskAssignment = {
+  task_key: string;
+  primary_model_id?: string;
+  fallback_model_ids: string[];
+  updated_at: string;
+};
+
 export type NewsletterSubscription = {
   id: string;
   email: string;

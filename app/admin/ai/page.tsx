@@ -75,6 +75,11 @@ export default function AdminAiPage() {
   const [savingProvider, setSavingProvider] = useState(false);
   const [providerError, setProviderError] = useState<string | null>(null);
 
+  const [editingProviderId, setEditingProviderId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState(emptyProviderForm);
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
   const [modelForm, setModelForm] = useState(emptyModelForm);
   const [savingModel, setSavingModel] = useState(false);
   const [modelError, setModelError] = useState<string | null>(null);
@@ -118,6 +123,45 @@ export default function AdminAiPage() {
       setProviderError(err instanceof Error ? err.message : 'Failed to create provider');
     } finally {
       setSavingProvider(false);
+    }
+  };
+
+  const startEditProvider = (provider: SafeProvider) => {
+    setEditingProviderId(provider.id);
+    setEditForm({ slug: provider.slug, name: provider.name, kind: provider.kind, base_url: provider.base_url || '', api_key: '' });
+    setEditError(null);
+  };
+
+  const cancelEditProvider = () => {
+    setEditingProviderId(null);
+    setEditError(null);
+  };
+
+  const saveEditProvider = async (id: string) => {
+    if (!editForm.slug.trim() || !editForm.name.trim()) return;
+    setSavingEdit(true);
+    setEditError(null);
+    try {
+      const payload: Record<string, unknown> = {
+        slug: editForm.slug,
+        name: editForm.name,
+        kind: editForm.kind,
+        base_url: editForm.base_url || null,
+      };
+      if (editForm.api_key.trim()) payload.api_key = editForm.api_key.trim();
+
+      const res = await fetch(`/api/admin/ai/providers/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed to save changes');
+      setEditingProviderId(null);
+      await load();
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Failed to save changes');
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -233,40 +277,64 @@ export default function AdminAiPage() {
               {!loading && providers.length === 0 && <p className="text-sm text-gray-500">No providers configured yet.</p>}
               {providers.map((provider) => (
                 <div key={provider.id} className="rounded-xl border border-midnight-950/10 bg-white p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-midnight-950">
-                        {provider.name} <span className="text-xs font-normal text-gray-500">({provider.kind})</span>
-                      </p>
-                      <p className="text-xs text-gray-500">{provider.slug}{provider.base_url ? ` · ${provider.base_url}` : ''}</p>
+                  {editingProviderId === provider.id ? (
+                    <div className="space-y-3">
+                      {editError && <p className="text-sm text-red-600">{editError}</p>}
+                      <Input placeholder="Slug" value={editForm.slug} onChange={(e) => setEditForm({ ...editForm, slug: e.target.value })} />
+                      <Input placeholder="Display name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+                      <Select options={KIND_OPTIONS} value={editForm.kind} onChange={(e) => setEditForm({ ...editForm, kind: e.target.value })} />
+                      <Input placeholder="Base URL (optional — leave blank for provider default)" value={editForm.base_url} onChange={(e) => setEditForm({ ...editForm, base_url: e.target.value })} />
+                      <Input type="password" placeholder="New API key (leave blank to keep the current one)" value={editForm.api_key} onChange={(e) => setEditForm({ ...editForm, api_key: e.target.value })} />
+                      <div className="flex gap-2">
+                        <Button variant="gold" onClick={() => saveEditProvider(provider.id)} disabled={savingEdit}>
+                          {savingEdit ? 'Saving...' : 'Save changes'}
+                        </Button>
+                        <Button variant="secondary" onClick={cancelEditProvider} disabled={savingEdit}>
+                          Cancel
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex shrink-0 gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${provider.has_api_key ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
-                        {provider.has_api_key ? 'Key configured' : 'No key'}
-                      </span>
-                      <button onClick={() => toggleProviderEnabled(provider)} className={`rounded-full px-3 py-1 text-xs font-semibold ${provider.enabled ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
-                        {provider.enabled ? 'Enabled' : 'Disabled'}
-                      </button>
-                      <button onClick={() => removeProvider(provider.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
-                    </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-midnight-950">
+                            {provider.name} <span className="text-xs font-normal text-gray-500">({provider.kind})</span>
+                          </p>
+                          <p className="text-xs text-gray-500">{provider.slug}{provider.base_url ? ` · ${provider.base_url}` : ''}</p>
+                        </div>
+                        <div className="flex shrink-0 gap-2">
+                          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${provider.has_api_key ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
+                            {provider.has_api_key ? 'Key configured' : 'No key'}
+                          </span>
+                          <button onClick={() => toggleProviderEnabled(provider)} className={`rounded-full px-3 py-1 text-xs font-semibold ${provider.enabled ? 'bg-emerald-100 text-emerald-700' : 'border border-midnight-950/15 text-gray-500'}`}>
+                            {provider.enabled ? 'Enabled' : 'Disabled'}
+                          </button>
+                          <button onClick={() => startEditProvider(provider)} className="rounded-full px-3 py-1 text-xs font-semibold border border-midnight-950/15 text-gray-600 hover:border-midnight-950/30 hover:text-midnight-950">
+                            Edit
+                          </button>
+                          <button onClick={() => removeProvider(provider.id)} className="rounded-full p-1.5 text-gray-400 hover:text-red-600">×</button>
+                        </div>
+                      </div>
 
-                  {provider.last_tested_at && (
-                    <p className={`mt-2 text-xs ${provider.last_test_ok ? 'text-emerald-700' : 'text-red-600'}`}>
-                      Last tested {new Date(provider.last_tested_at).toLocaleString()}: {provider.last_test_message}
-                    </p>
+                      {provider.last_tested_at && (
+                        <p className={`mt-2 text-xs ${provider.last_test_ok ? 'text-emerald-700' : 'text-red-600'}`}>
+                          Last tested {new Date(provider.last_tested_at).toLocaleString()}: {provider.last_test_message}
+                        </p>
+                      )}
+
+                      <div className="mt-3 flex gap-2">
+                        <Input
+                          placeholder="Model id to test with (e.g. gpt-4o-mini)"
+                          value={testModel[provider.id] || ''}
+                          onChange={(e) => setTestModel({ ...testModel, [provider.id]: e.target.value })}
+                        />
+                        <Button variant="secondary" onClick={() => runTest(provider.id)} disabled={testing === provider.id}>
+                          {testing === provider.id ? 'Testing...' : 'Test connection'}
+                        </Button>
+                      </div>
+                    </>
                   )}
-
-                  <div className="mt-3 flex gap-2">
-                    <Input
-                      placeholder="Model id to test with (e.g. gpt-4o-mini)"
-                      value={testModel[provider.id] || ''}
-                      onChange={(e) => setTestModel({ ...testModel, [provider.id]: e.target.value })}
-                    />
-                    <Button variant="secondary" onClick={() => runTest(provider.id)} disabled={testing === provider.id}>
-                      {testing === provider.id ? 'Testing...' : 'Test connection'}
-                    </Button>
-                  </div>
                 </div>
               ))}
             </div>

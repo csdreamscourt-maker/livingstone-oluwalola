@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { getSecret, decryptSecret } from '@/lib/secrets';
 import { getAiTaskAssignment, getAiModelWithProvider } from '@/lib/db';
 import { createClientForKind } from './factory';
-import type { ChatCompletionParams, ChatCompletionResult, ImageGenerationParams, ImageGenerationResult, ProviderClient } from './types';
+import type { ChatCompletionParams, ChatCompletionResult, ImageGenerationParams, ImageGenerationResult, EmbeddingResult, ProviderClient } from './types';
 
 async function resolveModelClient(modelId: string): Promise<{ client: ProviderClient; modelId: string } | null> {
   const row = await getAiModelWithProvider(modelId);
@@ -46,6 +46,16 @@ async function legacyOpenAIImageGeneration(params: ImageGenerationParams): Promi
   const url = result.data?.[0]?.url;
   if (!url) throw new Error('No image returned from OpenAI');
   return { url, model: 'dall-e-3', provider: 'openai' };
+}
+
+async function legacyOpenAIEmbedding(text: string): Promise<EmbeddingResult> {
+  const apiKey = await getSecret('OPENAI_API_KEY');
+  if (!apiKey) throw new Error('No embedding provider is configured');
+  const openai = new OpenAI({ apiKey });
+  const result = await openai.embeddings.create({ model: 'text-embedding-3-small', input: text });
+  const embedding = result.data?.[0]?.embedding;
+  if (!embedding) throw new Error('No embedding returned from OpenAI');
+  return { embedding, model: 'text-embedding-3-small', provider: 'openai' };
 }
 
 /**
@@ -95,4 +105,26 @@ export async function runImageGeneration(taskKey: string, params: ImageGeneratio
   }
 
   return legacyOpenAIImageGeneration(params);
+}
+
+export async function runEmbedding(taskKey: string, text: string): Promise<EmbeddingResult> {
+  const candidates = await candidateModelIds(taskKey);
+
+  let lastError: unknown;
+  for (const modelId of candidates) {
+    const resolved = await resolveModelClient(modelId);
+    if (!resolved || !resolved.client.createEmbedding) continue;
+    try {
+      return await resolved.client.createEmbedding(resolved.modelId, text);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  if (candidates.length > 0) {
+    if (lastError) throw lastError;
+    throw new Error('No enabled embedding AI provider is configured for this task');
+  }
+
+  return legacyOpenAIEmbedding(text);
 }

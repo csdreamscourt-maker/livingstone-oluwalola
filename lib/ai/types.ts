@@ -34,8 +34,15 @@ export type ConnectionTestResult = {
   message: string;
 };
 
+export type EmbeddingResult = {
+  embedding: number[];
+  model: string;
+  provider: string;
+};
+
 export interface ProviderClient {
   chatCompletion(model: string, params: ChatCompletionParams): Promise<ChatCompletionResult>;
   generateImage?(model: string, params: ImageGenerationParams): Promise<ImageGenerationResult>;
+  createEmbedding?(model: string, text: string): Promise<EmbeddingResult>;
   testConnection(model: string): Promise<ConnectionTestResult>;
 }

@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment } from '@/types/database';
+import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment, KnowledgeSource, KnowledgeChunkMatch } from '@/types/database';
 import { SETTINGS_DEFAULTS } from '@/lib/settingsSchema';
 
 let pool: Pool | null = null;
@@ -969,4 +969,134 @@ export async function setAiTaskAssignment(
     [taskKey, primaryModelId, fallbackModelIds]
   );
   return result.rows[0];
+}
+
+// --- Founder Knowledge Engine ---
+
+export type KnowledgeSourceInput = {
+  title: string;
+  author?: string | null;
+  source_type: string;
+  tier?: number;
+  publication_date?: string | null;
+  url?: string | null;
+  description?: string | null;
+  full_text?: string | null;
+  topics?: string[] | null;
+  tags?: string[] | null;
+  scripture_references?: string[] | null;
+  framework_categories?: string[] | null;
+};
+
+const KNOWLEDGE_SOURCE_COLUMNS =
+  'id, title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories, processing_status, processing_error, version, created_at, updated_at';
+
+const KNOWLEDGE_SOURCE_LIST_COLUMNS =
+  's.id, s.title, s.author, s.source_type, s.tier, s.publication_date, s.url, s.description, s.topics, s.tags, s.scripture_references, s.framework_categories, s.processing_status, s.processing_error, s.version, s.created_at, s.updated_at';
+
+export async function listKnowledgeSources(): Promise<(KnowledgeSource & { chunk_count: number })[]> {
+  const result = await query(
+    `SELECT ${KNOWLEDGE_SOURCE_LIST_COLUMNS}, count(c.id)::int as chunk_count
+     FROM knowledge_sources s
+     LEFT JOIN knowledge_chunks c ON c.source_id = s.id
+     GROUP BY s.id
+     ORDER BY s.created_at DESC`
+  );
+  return result.rows;
+}
+
+export async function getKnowledgeSourceById(id: string): Promise<KnowledgeSource | null> {
+  const result = await query(`SELECT ${KNOWLEDGE_SOURCE_COLUMNS} FROM knowledge_sources WHERE id = $1`, [id]);
+  return result.rows[0] || null;
+}
+
+export async function createKnowledgeSource(input: KnowledgeSourceInput): Promise<KnowledgeSource> {
+  const result = await query(
+    `INSERT INTO knowledge_sources (title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories)
+     VALUES ($1, $2, $3, COALESCE($4, 1), $5, $6, $7, $8, $9, $10, $11, $12)
+     RETURNING ${KNOWLEDGE_SOURCE_COLUMNS}`,
+    [
+      input.title,
+      input.author ?? null,
+      input.source_type,
+      input.tier ?? null,
+      input.publication_date ?? null,
+      input.url ?? null,
+      input.description ?? null,
+      input.full_text ?? null,
+      input.topics ?? null,
+      input.tags ?? null,
+      input.scripture_references ?? null,
+      input.framework_categories ?? null,
+    ]
+  );
+  return result.rows[0];
+}
+
+type KnowledgeSourceUpdates = Partial<KnowledgeSourceInput> & {
+  processing_status?: string;
+  processing_error?: string | null;
+};
+
+export async function updateKnowledgeSource(id: string, updates: KnowledgeSourceUpdates): Promise<KnowledgeSource | null> {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(`UPDATE knowledge_sources SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${KNOWLEDGE_SOURCE_COLUMNS}`, values);
+  return result.rows[0] || null;
+}
+
+export async function deleteKnowledgeSource(id: string): Promise<void> {
+  await query('DELETE FROM knowledge_sources WHERE id = $1', [id]);
+}
+
+function toVectorLiteral(embedding: number[]): string {
+  return `[${embedding.join(',')}]`;
+}
+
+export async function deleteKnowledgeChunksForSource(sourceId: string): Promise<void> {
+  await query('DELETE FROM knowledge_chunks WHERE source_id = $1', [sourceId]);
+}
+
+export async function insertKnowledgeChunk(
+  sourceId: string,
+  chunkIndex: number,
+  content: string,
+  embedding: number[],
+  page?: number | null,
+  chapter?: string | null
+): Promise<void> {
+  await query(
+    `INSERT INTO knowledge_chunks (source_id, chunk_index, content, page, chapter, embedding)
+     VALUES ($1, $2, $3, $4, $5, $6::vector)`,
+    [sourceId, chunkIndex, content, page ?? null, chapter ?? null, toVectorLiteral(embedding)]
+  );
+}
+
+export async function countKnowledgeChunksForSource(sourceId: string): Promise<number> {
+  const result = await query('SELECT count(*)::int as count FROM knowledge_chunks WHERE source_id = $1', [sourceId]);
+  return result.rows[0]?.count ?? 0;
+}
+
+export async function searchKnowledgeChunks(queryEmbedding: number[], limit: number): Promise<KnowledgeChunkMatch[]> {
+  const result = await query(
+    `SELECT c.id, c.source_id, c.chunk_index, c.content, c.page, c.chapter,
+            1 - (c.embedding <=> $1::vector) as similarity,
+            s.title as source_title, s.author as source_author, s.source_type, s.tier as source_tier
+     FROM knowledge_chunks c
+     JOIN knowledge_sources s ON s.id = c.source_id
+     WHERE s.processing_status = 'published'
+     ORDER BY c.embedding <=> $1::vector
+     LIMIT $2`,
+    [toVectorLiteral(queryEmbedding), limit]
+  );
+  return result.rows;
 }

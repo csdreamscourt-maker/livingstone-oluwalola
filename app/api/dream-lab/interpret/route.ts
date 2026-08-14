@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionFromCookies } from '@/lib/session';
 import { createDreamLabSession } from '@/lib/db';
 import { runChatCompletion } from '@/lib/ai/router';
+import { buildFounderGroundedMessages } from '@/lib/knowledge/prompt';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -15,15 +16,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const messages = await buildFounderGroundedMessages(
+      prompt,
+      `A member of Dream Court shares the following dream. Offer a thoughtful, grounded discernment following the ground rules you were given.\n\nDream: ${prompt}`
+    );
+
     const completion = await runChatCompletion('dream_interpretation', {
-      messages: [
-        {
-          role: 'user',
-          content: `You are a dream discernment guide integrating scriptural wisdom, psychology, and neuroscience. A member of Dream Court shares the following dream. Offer a thoughtful, grounded discernment — themes, possible symbolic meaning, and a reflective question to sit with. Keep it warm and practical, not superstitious or fear-based.\n\nDream: ${prompt}`,
-        },
-      ],
+      messages,
       temperature: 0.7,
-      maxTokens: 700,
+      maxTokens: 800,
     });
 
     const dreamLabSession = await createDreamLabSession(session.sub, {

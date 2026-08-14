@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionFromCookies } from '@/lib/session';
 import { getDreamById, upsertDreamInterpretation } from '@/lib/db';
 import { runChatCompletion } from '@/lib/ai/router';
+import { buildFounderGroundedMessages } from '@/lib/knowledge/prompt';
 
 export async function POST(req: NextRequest) {
   const session = await getSessionFromCookies();
@@ -21,30 +22,27 @@ export async function POST(req: NextRequest) {
 
   const dreamContent = [dream.title, dream.description, dream.content].filter(Boolean).join('\n\n');
 
-  const prompt = `You are a thoughtful dream interpretation expert with knowledge of psychology, spirituality, and symbolism. Analyze the following dream and provide:
-1. A comprehensive interpretation
-2. Key themes and patterns
-3. Symbolic meanings
-4. Psychological insights
-5. Any relevant biblical references if applicable
-
-Dream: ${dreamContent}
-
-Respond with JSON only, in this exact shape:
+  const userPrompt = `Analyze the following dream and respond with JSON only, in this exact shape:
 {
-  "interpretation": "...",
+  "interpretation": "a grounded discernment of the dream, following the ground rules you were given — note the dream's likely type (plain/complex) and sphere (intrinsic/extrinsic) where discernible, and be explicit about what remains uncertain",
   "key_themes": ["theme1", "theme2"],
-  "symbolic_meanings": "...",
-  "psychological_insights": "...",
+  "symbolic_meanings": "how the dream's symbols may connect to each other and the whole dream — not a symbol-by-symbol dictionary lookup",
+  "psychological_insights": "only if the dream shows signs of a natural or psychological origin (memory, body, ordinary thought) rather than a spiritual one — per the teaching that not every dream is a message; otherwise state that this appears spiritually significant rather than natural",
   "biblical_references": ["reference1", "reference2"],
   "confidence_score": 0.85
-}`;
+}
+
+Keep confidence_score conservative — low when the dream is thin on detail or the founder's teaching doesn't clearly speak to it, higher only where there is real scriptural or textual grounding for the reading.
+
+Dream: ${dreamContent}`;
 
   try {
+    const messages = await buildFounderGroundedMessages(dreamContent, userPrompt);
+
     const completion = await runChatCompletion('dream_interpretation', {
-      messages: [{ role: 'user', content: prompt }],
+      messages,
       temperature: 0.7,
-      maxTokens: 1000,
+      maxTokens: 1200,
       responseFormat: 'json_object',
     });
 

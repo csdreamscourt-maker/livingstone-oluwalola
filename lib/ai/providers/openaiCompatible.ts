@@ -6,6 +6,7 @@ import type {
   ImageGenerationParams,
   ImageGenerationResult,
   ConnectionTestResult,
+  EmbeddingResult,
 } from '../types';
 
 /**
@@ -40,6 +41,13 @@ export function createOpenAICompatibleClient(providerSlug: string, apiKey: strin
     return { url, model, provider: providerSlug };
   }
 
+  async function createEmbedding(model: string, text: string): Promise<EmbeddingResult> {
+    const result = await client.embeddings.create({ model, input: text });
+    const embedding = result.data?.[0]?.embedding;
+    if (!embedding) throw new Error('No embedding returned');
+    return { embedding, model, provider: providerSlug };
+  }
+
   async function testConnection(model: string): Promise<ConnectionTestResult> {
     try {
       await client.chat.completions.create({
@@ -53,5 +61,5 @@ export function createOpenAICompatibleClient(providerSlug: string, apiKey: strin
     }
   }
 
-  return { chatCompletion, generateImage, testConnection };
+  return { chatCompletion, generateImage, createEmbedding, testConnection };
 }

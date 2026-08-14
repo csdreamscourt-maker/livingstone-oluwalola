@@ -290,6 +290,44 @@ export type AiTaskAssignment = {
   updated_at: string;
 };
 
+export type KnowledgeSourceType = 'book' | 'journal' | 'article' | 'sermon' | 'video_transcript' | 'audio_transcript' | 'social_post' | 'document';
+export type KnowledgeProcessingStatus = 'pending' | 'processing' | 'indexed' | 'published' | 'failed' | 'needs_review';
+
+export type KnowledgeSource = {
+  id: string;
+  title: string;
+  author?: string;
+  source_type: KnowledgeSourceType;
+  tier: number;
+  publication_date?: string;
+  url?: string;
+  description?: string;
+  full_text?: string;
+  topics?: string[];
+  tags?: string[];
+  scripture_references?: string[];
+  framework_categories?: string[];
+  processing_status: KnowledgeProcessingStatus;
+  processing_error?: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type KnowledgeChunkMatch = {
+  id: string;
+  source_id: string;
+  chunk_index: number;
+  content: string;
+  page?: number;
+  chapter?: string;
+  similarity: number;
+  source_title: string;
+  source_author?: string;
+  source_type: KnowledgeSourceType;
+  source_tier: number;
+};
+
 export type NewsletterSubscription = {
   id: string;
   email: string;

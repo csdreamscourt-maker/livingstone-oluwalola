@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Inbox,
   KeyRound,
+  Library,
   Lightbulb,
   LogOut,
   Mail,
@@ -37,6 +38,7 @@ const navItems = [
   { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/integrations', label: 'Integrations & keys', icon: KeyRound },
   { href: '/admin/ai', label: 'AI Control Center', icon: Bot },
+  { href: '/admin/knowledge', label: 'Founder Knowledge', icon: Library },
 ];
 
 function LoadingShell() {

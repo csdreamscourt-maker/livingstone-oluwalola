@@ -318,6 +318,27 @@ export type KnowledgeSource = {
   processing_status: KnowledgeProcessingStatus;
   processing_error?: string;
   version: number;
+  sync_connection_id?: string;
+  external_id?: string;
+  platform?: SocialPlatform;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SocialPlatform = 'substack' | 'youtube' | 'tiktok' | 'instagram';
+export type SyncStatus = 'idle' | 'syncing' | 'ok' | 'failed';
+
+export type KnowledgeSyncConnection = {
+  id: string;
+  platform: SocialPlatform;
+  label: string;
+  feed_url?: string;
+  auto_sync: boolean;
+  last_synced_at?: string;
+  last_sync_status: SyncStatus;
+  last_sync_message?: string;
+  new_content_count: number;
+  failed_content_count: number;
   created_at: string;
   updated_at: string;
 };

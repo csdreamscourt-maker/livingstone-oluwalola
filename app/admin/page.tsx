@@ -13,6 +13,7 @@ import {
   Inbox,
   Library,
   Mail,
+  Radio,
   ShoppingBag,
   Sparkles,
   Users,
@@ -34,6 +35,8 @@ type OverviewStats = {
   ai_provider_count: string;
   ai_requests_today: string;
   ai_errors_today: string;
+  social_connection_count: string;
+  social_sync_failed_count: string;
 };
 
 function Tile({ label, value, icon: Icon, href, warn }: { label: string; value?: string; icon: typeof Users; href?: string; warn?: boolean }) {
@@ -95,6 +98,14 @@ export default function AdminOverviewPage() {
               icon={AlertTriangle}
               href="/admin/knowledge"
               warn={Boolean(stats && Number(stats.knowledge_failed_count) > 0)}
+            />
+            <Tile label="Social connections" value={stats?.social_connection_count} icon={Radio} href="/admin/social" />
+            <Tile
+              label="Failed syncs"
+              value={stats?.social_sync_failed_count}
+              icon={AlertTriangle}
+              href="/admin/social"
+              warn={Boolean(stats && Number(stats.social_sync_failed_count) > 0)}
             />
           </div>
         </section>

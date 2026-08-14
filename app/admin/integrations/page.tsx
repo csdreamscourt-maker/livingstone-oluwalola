@@ -15,6 +15,10 @@ const GROUPS: { label: string; keys: string[] }[] = [
     label: 'Cloudflare R2 (file storage)',
     keys: ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET_NAME', 'R2_PUBLIC_URL'],
   },
+  {
+    label: 'Automation (scheduled social sync — required only for auto-sync, see Social Ingestion)',
+    keys: ['CRON_SECRET'],
+  },
 ];
 
 export default function AdminIntegrationsPage() {

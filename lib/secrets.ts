@@ -41,6 +41,7 @@ export const SECRET_KEYS = [
   'R2_SECRET_ACCESS_KEY',
   'R2_BUCKET_NAME',
   'R2_PUBLIC_URL',
+  'CRON_SECRET',
 ] as const;
 
 export type SecretKey = (typeof SECRET_KEYS)[number];

@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment, KnowledgeSource, KnowledgeChunkMatch, AiPromptSlot, AiPromptVersion } from '@/types/database';
+import type { Framework, Company, IdeasArticle, AiProvider, AiModel, AiModelWithProvider, AiTaskAssignment, KnowledgeSource, KnowledgeChunkMatch, AiPromptSlot, AiPromptVersion, KnowledgeSyncConnection, SocialPlatform } from '@/types/database';
 import { SETTINGS_DEFAULTS } from '@/lib/settingsSchema';
 
 let pool: Pool | null = null;
@@ -683,7 +683,9 @@ export async function getAdminOverviewStats() {
       (SELECT count(*) FROM knowledge_sources WHERE processing_status = 'failed') AS knowledge_failed_count,
       (SELECT count(*) FROM ai_providers WHERE enabled = true) AS ai_provider_count,
       (SELECT count(*) FROM ai_usage_logs WHERE created_at > now() - interval '24 hours') AS ai_requests_today,
-      (SELECT count(*) FROM ai_usage_logs WHERE created_at > now() - interval '24 hours' AND success = false) AS ai_errors_today
+      (SELECT count(*) FROM ai_usage_logs WHERE created_at > now() - interval '24 hours' AND success = false) AS ai_errors_today,
+      (SELECT count(*) FROM knowledge_sync_connections) AS social_connection_count,
+      (SELECT count(*) FROM knowledge_sync_connections WHERE last_sync_status = 'failed') AS social_sync_failed_count
   `);
   return result.rows[0];
 }
@@ -1051,13 +1053,17 @@ export type KnowledgeSourceInput = {
   tags?: string[] | null;
   scripture_references?: string[] | null;
   framework_categories?: string[] | null;
+  sync_connection_id?: string | null;
+  external_id?: string | null;
+  platform?: SocialPlatform | null;
+  processing_status?: string;
 };
 
 const KNOWLEDGE_SOURCE_COLUMNS =
-  'id, title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories, processing_status, processing_error, version, created_at, updated_at';
+  'id, title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories, processing_status, processing_error, version, sync_connection_id, external_id, platform, created_at, updated_at';
 
 const KNOWLEDGE_SOURCE_LIST_COLUMNS =
-  's.id, s.title, s.author, s.source_type, s.tier, s.publication_date, s.url, s.description, s.topics, s.tags, s.scripture_references, s.framework_categories, s.processing_status, s.processing_error, s.version, s.created_at, s.updated_at';
+  's.id, s.title, s.author, s.source_type, s.tier, s.publication_date, s.url, s.description, s.topics, s.tags, s.scripture_references, s.framework_categories, s.processing_status, s.processing_error, s.version, s.sync_connection_id, s.external_id, s.platform, s.created_at, s.updated_at';
 
 export async function listKnowledgeSources(): Promise<(KnowledgeSource & { chunk_count: number })[]> {
   const result = await query(
@@ -1077,8 +1083,8 @@ export async function getKnowledgeSourceById(id: string): Promise<KnowledgeSourc
 
 export async function createKnowledgeSource(input: KnowledgeSourceInput): Promise<KnowledgeSource> {
   const result = await query(
-    `INSERT INTO knowledge_sources (title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories)
-     VALUES ($1, $2, $3, COALESCE($4, 1), $5, $6, $7, $8, $9, $10, $11, $12)
+    `INSERT INTO knowledge_sources (title, author, source_type, tier, publication_date, url, description, full_text, topics, tags, scripture_references, framework_categories, sync_connection_id, external_id, platform, processing_status)
+     VALUES ($1, $2, $3, COALESCE($4, 1), $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, COALESCE($16, 'pending'))
      RETURNING ${KNOWLEDGE_SOURCE_COLUMNS}`,
     [
       input.title,
@@ -1093,9 +1099,21 @@ export async function createKnowledgeSource(input: KnowledgeSourceInput): Promis
       input.tags ?? null,
       input.scripture_references ?? null,
       input.framework_categories ?? null,
+      input.sync_connection_id ?? null,
+      input.external_id ?? null,
+      input.platform ?? null,
+      input.processing_status ?? null,
     ]
   );
   return result.rows[0];
+}
+
+export async function findKnowledgeSourceByExternalId(connectionId: string, externalId: string): Promise<{ id: string } | null> {
+  const result = await query(
+    'SELECT id FROM knowledge_sources WHERE sync_connection_id = $1 AND external_id = $2',
+    [connectionId, externalId]
+  );
+  return result.rows[0] || null;
 }
 
 type KnowledgeSourceUpdates = Partial<KnowledgeSourceInput> & {
@@ -1121,6 +1139,69 @@ export async function updateKnowledgeSource(id: string, updates: KnowledgeSource
 
 export async function deleteKnowledgeSource(id: string): Promise<void> {
   await query('DELETE FROM knowledge_sources WHERE id = $1', [id]);
+}
+
+// --- Social ingestion sync connections ---
+
+const SYNC_CONNECTION_COLUMNS =
+  'id, platform, label, feed_url, auto_sync, last_synced_at, last_sync_status, last_sync_message, new_content_count, failed_content_count, created_at, updated_at';
+
+export type KnowledgeSyncConnectionInput = {
+  platform: SocialPlatform;
+  label: string;
+  feed_url?: string | null;
+  auto_sync?: boolean;
+};
+
+export async function listKnowledgeSyncConnections(): Promise<KnowledgeSyncConnection[]> {
+  const result = await query(`SELECT ${SYNC_CONNECTION_COLUMNS} FROM knowledge_sync_connections ORDER BY created_at DESC`);
+  return result.rows;
+}
+
+export async function getKnowledgeSyncConnectionById(id: string): Promise<KnowledgeSyncConnection | null> {
+  const result = await query(`SELECT ${SYNC_CONNECTION_COLUMNS} FROM knowledge_sync_connections WHERE id = $1`, [id]);
+  return result.rows[0] || null;
+}
+
+export async function createKnowledgeSyncConnection(input: KnowledgeSyncConnectionInput): Promise<KnowledgeSyncConnection> {
+  const result = await query(
+    `INSERT INTO knowledge_sync_connections (platform, label, feed_url, auto_sync)
+     VALUES ($1, $2, $3, COALESCE($4, false))
+     RETURNING ${SYNC_CONNECTION_COLUMNS}`,
+    [input.platform, input.label, input.feed_url ?? null, input.auto_sync ?? null]
+  );
+  return result.rows[0];
+}
+
+type KnowledgeSyncConnectionUpdates = Partial<KnowledgeSyncConnectionInput> & {
+  last_synced_at?: string;
+  last_sync_status?: string;
+  last_sync_message?: string | null;
+  new_content_count?: number;
+  failed_content_count?: number;
+};
+
+export async function updateKnowledgeSyncConnection(id: string, updates: KnowledgeSyncConnectionUpdates): Promise<KnowledgeSyncConnection | null> {
+  const fields: string[] = [];
+  const values: unknown[] = [];
+  let i = 1;
+  for (const [key, value] of Object.entries(updates)) {
+    fields.push(`${key} = $${i}`);
+    values.push(value);
+    i += 1;
+  }
+  if (!fields.length) return null;
+  fields.push(`updated_at = timezone('utc'::text, now())`);
+  values.push(id);
+  const result = await query(
+    `UPDATE knowledge_sync_connections SET ${fields.join(', ')} WHERE id = $${i} RETURNING ${SYNC_CONNECTION_COLUMNS}`,
+    values
+  );
+  return result.rows[0] || null;
+}
+
+export async function deleteKnowledgeSyncConnection(id: string): Promise<void> {
+  await query('DELETE FROM knowledge_sync_connections WHERE id = $1', [id]);
 }
 
 function toVectorLiteral(embedding: number[]): string {

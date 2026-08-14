@@ -12,6 +12,7 @@ type Source = {
   tier: number;
   processing_status: 'pending' | 'processing' | 'indexed' | 'published' | 'failed' | 'needs_review';
   processing_error?: string;
+  platform?: string;
   chunk_count: number;
   updated_at: string;
 };
@@ -203,6 +204,7 @@ export default function AdminKnowledgePage() {
                     <p className="text-sm font-semibold text-midnight-950">{source.title}</p>
                     <p className="text-xs text-gray-500">
                       {source.author || 'Livingstone Oluwalola'} · {source.source_type} · tier {source.tier} · {source.chunk_count} chunks
+                      {source.platform ? ` · via ${source.platform}` : ''}
                     </p>
                   </div>
                   <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[source.processing_status] ?? ''}`}>

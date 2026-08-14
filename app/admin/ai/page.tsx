@@ -107,7 +107,10 @@ export default function AdminAiPage() {
 
   const createProvider = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!providerForm.slug.trim() || !providerForm.name.trim()) return;
+    if (!providerForm.slug.trim() || !providerForm.name.trim()) {
+      setProviderError('Slug and display name are required.');
+      return;
+    }
     setSavingProvider(true);
     setProviderError(null);
     try {
@@ -138,7 +141,10 @@ export default function AdminAiPage() {
   };
 
   const saveEditProvider = async (id: string) => {
-    if (!editForm.slug.trim() || !editForm.name.trim()) return;
+    if (!editForm.slug.trim() || !editForm.name.trim()) {
+      setEditError('Slug and display name are required.');
+      return;
+    }
     setSavingEdit(true);
     setEditError(null);
     try {
@@ -197,7 +203,14 @@ export default function AdminAiPage() {
 
   const createModel = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!modelForm.provider_id || !modelForm.model_id.trim() || !modelForm.display_name.trim()) return;
+    if (!modelForm.provider_id) {
+      setModelError('Select a provider first.');
+      return;
+    }
+    if (!modelForm.model_id.trim() || !modelForm.display_name.trim()) {
+      setModelError('Model id and display name are required.');
+      return;
+    }
     setSavingModel(true);
     setModelError(null);
     try {
@@ -258,15 +271,15 @@ export default function AdminAiPage() {
               <h3 className="mb-4 text-sm font-semibold text-midnight-950">New provider</h3>
               {providerError && <p className="mb-3 text-sm text-red-600">{providerError}</p>}
               <form onSubmit={createProvider} className="space-y-3">
-                <Input placeholder="Slug (e.g. openai-main)" value={providerForm.slug} onChange={(e) => setProviderForm({ ...providerForm, slug: e.target.value })} />
-                <Input placeholder="Display name" value={providerForm.name} onChange={(e) => setProviderForm({ ...providerForm, name: e.target.value })} />
+                <Input autoComplete="off" placeholder="Slug (e.g. openai-main)" value={providerForm.slug} onChange={(e) => setProviderForm({ ...providerForm, slug: e.target.value })} />
+                <Input autoComplete="off" placeholder="Display name" value={providerForm.name} onChange={(e) => setProviderForm({ ...providerForm, name: e.target.value })} />
                 <Select
                   options={KIND_OPTIONS}
                   value={providerForm.kind}
                   onChange={(e) => setProviderForm({ ...providerForm, kind: e.target.value })}
                 />
-                <Input placeholder="Base URL (optional — leave blank for provider default)" value={providerForm.base_url} onChange={(e) => setProviderForm({ ...providerForm, base_url: e.target.value })} />
-                <Input type="password" placeholder="API key" value={providerForm.api_key} onChange={(e) => setProviderForm({ ...providerForm, api_key: e.target.value })} />
+                <Input autoComplete="off" placeholder="Base URL (optional — leave blank for provider default)" value={providerForm.base_url} onChange={(e) => setProviderForm({ ...providerForm, base_url: e.target.value })} />
+                <Input type="password" autoComplete="new-password" placeholder="API key" value={providerForm.api_key} onChange={(e) => setProviderForm({ ...providerForm, api_key: e.target.value })} />
                 <Button type="submit" variant="gold" disabled={savingProvider} className="w-full">
                   {savingProvider ? 'Saving...' : 'Add provider'}
                 </Button>
@@ -280,11 +293,11 @@ export default function AdminAiPage() {
                   {editingProviderId === provider.id ? (
                     <div className="space-y-3">
                       {editError && <p className="text-sm text-red-600">{editError}</p>}
-                      <Input placeholder="Slug" value={editForm.slug} onChange={(e) => setEditForm({ ...editForm, slug: e.target.value })} />
-                      <Input placeholder="Display name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+                      <Input autoComplete="off" placeholder="Slug" value={editForm.slug} onChange={(e) => setEditForm({ ...editForm, slug: e.target.value })} />
+                      <Input autoComplete="off" placeholder="Display name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
                       <Select options={KIND_OPTIONS} value={editForm.kind} onChange={(e) => setEditForm({ ...editForm, kind: e.target.value })} />
-                      <Input placeholder="Base URL (optional — leave blank for provider default)" value={editForm.base_url} onChange={(e) => setEditForm({ ...editForm, base_url: e.target.value })} />
-                      <Input type="password" placeholder="New API key (leave blank to keep the current one)" value={editForm.api_key} onChange={(e) => setEditForm({ ...editForm, api_key: e.target.value })} />
+                      <Input autoComplete="off" placeholder="Base URL (optional — leave blank for provider default)" value={editForm.base_url} onChange={(e) => setEditForm({ ...editForm, base_url: e.target.value })} />
+                      <Input type="password" autoComplete="new-password" placeholder="New API key (leave blank to keep the current one)" value={editForm.api_key} onChange={(e) => setEditForm({ ...editForm, api_key: e.target.value })} />
                       <div className="flex gap-2">
                         <Button variant="gold" onClick={() => saveEditProvider(provider.id)} disabled={savingEdit}>
                           {savingEdit ? 'Saving...' : 'Save changes'}

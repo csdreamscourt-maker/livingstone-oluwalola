@@ -93,6 +93,7 @@ export type DreamInput = {
   is_private?: boolean;
   folder_id?: string | null;
   voice_recording_url?: string | null;
+  dream_type?: string | null;
 };
 
 export type DreamUpdate = Partial<DreamInput> & {
@@ -101,7 +102,7 @@ export type DreamUpdate = Partial<DreamInput> & {
 };
 
 const DREAM_COLUMNS =
-  'id, user_id, title, description, content, date_occurred, mood, tags, voice_recording_url, is_private, favorite, is_archived, clarity, folder_id, created_at, updated_at';
+  'id, user_id, title, description, content, date_occurred, mood, tags, voice_recording_url, is_private, favorite, is_archived, clarity, folder_id, dream_type, created_at, updated_at';
 
 export async function getDreamsByUser(userId: string) {
   const result = await query(
@@ -113,8 +114,8 @@ export async function getDreamsByUser(userId: string) {
 
 export async function createDream(userId: string, input: DreamInput) {
   const result = await query(
-    `INSERT INTO dreams (user_id, title, description, content, date_occurred, mood, tags, clarity, is_private, folder_id, voice_recording_url)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, COALESCE($9, true), $10, $11)
+    `INSERT INTO dreams (user_id, title, description, content, date_occurred, mood, tags, clarity, is_private, folder_id, voice_recording_url, dream_type)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, COALESCE($9, true), $10, $11, $12)
      RETURNING ${DREAM_COLUMNS}`,
     [
       userId,
@@ -128,6 +129,7 @@ export async function createDream(userId: string, input: DreamInput) {
       input.is_private ?? null,
       input.folder_id ?? null,
       input.voice_recording_url ?? null,
+      input.dream_type ?? null,
     ]
   );
   return result.rows[0];
@@ -165,6 +167,67 @@ export async function getDreamById(userId: string, id: string) {
     [id, userId]
   );
   return result.rows[0] || null;
+}
+
+// --- Dream capture details (the journal's 10 remaining recording-guide points) ---
+
+export type DreamCaptureDetailsInput = {
+  people?: string | null;
+  places?: string | null;
+  attire?: string | null;
+  emotions?: string | null;
+  timing?: string | null;
+  numbers?: string | null;
+  colors?: string | null;
+  sounds?: string | null;
+  repeated_patterns?: string | null;
+  ending?: string | null;
+};
+
+const DREAM_CAPTURE_DETAILS_COLUMNS =
+  'id, dream_id, user_id, people, places, attire, emotions, timing, numbers, colors, sounds, repeated_patterns, ending, created_at, updated_at';
+
+export async function getDreamCaptureDetails(userId: string, dreamId: string) {
+  const result = await query(
+    `SELECT ${DREAM_CAPTURE_DETAILS_COLUMNS} FROM dream_capture_details WHERE dream_id = $1 AND user_id = $2`,
+    [dreamId, userId]
+  );
+  return result.rows[0] || null;
+}
+
+export async function upsertDreamCaptureDetails(userId: string, dreamId: string, input: DreamCaptureDetailsInput) {
+  const result = await query(
+    `INSERT INTO dream_capture_details (dream_id, user_id, people, places, attire, emotions, timing, numbers, colors, sounds, repeated_patterns, ending)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+     ON CONFLICT (dream_id) DO UPDATE SET
+       people = EXCLUDED.people,
+       places = EXCLUDED.places,
+       attire = EXCLUDED.attire,
+       emotions = EXCLUDED.emotions,
+       timing = EXCLUDED.timing,
+       numbers = EXCLUDED.numbers,
+       colors = EXCLUDED.colors,
+       sounds = EXCLUDED.sounds,
+       repeated_patterns = EXCLUDED.repeated_patterns,
+       ending = EXCLUDED.ending,
+       updated_at = timezone('utc'::text, now())
+     RETURNING ${DREAM_CAPTURE_DETAILS_COLUMNS}`,
+    [
+      dreamId,
+      userId,
+      input.people ?? null,
+      input.places ?? null,
+      input.attire ?? null,
+      input.emotions ?? null,
+      input.timing ?? null,
+      input.numbers ?? null,
+      input.colors ?? null,
+      input.sounds ?? null,
+      input.repeated_patterns ?? null,
+      input.ending ?? null,
+    ]
+  );
+  return result.rows[0];
 }
 
 export type DreamInterpretationInput = {

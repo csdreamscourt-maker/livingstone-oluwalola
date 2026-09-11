@@ -94,6 +94,25 @@ export type Dream = {
   is_archived: boolean;
   clarity?: number;
   folder_id?: string;
+  dream_type?: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DreamCaptureDetails = {
+  id: string;
+  dream_id: string;
+  user_id: string;
+  people?: string;
+  places?: string;
+  attire?: string;
+  emotions?: string;
+  timing?: string;
+  numbers?: string;
+  colors?: string;
+  sounds?: string;
+  repeated_patterns?: string;
+  ending?: string;
   created_at: string;
   updated_at: string;
 };

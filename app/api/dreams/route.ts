@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
     is_private: body.is_private,
     folder_id: body.folder_id,
     voice_recording_url: body.voice_recording_url,
+    dream_type: body.dream_type,
   });
 
   return NextResponse.json({ dream }, { status: 201 });

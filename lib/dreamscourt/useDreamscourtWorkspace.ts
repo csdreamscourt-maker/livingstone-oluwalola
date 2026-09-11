@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUser, logout as apiLogout } from '@/lib/api/auth';
-import { createDream, deleteDream, fetchDreams, updateDream } from '@/lib/api/dreams';
+import { createDream, deleteDream, fetchDreams, updateDream, type DreamDraft } from '@/lib/api/dreams';
 import { createJournalEntry, fetchJournalEntries, updateJournalEntry } from '@/lib/api/journal';
 import type { Dream, PrayerJournalEntry, User } from '@/types/database';
 
@@ -83,7 +83,7 @@ export function useDreamscourtWorkspace() {
     router.push('/auth/login');
   };
 
-  const addDream = async (input: { title: string; description: string; date_occurred: string; tags: string[]; folder_id?: string | null; voice_recording_url?: string | null }) => {
+  const addDream = async (input: DreamDraft) => {
     const dream = await createDream(input);
     setDreams((prev) => [dream, ...prev]);
     return dream;

@@ -1,4 +1,4 @@
-import type { Dream, DreamFolder, DreamInterpretation, RecurringDreamPattern } from '@/types/database';
+import type { Dream, DreamCaptureDetails, DreamFolder, DreamInterpretation, RecurringDreamPattern } from '@/types/database';
 
 async function parseOrThrow<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => ({}));
@@ -19,7 +19,12 @@ export type DreamDraft = {
   is_private?: boolean;
   folder_id?: string | null;
   voice_recording_url?: string | null;
+  dream_type?: string | null;
 };
+
+export type DreamCaptureDetailsDraft = Partial<
+  Pick<DreamCaptureDetails, 'people' | 'places' | 'attire' | 'emotions' | 'timing' | 'numbers' | 'colors' | 'sounds' | 'repeated_patterns' | 'ending'>
+>;
 
 export async function fetchDreams(): Promise<Dream[]> {
   const res = await fetch('/api/dreams');
@@ -50,6 +55,22 @@ export async function updateDream(id: string, patch: Partial<DreamDraft & { favo
 export async function deleteDream(id: string): Promise<void> {
   const res = await fetch(`/api/dreams/${id}`, { method: 'DELETE' });
   await parseOrThrow(res);
+}
+
+export async function fetchDreamCaptureDetails(dreamId: string): Promise<DreamCaptureDetails | null> {
+  const res = await fetch(`/api/dreams/${dreamId}/capture`);
+  const data = await parseOrThrow<{ details: DreamCaptureDetails | null }>(res);
+  return data.details;
+}
+
+export async function saveDreamCaptureDetails(dreamId: string, draft: DreamCaptureDetailsDraft): Promise<DreamCaptureDetails> {
+  const res = await fetch(`/api/dreams/${dreamId}/capture`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(draft),
+  });
+  const data = await parseOrThrow<{ details: DreamCaptureDetails }>(res);
+  return data.details;
 }
 
 export async function interpretDream(dreamId: string): Promise<DreamInterpretation> {

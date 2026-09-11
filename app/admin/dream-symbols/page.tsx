@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { Input, Textarea, Button } from '@/components/ui';
+import { Input, Textarea, Select, Button } from '@/components/ui';
+import { DREAM_SYMBOL_CATEGORIES } from '@/lib/dreamSymbolCategories';
 import type { DreamSymbol } from '@/types/database';
 
-const emptyForm = { term: '', meaning: '', category: '', scripture_reference: '' };
+const CATEGORY_OPTIONS = DREAM_SYMBOL_CATEGORIES.map((c) => ({ value: c, label: c }));
+
+const emptyForm = { term: '', meaning: '', category: DREAM_SYMBOL_CATEGORIES[0] as string, scripture_reference: '' };
 
 export default function AdminDreamSymbolsPage() {
   const [symbols, setSymbols] = useState<DreamSymbol[]>([]);
@@ -35,7 +38,7 @@ export default function AdminDreamSymbolsPage() {
     setForm({
       term: symbol.term,
       meaning: symbol.meaning,
-      category: symbol.category ?? '',
+      category: symbol.category ?? DREAM_SYMBOL_CATEGORIES[0],
       scripture_reference: symbol.scripture_reference ?? '',
     });
   };
@@ -84,7 +87,7 @@ export default function AdminDreamSymbolsPage() {
           <form onSubmit={handleSubmit} className="space-y-3">
             <Input placeholder="Term (e.g. Water)" value={form.term} onChange={(e) => setForm({ ...form, term: e.target.value })} />
             <Textarea placeholder="Meaning" value={form.meaning} onChange={(e) => setForm({ ...form, meaning: e.target.value })} />
-            <Input placeholder="Category (e.g. Nature)" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+            <Select options={CATEGORY_OPTIONS} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
             <Input placeholder="Scripture reference (optional)" value={form.scripture_reference} onChange={(e) => setForm({ ...form, scripture_reference: e.target.value })} />
             <div className="flex gap-2">
               <Button type="submit" variant="gold" disabled={saving} className="flex-1">

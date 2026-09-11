@@ -9,6 +9,7 @@ const standalonePrefixes = [
   '/dashboard',
   '/journal',
   '/dreams',
+  '/insights',
   '/settings',
   '/auth',
   '/admin',

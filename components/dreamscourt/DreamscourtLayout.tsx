@@ -9,6 +9,7 @@ import { DreamscourtContext } from '@/lib/dreamscourt/context';
 import {
   BookOpen,
   Brain,
+  ExternalLink,
   GraduationCap,
   LayoutDashboard,
   Lightbulb,
@@ -140,8 +141,20 @@ export function DreamscourtLayout({ children }: { children: ReactNode }) {
                 </span>
                 <h2 className="mt-2 text-xl font-semibold text-midnight-950">{activeItem?.label ?? 'Dreamscourt'}</h2>
               </div>
-              <div className="rounded-md border border-midnight-950/10 bg-white px-4 py-2.5 text-sm text-gray-600">
-                {workspace.user?.email || 'Signed in'}
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Visit the Livingstone Oluwalola website"
+                  className="flex items-center gap-1.5 rounded-md border border-midnight-950/10 bg-white px-3 py-2.5 text-xs font-semibold text-gray-500 transition-colors duration-200 hover:border-midnight-950/25 hover:text-midnight-950"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Livingstone.com
+                </a>
+                <div className="rounded-md border border-midnight-950/10 bg-white px-4 py-2.5 text-sm text-gray-600">
+                  {workspace.user?.email || 'Signed in'}
+                </div>
               </div>
             </div>
 
